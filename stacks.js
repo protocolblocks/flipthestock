@@ -78,21 +78,22 @@
       return;
     }
     var lead = articles[0];
-    var rest = articles.slice(1, 4);
-    function card(article, className) {
+    var rest = articles.slice(1, 7);
+    var boxes = rest.map(function (article, index) {
       var slug = encodeURIComponent(article.slug || "");
-      return '<a class="' + className + '" href="articles/piece.html?slug=' + slug + '">' +
+      return '<a class="story" href="articles/piece.html?slug=' + slug + '">' +
+        '<span class="idx">' + String(index + 2).padStart(2, "0") + '</span>' +
         '<h3>' + esc(article.title) + '</h3>' +
         '<p>' + esc(article.dek) + '</p>' +
         '<p class="when">' + formatDate(article.date) + '</p></a>';
-    }
-    root.classList.toggle("is-solo", rest.length === 0);
-    root.innerHTML = '<a class="lead" href="articles/piece.html?slug=' + encodeURIComponent(lead.slug || "") + '">' +
-      '<p class="kicker">Lead story</p>' +
+    }).join("");
+    root.innerHTML = '<a class="cover" href="articles/piece.html?slug=' + encodeURIComponent(lead.slug || "") + '">' +
+      '<p class="cover-kicker"><span>Cover story</span><span>' + formatDate(lead.date) + '</span></p>' +
       '<h2>' + esc(lead.title) + '</h2>' +
+      '<div class="cover-foot">' +
       '<p class="standfirst">' + esc(lead.dek) + '</p>' +
-      '<p class="when">' + formatDate(lead.date) + ' · Read the piece</p></a>' +
-      (rest.length ? '<div class="rail">' + rest.map(function (article) { return card(article, "rail-piece"); }).join("") + '</div>' : "");
+      '<p class="read">Read the piece</p></div></a>' +
+      (boxes ? '<div class="issue-grid">' + boxes + '</div>' : "");
   };
 
   window.renderMemes = function (root) {

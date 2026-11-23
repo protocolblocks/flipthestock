@@ -29,6 +29,28 @@ window.STACKS = {
         "<p>The videos filed here are those conversations: NGMI, The Block, Southern Fried Chad, and threadguy. They are worth hearing if you want the case in his words. They are not the founding documents, and nothing said in them is advice from this page. The line he repeats, stop trading and believe in something, was already the crowd’s line.</p>",
         "<p>If a clip names a price, treat it as weather. The stamp on the front of this site is still no.</p>"
       ].join("")
+    },
+    {
+      slug: "two-sentences",
+      title: "Two sentences did the recruiting",
+      date: "2026-11-16",
+      dek: "Stop trading and believe in something. Flip the stock market. By early 2025 the pair was doing the work.",
+      html: [
+        "<p>Most of what outsiders can repeat about SPX6900 fits in two lines. Stop trading and believe in something. Flip the stock market. They showed up together in public posts by early 2025, then on avatars, merch, and the front of spx6900.com.</p>",
+        "<p>The first line is a refusal of the usual routine: the next ticker, the next chart, the next hour. The second line is the goal they say with a straight face. Together they are the recruiting poster. The rest of the lore hangs off them.</p>",
+        "<p>Neither line is a promise of a return. They are the joke, said often enough that a crowd started answering to it.</p>"
+      ].join("")
+    },
+    {
+      slug: "ethereum-is-home",
+      title: "Ethereum is still home",
+      date: "2026-11-09",
+      dek: "Copies on Solana, Base, BNB Chain, and Sui are bridges. A bridge can fail on its own.",
+      html: [
+        "<p>The token people mean when they say SPX6900 started on Ethereum. The project site also lists copies on Solana, Base, BNB Chain, and Sui. Those are bridged. The site’s own warning is that a bridge can fail even when the story does not.</p>",
+        "<p>The comfortable contract, in the project’s words, is the Ethereum one. The five addresses, and the supply figures printed beside them, are on the learn page here and on spx6900.com. Compare them there. The name gets reused by copycats.</p>",
+        "<p>This is a map, not a reason to buy. Money put into the token can go to zero.</p>"
+      ].join("")
     }
   ],
   memes: [
