@@ -7,6 +7,7 @@ window.STACKS = {
   articles: [
     {
       slug: "origin-story",
+      kicker: "Cover",
       title: "How SPX6900 started",
       date: "2026-11-23",
       dek: "A fair launch on Ethereum in August 2023, a crew that left, and a crowd that kept the joke until it had a name.",
@@ -21,6 +22,7 @@ window.STACKS = {
     },
     {
       slug: "murad-showed-up-later",
+      kicker: "The record",
       title: "Murad did not launch it",
       date: "2026-11-20",
       dek: "The interviews on this site are from the advocate who showed up later, not from the crew that vanished.",
@@ -32,6 +34,7 @@ window.STACKS = {
     },
     {
       slug: "two-sentences",
+      kicker: "The lines",
       title: "Two sentences did the recruiting",
       date: "2026-11-16",
       dek: "Stop trading and believe in something. Flip the stock market. By early 2025 the pair was doing the work.",
@@ -43,6 +46,7 @@ window.STACKS = {
     },
     {
       slug: "ethereum-is-home",
+      kicker: "The contracts",
       title: "Ethereum is still home",
       date: "2026-11-09",
       dek: "Copies on Solana, Base, BNB Chain, and Sui are bridges. A bridge can fail on its own.",
