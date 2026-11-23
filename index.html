@@ -468,6 +468,8 @@
     }
 
     .doors { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .stacks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .nav-links a[aria-current="page"] { color: var(--lime); }
     .door { text-decoration: none; display: block; min-height: 150px; }
     .door:hover { border-color: rgba(226, 255, 87, 0.7); }
     .door span {
@@ -493,7 +495,7 @@
     }
 
     @media (max-width: 900px) {
-      .hero, .question, .cards, .tenet-layout, .supply, .doors { grid-template-columns: 1fr; }
+      .hero, .question, .cards, .tenet-layout, .supply, .doors, .stacks { grid-template-columns: 1fr; }
       .tenets { grid-template-columns: 1fr; }
       .timeline li { grid-template-columns: 1fr; gap: 6px; }
       .sticker-card { position: static; max-width: 280px; }
@@ -524,6 +526,9 @@
     <div class="wrap nav">
       <a class="brand" href="#main"><strong>There Is No Chart</strong> <em>Unofficial</em></a>
       <nav class="nav-links" aria-label="Page">
+        <a href="articles/">Articles</a>
+        <a href="memes/">Memes</a>
+        <a href="videos/">Videos</a>
         <a href="#question">The chart</a>
         <a href="#bit">The bit</a>
         <a href="#tenets">Tenets</a>
@@ -750,10 +755,36 @@
         <p class="callout">Ethereum is home. Solana, Base, BNB, and Sui are bridged copies. The project site says a bridge can fail even when the token’s story does not, and it tells holders the Ethereum contract is the comfortable one.</p>
       </section>
 
-      <section id="doors">
+      <section id="stacks">
         <div class="section-head">
           <div>
             <div class="idx">05</div>
+            <h2>The stacks</h2>
+          </div>
+        </div>
+        <div class="stacks">
+          <a class="door" href="articles/">
+            <span>Writing</span>
+            <h3>Articles</h3>
+            <p>Pieces filed in the order they were written.</p>
+          </a>
+          <a class="door" href="memes/">
+            <span>Images</span>
+            <h3>Memes</h3>
+            <p>Prints worth keeping on the wall.</p>
+          </a>
+          <a class="door" href="videos/">
+            <span>Moving</span>
+            <h3>Videos</h3>
+            <p>The best ones seen so far.</p>
+          </a>
+        </div>
+      </section>
+
+      <section id="doors">
+        <div class="section-head">
+          <div>
+            <div class="idx">06</div>
             <h2>Doors out</h2>
           </div>
         </div>
