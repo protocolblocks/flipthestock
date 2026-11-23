@@ -13,7 +13,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   background: var(--paper);
@@ -181,7 +181,7 @@ a.kicker:hover, .kicker:hover { color: var(--claret); }
   padding: 16px 0;
   border-top: 1px solid var(--line);
 }
-.piece .idx { grid-row: 1 / span 3; padding-top: 6px; }
+.piece .idx { grid-row: 1 / span 2; padding-top: 6px; }
 .piece h2 { font-size: 26px; line-height: 1.15; margin: 0; }
 .piece p { margin: 0; }
 .piece .when { margin-top: 6px; }
@@ -429,8 +429,14 @@ body.is-logged-on .log-line { display: block; }
   .bar { display: block; }
   .edition { margin-top: 6px; }
   .logo { font-size: 24px; }
+  .nav-links { gap: 2px 16px; }
+  .nav-links a { padding: 10px 0; }
   .quad, .video-row, .wall, .doors { grid-template-columns: 1fr; }
   .hero-copy h2 { font-size: 28px; }
+  .btn, .copy, dialog button { min-height: 44px; padding: 0 14px; }
+  .chain { grid-template-columns: 1fr; justify-items: start; }
+  .chain .copy { margin-top: 4px; }
+  .block, .page h1, .video { scroll-margin-top: 128px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

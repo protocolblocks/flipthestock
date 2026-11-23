@@ -49,8 +49,7 @@
       return '<a class="piece" href="piece.html?slug=' + slug + '">' +
         '<div class="idx">' + String(index + 1).padStart(2, "0") + '</div>' +
         '<h2>' + esc(article.title) + '</h2>' +
-        '<p>' + esc(article.dek) + '</p>' +
-        '<p class="when">' + formatDate(article.date) + '</p></a>';
+        '<p>' + esc(article.dek) + '</p></a>';
     }).join("");
   };
 
@@ -67,7 +66,6 @@
     var body = String(article.html || "").replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
     root.innerHTML = '<a class="back" href="./">All articles</a>' +
       '<article class="article">' +
-      '<p class="when">' + formatDate(article.date) + '</p>' +
       '<h1>' + esc(article.title) + '</h1>' +
       '<p class="article-dek">' + esc(article.dek) + '</p>' +
       '<div class="article-body">' + body + '</div></article>';
@@ -91,7 +89,7 @@
     var lead = articles[0];
     var side = articles[1];
     var related = articles.slice(2, 4);
-    if (edition) edition.textContent = "Unofficial · " + formatDate(lead.date);
+    if (edition) edition.textContent = formatDate(lead.date);
     var sideHtml = "";
     if (side) {
       sideHtml = '<div class="side"><a href="' + pieceHref("articles/", side.slug) + '">' +
