@@ -63,6 +63,38 @@
       '<div class="article-body">' + body + '</div></article>';
   };
 
+  function safePostUrl(value) {
+    var url = String(value || "");
+    if (!/^https:\/\/(x\.com|twitter\.com)\/[A-Za-z0-9_./?=&%-]+$/.test(url)) return "";
+    return url;
+  }
+
+  window.renderNews = function (root) {
+    var articles = data().articles.slice().sort(function (a, b) {
+      return String(b.date || "").localeCompare(String(a.date || ""));
+    });
+    if (!articles.length) {
+      root.innerHTML = empty("Nothing filed yet.", "The latest piece will lead this page.");
+      return;
+    }
+    var lead = articles[0];
+    var rest = articles.slice(1, 4);
+    function card(article, className) {
+      var slug = encodeURIComponent(article.slug || "");
+      return '<a class="' + className + '" href="articles/piece.html?slug=' + slug + '">' +
+        '<h3>' + esc(article.title) + '</h3>' +
+        '<p>' + esc(article.dek) + '</p>' +
+        '<p class="when">' + formatDate(article.date) + '</p></a>';
+    }
+    root.classList.toggle("is-solo", rest.length === 0);
+    root.innerHTML = '<a class="lead" href="articles/piece.html?slug=' + encodeURIComponent(lead.slug || "") + '">' +
+      '<p class="kicker">Lead story</p>' +
+      '<h2>' + esc(lead.title) + '</h2>' +
+      '<p class="standfirst">' + esc(lead.dek) + '</p>' +
+      '<p class="when">' + formatDate(lead.date) + ' · Read the piece</p></a>' +
+      (rest.length ? '<div class="rail">' + rest.map(function (article) { return card(article, "rail-piece"); }).join("") + '</div>' : "");
+  };
+
   window.renderMemes = function (root) {
     var memes = data().memes;
     if (!memes.length) {
@@ -72,9 +104,13 @@
     root.innerHTML = memes.map(function (meme, index) {
       var src = String(meme.src || "");
       if (!/^[A-Za-z0-9_./-]+$/.test(src) || src.indexOf("..") !== -1) return "";
+      var href = safePostUrl(meme.href);
+      var credit = href
+        ? '<a class="credit" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + esc(meme.credit || "Source on X") + '</a>'
+        : "";
       return '<figure class="meme"><button type="button" data-src="' + esc(src) + '" data-alt="' + esc(meme.alt) + '">' +
-        '<img src="' + esc(src) + '" alt="' + esc(meme.alt || "Meme " + (index + 1)) + '">' +
-        '<figcaption>' + esc(meme.caption) + '</figcaption></button></figure>';
+        '<img src="' + esc(src) + '" alt="' + esc(meme.alt || "Meme " + (index + 1)) + '"></button>' +
+        '<figcaption><span>' + esc(meme.caption) + '</span>' + credit + '</figcaption></figure>';
     }).join("");
     root.addEventListener("click", function (event) {
       var button = event.target.closest("button");

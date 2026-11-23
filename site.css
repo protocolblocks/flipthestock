@@ -184,7 +184,7 @@ a { color: inherit; }
 }
 .empty p { margin: 0; max-width: 52ch; color: var(--paper-muted); }
 
-.wall { grid-template-columns: repeat(3, 1fr); }
+.wall { grid-template-columns: repeat(3, 1fr); align-items: start; }
 .meme { padding: 10px; }
 .meme button {
   appearance: none;
@@ -199,12 +199,23 @@ a { color: inherit; }
 }
 .meme img {
   width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
+  height: auto;
   border-radius: 12px;
-  background: #2a211c;
+  background: #0e0c0a;
 }
 .meme figcaption { padding: 10px 6px 4px; color: var(--muted); font-size: 15px; }
+.meme figcaption span { display: block; }
+.credit {
+  display: inline-block;
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lime);
+  text-decoration: none;
+}
+.credit:hover { color: var(--paper); }
 
 .reel { grid-template-columns: 1fr; }
 .video { padding: 16px; }
