@@ -36,6 +36,79 @@
     return '<div class="empty"><div class="idx">Empty</div><h2>' + esc(title) + '</h2><p>' + esc(text) + '</p></div>';
   }
 
+  var VIDEO_PAGE_SIZE = 9;
+
+  function validVideos() {
+    return data().videos.filter(function (video) {
+      return /^[A-Za-z0-9_-]{11}$/.test(String(video.id || ""));
+    });
+  }
+
+  function clampPage(page, totalPages) {
+    var n = parseInt(page, 10);
+    if (!(n > 0)) n = 1;
+    if (totalPages < 1) return 1;
+    return n > totalPages ? totalPages : n;
+  }
+
+  function pageFromSearch() {
+    try {
+      return clampPage(new URLSearchParams(location.search).get("page"), Number.MAX_SAFE_INTEGER);
+    } catch (err) {
+      return 1;
+    }
+  }
+
+  function setVideoPageQuery(page) {
+    var url = new URL(location.href);
+    if (page <= 1) url.searchParams.delete("page");
+    else url.searchParams.set("page", String(page));
+    url.hash = "";
+    var next = url.pathname + url.search;
+    if (next !== location.pathname + location.search + location.hash) {
+      history.replaceState(null, "", next);
+    }
+  }
+
+  function pageForVideoHash(videos) {
+    var hash = String(location.hash || "").replace(/^#/, "");
+    if (!hash) return 0;
+    for (var i = 0; i < videos.length; i++) {
+      if ("v-" + videos[i].id === hash) return Math.floor(i / VIDEO_PAGE_SIZE) + 1;
+    }
+    return 0;
+  }
+
+  function pagerHtml(page, totalPages) {
+    if (totalPages <= 1) return "";
+    var html = '<nav class="pager" aria-label="Video pages">';
+    html += page > 1
+      ? '<button type="button" data-page="' + (page - 1) + '">Previous</button>'
+      : '<button type="button" disabled>Previous</button>';
+    for (var i = 1; i <= totalPages; i++) {
+      html += i === page
+        ? '<button type="button" data-page="' + i + '" aria-current="page">' + i + '</button>'
+        : '<button type="button" data-page="' + i + '">' + i + '</button>';
+    }
+    html += page < totalPages
+      ? '<button type="button" data-page="' + (page + 1) + '">Next</button>'
+      : '<button type="button" disabled>Next</button>';
+    return html + '</nav>';
+  }
+
+  function placePager(root, page, totalPages, onPage) {
+    var existing = root.nextElementSibling;
+    if (existing && existing.classList.contains("pager")) existing.remove();
+    if (totalPages <= 1) return;
+    root.insertAdjacentHTML("afterend", pagerHtml(page, totalPages));
+    root.nextElementSibling.addEventListener("click", function (event) {
+      var button = event.target.closest("button[data-page]");
+      if (!button || button.disabled) return;
+      var next = parseInt(button.getAttribute("data-page"), 10);
+      if (next > 0) onPage(next);
+    });
+  }
+
   var SITE = "Flip the Stock";
   var ORIGIN = "https://www.flipthestock.com";
 
@@ -206,21 +279,36 @@
   };
 
   window.renderFrontVideos = function (root) {
-    var videos = data().videos;
+    var videos = validVideos();
     if (!videos.length) {
       root.innerHTML = empty("No reels filed.", "The best videos will play here.");
+      placePager(root, 1, 0);
       return;
     }
-    root.innerHTML = videos.map(function (video) {
-      var id = String(video.id || "");
-      if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return "";
-      var note = String(video.note || "").split(". ")[0];
-      return '<a href="videos/#v-' + id + '">' +
-        '<img class="pic" src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="">' +
-        '<h3>' + esc(video.title) + '</h3>' +
-        (note ? '<p class="credit">' + esc(note) + '</p>' : '') +
-        '</a>';
-    }).join("");
+
+    function draw(page, scroll) {
+      var totalPages = Math.ceil(videos.length / VIDEO_PAGE_SIZE);
+      page = clampPage(page, totalPages);
+      var slice = videos.slice((page - 1) * VIDEO_PAGE_SIZE, page * VIDEO_PAGE_SIZE);
+      root.innerHTML = slice.map(function (video) {
+        var id = String(video.id || "");
+        var note = String(video.note || "").split(". ")[0];
+        return '<a href="videos/#v-' + id + '">' +
+          '<img class="pic" src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="">' +
+          '<h3>' + esc(video.title) + '</h3>' +
+          (note ? '<p class="credit">' + esc(note) + '</p>' : '') +
+          '</a>';
+      }).join("");
+      placePager(root, page, totalPages, function (next) {
+        draw(next, true);
+      });
+      if (scroll) {
+        var section = document.getElementById("videos") || root;
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    draw(1, false);
   };
 
   window.renderMemes = function (root) {
@@ -252,19 +340,41 @@
   };
 
   window.renderVideos = function (root) {
-    var videos = data().videos;
+    var videos = validVideos();
     if (!videos.length) {
       root.innerHTML = empty("No reels filed.", "The best videos will play here.");
+      placePager(root, 1, 0);
       return;
     }
-    root.innerHTML = videos.map(function (video) {
-      var id = String(video.id || "");
-      if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return "";
-      var src = "https://www.youtube-nocookie.com/embed/" + id;
-      return '<article class="video" id="v-' + id + '"><div class="frame"><iframe src="' + src + '" title="' + esc(video.title) + '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>' +
-        '<h2>' + esc(video.title) + '</h2>' +
-        (video.note ? '<p>' + esc(video.note) + '</p>' : '') +
-        '</article>';
-    }).join("");
+
+    function draw(page, opts) {
+      opts = opts || {};
+      var totalPages = Math.ceil(videos.length / VIDEO_PAGE_SIZE);
+      page = clampPage(page, totalPages);
+      var slice = videos.slice((page - 1) * VIDEO_PAGE_SIZE, page * VIDEO_PAGE_SIZE);
+      root.innerHTML = slice.map(function (video) {
+        var id = String(video.id || "");
+        var src = "https://www.youtube-nocookie.com/embed/" + id;
+        return '<article class="video" id="v-' + id + '"><div class="frame"><iframe src="' + src + '" title="' + esc(video.title) + '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>' +
+          '<h2>' + esc(video.title) + '</h2>' +
+          (video.note ? '<p>' + esc(video.note) + '</p>' : '') +
+          '</article>';
+      }).join("");
+      placePager(root, page, totalPages, function (next) {
+        setVideoPageQuery(next);
+        draw(next, { scroll: "grid" });
+      });
+      if (opts.scroll === "grid") {
+        var section = document.getElementById("main") || root;
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (opts.scroll === "hash") {
+        var target = document.getElementById(String(location.hash || "").replace(/^#/, ""));
+        if (target) target.scrollIntoView();
+      }
+    }
+
+    var hashPage = pageForVideoHash(videos);
+    var page = hashPage || clampPage(pageFromSearch(), Math.ceil(videos.length / VIDEO_PAGE_SIZE));
+    draw(page, { scroll: hashPage ? "hash" : "" });
   };
 })();
