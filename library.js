@@ -59,6 +59,13 @@ window.STACKS = {
   ],
   memes: [
     {
+      src: "wall/2026-11-23-painting-the-wall.jpg",
+      alt: "A man in a backwards cap and tank top rolls teal paint onto a wall, captioned Me in November 2026 instead of buying SPX6900 at $0.25.",
+      caption: "The regret trade. A fresh coat of paint where a position should have been.",
+      credit: "Post on X · @ChandlerCharts",
+      href: "https://x.com/ChandlerCharts/status/2124911722431680991"
+    },
+    {
       src: "wall/stop-trading.jpg",
       alt: "Concentric arrows around an SPX6900 coin: DCA, hold, chill, shill, stop trading, believe in something, persist forever, flip the stock market.",
       caption: "The loop. Stop trading on the inside, flip the stock market on the outside.",
