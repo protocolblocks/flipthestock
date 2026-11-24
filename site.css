@@ -70,7 +70,7 @@ a:hover { color: var(--claret); }
   flex: 0 0 auto;
   width: auto;
   height: 1em;
-  aspect-ratio: 14.87 / 26.042;
+  aspect-ratio: 24 / 28;
   overflow: visible;
 }
 .logo:hover { color: var(--ink); }
