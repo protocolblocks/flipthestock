@@ -37,6 +37,7 @@
   }
 
   var VIDEO_PAGE_SIZE = 9;
+  var MEME_PAGE_SIZE = 6;
 
   function validVideos() {
     return data().videos.filter(function (video) {
@@ -59,7 +60,7 @@
     }
   }
 
-  function setVideoPageQuery(page) {
+  function setPageQuery(page) {
     var url = new URL(location.href);
     if (page <= 1) url.searchParams.delete("page");
     else url.searchParams.set("page", String(page));
@@ -79,9 +80,31 @@
     return 0;
   }
 
-  function pagerHtml(page, totalPages) {
+  function validMemes() {
+    return data().memes.filter(function (meme) {
+      return !!safeImage(meme.src);
+    });
+  }
+
+  function memeAnchor(src) {
+    var name = String(src || "").split("/").pop().replace(/\.[A-Za-z0-9]+$/, "");
+    if (!/^[A-Za-z0-9_-]+$/.test(name)) return "";
+    return "m-" + name;
+  }
+
+  function pageForMemeHash(memes) {
+    var hash = String(location.hash || "").replace(/^#/, "");
+    if (!hash) return 0;
+    for (var i = 0; i < memes.length; i++) {
+      var id = memeAnchor(memes[i].src);
+      if (id && id === hash) return Math.floor(i / MEME_PAGE_SIZE) + 1;
+    }
+    return 0;
+  }
+
+  function pagerHtml(page, totalPages, label) {
     if (totalPages <= 1) return "";
-    var html = '<nav class="pager" aria-label="Video pages">';
+    var html = '<nav class="pager" aria-label="' + esc(label || "Video pages") + '">';
     html += page > 1
       ? '<button type="button" data-page="' + (page - 1) + '">Previous</button>'
       : '<button type="button" disabled>Previous</button>';
@@ -96,11 +119,11 @@
     return html + '</nav>';
   }
 
-  function placePager(root, page, totalPages, onPage) {
+  function placePager(root, page, totalPages, onPage, label) {
     var existing = root.nextElementSibling;
     if (existing && existing.classList.contains("pager")) existing.remove();
     if (totalPages <= 1) return;
-    root.insertAdjacentHTML("afterend", pagerHtml(page, totalPages));
+    root.insertAdjacentHTML("afterend", pagerHtml(page, totalPages, label));
     root.nextElementSibling.addEventListener("click", function (event) {
       var button = event.target.closest("button[data-page]");
       if (!button || button.disabled) return;
@@ -296,31 +319,61 @@
   };
 
   window.renderMemes = function (root) {
-    var memes = data().memes;
+    var memes = validMemes();
     if (!memes.length) {
       root.innerHTML = empty("Nothing on the wall.", "Meme images will be hung here.");
+      placePager(root, 1, 0);
       return;
     }
-    root.innerHTML = memes.map(function (meme, index) {
-      var src = String(meme.src || "");
-      if (!/^[A-Za-z0-9_./-]+$/.test(src) || src.indexOf("..") !== -1) return "";
-      var href = safePostUrl(meme.href);
-      var credit = href
-        ? '<a class="credit" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + esc(meme.credit || "Source on X") + '</a>'
-        : "";
-      return '<figure class="meme"><button type="button" data-src="' + esc(src) + '" data-alt="' + esc(meme.alt) + '">' +
-        '<img src="' + esc(src) + '" alt="' + esc(meme.alt || "Meme " + (index + 1)) + '"></button>' +
-        '<figcaption><span>' + esc(meme.caption) + '</span>' + credit + '</figcaption></figure>';
-    }).join("");
-    root.addEventListener("click", function (event) {
-      var button = event.target.closest("button");
-      if (!button) return;
-      var dialog = document.getElementById("viewer");
-      var image = dialog.querySelector("img");
-      image.src = button.getAttribute("data-src");
-      image.alt = button.getAttribute("data-alt") || "";
-      dialog.showModal();
-    });
+
+    if (root.getAttribute("data-viewer") !== "on") {
+      root.setAttribute("data-viewer", "on");
+      root.addEventListener("click", function (event) {
+        var button = event.target.closest("button[data-src]");
+        if (!button || !root.contains(button)) return;
+        var dialog = document.getElementById("viewer");
+        if (!dialog) return;
+        var image = dialog.querySelector("img");
+        image.src = button.getAttribute("data-src");
+        image.alt = button.getAttribute("data-alt") || "";
+        dialog.showModal();
+      });
+    }
+
+    function draw(page, opts) {
+      opts = opts || {};
+      var totalPages = Math.ceil(memes.length / MEME_PAGE_SIZE);
+      page = clampPage(page, totalPages);
+      var slice = memes.slice((page - 1) * MEME_PAGE_SIZE, page * MEME_PAGE_SIZE);
+      root.innerHTML = slice.map(function (meme, index) {
+        var src = safeImage(meme.src);
+        if (!src) return "";
+        var href = safePostUrl(meme.href);
+        var credit = href
+          ? '<a class="credit" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + esc(meme.credit || "Source on X") + '</a>'
+          : "";
+        var id = memeAnchor(src);
+        var number = (page - 1) * MEME_PAGE_SIZE + index + 1;
+        return '<figure class="meme"' + (id ? ' id="' + id + '"' : '') + '><button type="button" data-src="' + esc(src) + '" data-alt="' + esc(meme.alt) + '">' +
+          '<img src="' + esc(src) + '" alt="' + esc(meme.alt || "Meme " + number) + '"></button>' +
+          '<figcaption><span>' + esc(meme.caption) + '</span>' + credit + '</figcaption></figure>';
+      }).join("");
+      placePager(root, page, totalPages, function (next) {
+        setPageQuery(next);
+        draw(next, { scroll: "grid" });
+      }, "Meme pages");
+      if (opts.scroll === "grid") {
+        var section = document.getElementById("main") || root;
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (opts.scroll === "hash") {
+        var target = document.getElementById(String(location.hash || "").replace(/^#/, ""));
+        if (target) target.scrollIntoView();
+      }
+    }
+
+    var hashPage = pageForMemeHash(memes);
+    var page = hashPage || clampPage(pageFromSearch(), Math.ceil(memes.length / MEME_PAGE_SIZE));
+    draw(page, { scroll: hashPage ? "hash" : "" });
   };
 
   window.renderVideos = function (root) {
@@ -345,7 +398,7 @@
           '</article>';
       }).join("");
       placePager(root, page, totalPages, function (next) {
-        setVideoPageQuery(next);
+        setPageQuery(next);
         draw(next, { scroll: "grid" });
       });
       if (opts.scroll === "grid") {

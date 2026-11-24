@@ -210,21 +210,40 @@ a.kicker:hover, .kicker:hover { color: var(--claret); }
 }
 .empty p { margin: 0; max-width: 52ch; }
 
-.wall { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 22px; margin-top: 28px; align-items: start; }
-.meme { margin: 0; }
+.wall { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 22px; margin-top: 28px; align-items: stretch; }
+.meme {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--ink);
+  scroll-margin-top: 108px;
+}
 .meme button {
   appearance: none;
   border: 0;
-  padding: 0;
+  padding: 12px;
   width: 100%;
-  background: transparent;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: var(--wheat);
   color: inherit;
   cursor: zoom-in;
   text-align: left;
   font: inherit;
 }
-.meme img { width: 100%; height: auto; background: var(--wheat); }
-.meme figcaption { padding-top: 8px; }
+.meme img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: var(--wheat);
+}
+.meme figcaption { padding-top: 10px; }
 .meme figcaption span { display: block; font-family: var(--serif); font-size: 20px; line-height: 1.25; }
 .credit { display: inline-block; margin-top: 6px; }
 a.credit { color: var(--teal); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
@@ -476,7 +495,7 @@ body.is-logged-on .log-line { display: block; }
   .btn, .copy, dialog button { min-height: 44px; padding: 0 14px; }
   .chain { grid-template-columns: 1fr; justify-items: start; }
   .chain .copy { margin-top: 4px; }
-  .block, .page h1, .video { scroll-margin-top: 128px; }
+  .block, .page h1, .video, .meme { scroll-margin-top: 128px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
