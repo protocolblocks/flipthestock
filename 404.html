@@ -52,7 +52,15 @@
   <header class="mast">
     <div class="wrap bar">
       <a class="logo" href="/"><svg class="mark" viewBox="0 0 24 28" aria-hidden="true" focusable="false"><path fill="none" stroke="#33302e" stroke-width="1.1" stroke-linejoin="miter" d="M21 8.8 V21 H3 V6.2 H21"/><path fill="none" stroke="#33302e" stroke-width="1.45" stroke-linecap="square" stroke-linejoin="miter" d="M6 16 9.8 18.2 12.6 15.2"/><path fill="none" stroke="#990f3d" stroke-width="1.65" stroke-linecap="square" d="M12.6 15.2 20.2 4.2"/><path fill="none" stroke="#990f3d" stroke-width="1.65" stroke-linecap="square" stroke-linejoin="miter" d="M16.2 4.6 20.2 4.2 19.7 8.3"/></svg>Flip the Stock</a>
-      <p class="edition"></p>
+      <div class="mast-meta">
+        <p class="edition"></p>
+        <a class="ticker" href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer" aria-label="SPX6900 price on CoinGecko">
+          <span class="ticker-live">Live</span>
+          <span class="ticker-name">SPX6900</span>
+          <span class="ticker-price">—</span>
+          <span class="ticker-change" hidden></span>
+        </a>
+      </div>
     </div>
     <div class="wrap">
       <nav class="nav-links" aria-label="Site">
@@ -105,5 +113,6 @@
     </div>
   </footer>
   <script src="/edition.js"></script>
+  <script src="/ticker.js"></script>
 </body>
 </html>
