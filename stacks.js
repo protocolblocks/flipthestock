@@ -186,7 +186,7 @@
   };
 
   window.renderFrontMemes = function (root) {
-    var memes = data().memes;
+    var memes = data().memes.slice(0, 4);
     if (!memes.length) {
       root.innerHTML = empty("Nothing on the wall.", "Meme images will be hung here.");
       return;
