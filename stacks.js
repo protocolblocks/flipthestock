@@ -39,9 +39,34 @@
   var VIDEO_PAGE_SIZE = 9;
   var MEME_PAGE_SIZE = 6;
 
+  function youtubeId(video) {
+    var id = String(video && video.id || "");
+    return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : "";
+  }
+
+  function xPost(video) {
+    var url = String(video && video.x || "");
+    var match = url.match(/^https:\/\/(?:www\.)?(?:x\.com|twitter\.com)\/([A-Za-z0-9_]+)\/status\/(\d+)(?:[/?#].*)?$/);
+    if (!match || !safeImage(video.poster)) return null;
+    return { user: match[1], id: match[2], href: "https://x.com/" + match[1] + "/status/" + match[2] };
+  }
+
+  function videoKey(video) {
+    var yt = youtubeId(video);
+    if (yt) return yt;
+    var x = xPost(video);
+    return x ? x.id : "";
+  }
+
+  function posterSrc(path) {
+    var safe = safeImage(path);
+    if (!safe) return "";
+    return "/" + safe.replace(/^\//, "");
+  }
+
   function validVideos() {
     return data().videos.filter(function (video) {
-      return /^[A-Za-z0-9_-]{11}$/.test(String(video.id || ""));
+      return !!videoKey(video);
     });
   }
 
@@ -75,9 +100,36 @@
     var hash = String(location.hash || "").replace(/^#/, "");
     if (!hash) return 0;
     for (var i = 0; i < videos.length; i++) {
-      if ("v-" + videos[i].id === hash) return Math.floor(i / VIDEO_PAGE_SIZE) + 1;
+      var key = videoKey(videos[i]);
+      if (key && "v-" + key === hash) return Math.floor(i / VIDEO_PAGE_SIZE) + 1;
     }
     return 0;
+  }
+
+  function loadTwitterWidgets(root) {
+    if (!root || !root.querySelector || !root.querySelector(".twitter-tweet")) return;
+    function paint() {
+      if (!window.twttr || !window.twttr.widgets) return false;
+      if (window.twttr.events && !loadTwitterWidgets.bound) {
+        loadTwitterWidgets.bound = true;
+        window.twttr.events.bind("rendered", function (el) {
+          var frame = el && el.closest ? el.closest(".frame-x") : null;
+          if (frame) frame.classList.add("is-ready");
+        });
+      }
+      window.twttr.widgets.load(root);
+      return true;
+    }
+    if (paint()) return;
+    var script = document.getElementById("twitter-wjs");
+    if (!script) {
+      script = document.createElement("script");
+      script.id = "twitter-wjs";
+      script.async = true;
+      script.src = "https://platform.twitter.com/widgets.js";
+      document.body.appendChild(script);
+    }
+    script.addEventListener("load", function () { paint(); });
   }
 
   function validMemes() {
@@ -318,10 +370,15 @@
       return;
     }
     root.innerHTML = videos.map(function (video) {
-      var id = String(video.id || "");
-      var note = String(video.note || "").split(". ")[0];
-      return '<a href="videos/#v-' + id + '">' +
-        '<img class="pic" src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="">' +
+      var key = videoKey(video);
+      if (!key) return "";
+      var note = String(video.note || "").split(". ")[0] || String(video.credit || "");
+      var x = xPost(video);
+      var thumb = x
+        ? posterSrc(video.poster)
+        : "https://i.ytimg.com/vi/" + youtubeId(video) + "/hqdefault.jpg";
+      return '<a href="videos/#v-' + key + '">' +
+        '<img class="pic" src="' + esc(thumb) + '" alt="">' +
         '<h3>' + esc(video.title) + '</h3>' +
         (note ? '<p class="credit">' + esc(note) + '</p>' : '') +
         '</a>';
@@ -400,13 +457,34 @@
       page = clampPage(page, totalPages);
       var slice = videos.slice((page - 1) * VIDEO_PAGE_SIZE, page * VIDEO_PAGE_SIZE);
       root.innerHTML = slice.map(function (video) {
-        var id = String(video.id || "");
+        var x = xPost(video);
+        if (x) {
+          var poster = posterSrc(video.poster);
+          var fallback = poster
+            ? '<a class="x-fallback" href="' + esc(x.href) + '" target="_blank" rel="noopener noreferrer">' +
+              '<img src="' + esc(poster) + '" alt="">' +
+              '<span class="x-fallback-label">Watch on X</span></a>'
+            : "";
+          var credit = video.credit
+            ? '<p><a class="credit" href="' + esc(x.href) + '" target="_blank" rel="noopener noreferrer">' + esc(video.credit) + '</a></p>'
+            : "";
+          return '<article class="video" id="v-' + x.id + '"><div class="frame frame-x">' + fallback +
+            '<blockquote class="twitter-tweet" data-dnt="true" data-media-max-width="560">' +
+            '<a href="' + esc(x.href) + '">' + esc(video.title || "View on X") + '</a></blockquote></div>' +
+            '<h2>' + esc(video.title) + '</h2>' +
+            (video.note ? '<p>' + esc(video.note) + '</p>' : '') +
+            credit +
+            '</article>';
+        }
+        var id = youtubeId(video);
+        if (!id) return "";
         var src = "https://www.youtube-nocookie.com/embed/" + id;
         return '<article class="video" id="v-' + id + '"><div class="frame"><iframe src="' + src + '" title="' + esc(video.title) + '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>' +
           '<h2>' + esc(video.title) + '</h2>' +
           (video.note ? '<p>' + esc(video.note) + '</p>' : '') +
           '</article>';
       }).join("");
+      loadTwitterWidgets(root);
       placePager(root, page, totalPages, function (next) {
         setPageQuery(next);
         draw(next, { scroll: "grid" });
