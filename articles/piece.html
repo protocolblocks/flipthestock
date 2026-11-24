@@ -67,7 +67,24 @@
   <main id="main" class="page">
     <div class="wrap" id="stack"></div>
   </main>
-  <footer><div class="wrap"><p>Nothing here is an offer or financial advice. The token can go to zero.</p></div></footer>
+  <footer>
+    <div class="wrap">
+      <section class="newsletter" aria-label="Newsletter">
+        <p class="kicker">Newsletter</p>
+        <h2>A monthly letter</h2>
+        <p class="dek">Keep up with the latest happenings in the SPX6900 community — the writing, the memes, and the videos.</p>
+        <form class="newsletter-form embeddable-buttondown-form" action="https://buttondown.com/api/emails/embed-subscribe/flipthestock" method="post">
+          <label for="newsletter-email-article">Email address</label>
+          <input id="newsletter-email-article" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+          <input type="hidden" name="embed" value="1">
+          <input type="hidden" name="tag" value="article">
+          <button class="btn" type="submit">Subscribe</button>
+        </form>
+        <p class="newsletter-help">One email a month. We’ll send a confirmation link first.</p>
+      </section>
+      <p>Nothing here is an offer or financial advice. The token can go to zero.</p>
+    </div>
+  </footer>
   <script src="../library.js"></script>
   <script src="../stacks.js"></script>
   <script>
@@ -86,6 +103,7 @@
       }
     };
   </script>
+  <script src="../edition.js"></script>
   <script data-goatcounter="https://flipthestock.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>

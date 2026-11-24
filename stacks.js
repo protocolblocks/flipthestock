@@ -294,7 +294,6 @@
     var articles = data().articles.slice().sort(function (a, b) {
       return String(b.date || "").localeCompare(String(a.date || ""));
     });
-    var edition = document.getElementById("edition");
     if (!articles.length) {
       root.innerHTML = empty("Nothing filed yet.", "The latest piece will lead this page.");
       return;
@@ -302,7 +301,6 @@
     var lead = articles[0];
     var side = articles[1];
     var related = articles.slice(2, 4);
-    if (edition) edition.textContent = formatDate(lead.date);
     var sideHtml = "";
     if (side) {
       sideHtml = '<div class="side"><a href="' + pieceHref("articles/", side.slug) + '">' +

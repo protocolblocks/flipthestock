@@ -228,6 +228,19 @@
 
   <footer>
     <div class="wrap">
+      <section class="newsletter" aria-label="Newsletter">
+        <p class="kicker">Newsletter</p>
+        <h2>A monthly letter</h2>
+        <p class="dek">Keep up with the latest happenings in the SPX6900 community — the writing, the memes, and the videos.</p>
+        <form class="newsletter-form embeddable-buttondown-form" action="https://buttondown.com/api/emails/embed-subscribe/flipthestock" method="post">
+          <label for="newsletter-email-learn">Email address</label>
+          <input id="newsletter-email-learn" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+          <input type="hidden" name="embed" value="1">
+          <input type="hidden" name="tag" value="learn">
+          <button class="btn" type="submit">Subscribe</button>
+        </form>
+        <p class="newsletter-help">One email a month. We’ll send a confirmation link first.</p>
+      </section>
       <p>Nothing here is an offer or financial advice. The token can go to zero.</p>
       <p>The token is a meme. Its own site says it has no intrinsic value, no expected financial return, no formal team or roadmap, and no tie to the S&amp;P 500. Money you put into it can go to zero. Supply figures and contract addresses were checked against spx6900.com in November 2026. Confirm them again before you use them.</p>
       <p><a href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer">CoinGecko market page</a></p>
@@ -301,6 +314,7 @@
         });
     })();
   </script>
+  <script src="../edition.js"></script>
   <script data-goatcounter="https://flipthestock.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>

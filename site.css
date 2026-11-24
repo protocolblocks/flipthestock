@@ -87,7 +87,7 @@ a:hover { color: var(--claret); }
   font-weight: 600;
 }
 a.kicker:hover, .kicker:hover { color: var(--claret); }
-.page h1, .article h1, .hero-copy h2, .side h2, .rail h2, .band-head h2, .primer h2,
+.page h1, .article h1, .hero-copy h2, .side h2, .rail h2, .band-head h2, .newsletter h2, .primer h2,
 .piece h2, .video h2, .card h3, .tenet h3, .door h3, .timeline h3, .quad h3, .video-row h3, .related h3 {
   font-family: var(--serif);
   font-weight: 500;
@@ -359,6 +359,49 @@ dialog button {
 footer { border-top: 1px solid var(--line); margin-top: 28px; padding: 16px 0 40px; color: var(--muted); font-size: 13px; }
 footer p { margin: 0 0 10px; max-width: 85ch; }
 
+.newsletter {
+  color: var(--ink);
+  margin: 0 0 16px;
+  padding: 0 0 16px;
+  border-bottom: 1px solid var(--line);
+  max-width: 36rem;
+}
+.newsletter .kicker { margin-top: 0; }
+.newsletter h2 {
+  font-size: 22px;
+  line-height: 1.2;
+  margin: 0 0 6px;
+}
+.newsletter .dek { margin: 0 0 12px; color: var(--ink); }
+.newsletter-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 10px;
+  align-items: center;
+  max-width: 28rem;
+}
+.newsletter-form label {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  font-weight: 600;
+}
+.newsletter-form input[type="email"] {
+  width: 100%;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+}
+.newsletter-form input[type="email"]:focus {
+  outline: 2px solid var(--teal);
+  outline-offset: 1px;
+}
+.newsletter-help { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+
 .intro {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -532,6 +575,9 @@ body.is-logged-on .log-line { display: block; }
   .quad, .video-row, .reel, .wall, .doors { grid-template-columns: 1fr; }
   .hero-copy h2 { font-size: 28px; }
   .btn, .copy, dialog button { min-height: 44px; padding: 0 14px; }
+  .newsletter-form { grid-template-columns: 1fr; }
+  .newsletter-form input[type="email"] { min-height: 44px; }
+  .newsletter-form .btn { justify-self: start; }
   .chain { grid-template-columns: 1fr; justify-items: start; }
   .chain .copy { margin-top: 4px; }
   .block, .page h1, .video, .meme { scroll-margin-top: 128px; }
