@@ -96,6 +96,13 @@ window.STACKS = {
   ],
   videos: [
     {
+      x: "https://x.com/MustStopMurad/status/2124964992277446975",
+      poster: "videos/posters/2026-11-23-only-seen-it-with-bitcoin.jpg",
+      title: "Murad has only seen this once before, with Bitcoin",
+      note: "MustStopMurad, 23 November 2026. About fifty-three seconds. The clip sets SPX6900 next to Bitcoin, with credit to @STPC_Pro and @Cryptic_Mang.",
+      credit: "Post on X · @MustStopMurad"
+    },
+    {
       id: "tdh4QMHkXMU",
       title: "Murad: The SPX6900 Memecoin Will Flip The US Stock Market",
       note: "NGMI, 22 October 2025. About an hour. Murad on the genesis of the token and why he calls it a movement coin."
