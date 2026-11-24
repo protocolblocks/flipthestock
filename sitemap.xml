@@ -2,11 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.flipthestock.com/</loc>
-    <lastmod>2026-11-23</lastmod>
+    <lastmod>2026-11-24</lastmod>
   </url>
   <url>
     <loc>https://www.flipthestock.com/articles/</loc>
-    <lastmod>2026-11-23</lastmod>
+    <lastmod>2026-11-24</lastmod>
+  </url>
+  <url>
+    <loc>https://www.flipthestock.com/articles/piece.html?slug=volleyball-practice-vol-24</loc>
+    <lastmod>2026-11-24</lastmod>
   </url>
   <url>
     <loc>https://www.flipthestock.com/articles/piece.html?slug=origin-story</loc>
@@ -31,6 +35,10 @@
   <url>
     <loc>https://www.flipthestock.com/videos/</loc>
     <lastmod>2026-11-23</lastmod>
+  </url>
+  <url>
+    <loc>https://www.flipthestock.com/events/</loc>
+    <lastmod>2026-11-24</lastmod>
   </url>
   <url>
     <loc>https://www.flipthestock.com/learn/</loc>

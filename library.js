@@ -2,7 +2,13 @@
    Article html is a short string of <p> blocks.
    Meme src is a path from the memes folder, for example "wall/poster.jpg".
    Meme href, when set, is an https link back to the X post.
-   Video id is the 11-character YouTube id. */
+   Video id is the 11-character YouTube id.
+   Events: soonest dated items first, then standing regulars, then recent past.
+   Fields: id, type (online|in-person), title, host, start, end, timezone,
+   location, url, source, recurring, inferred, standing, note.
+   start and end are ISO 8601 UTC. standing regulars omit start (no fake date).
+   inferred means the occurrence has not been posted yet for that week.
+   Upcoming items drop off once end, or start plus two hours, has passed. */
 window.STACKS = {
   articles: [
     {
@@ -138,6 +144,152 @@ window.STACKS = {
       id: "Urr3BeFqEZY",
       title: "Must Stop Murad — Into the Cognisphere 058",
       note: "Southern Fried Chad, 18 November 2026. A livestream of about an hour and forty-six minutes, with Murad as the guest."
+    }
+  ],
+  events: [
+    {
+      id: "volleyball-vol-25",
+      type: "online",
+      title: "SPX6900 Sunday Spaces Volleyball Practice Vol. 25",
+      host: "@MustStopMurad",
+      start: "2026-11-29T19:00:00Z",
+      end: null,
+      timezone: "America/New_York",
+      location: null,
+      url: null,
+      source: "https://x.com/MustStopMurad/status/2124307459695075399",
+      recurring: "weekly-sunday",
+      inferred: true,
+      standing: false,
+      note: "Usually 2 p.m. Eastern, 7 p.m. UTC. The live link is typically posted on Saturday."
+    },
+    {
+      id: "mondaeon-2026-11-30",
+      type: "online",
+      title: "Mondaeon",
+      host: "@MikeFlipthe500",
+      start: "2026-11-30T21:15:00Z",
+      end: null,
+      timezone: "America/New_York",
+      location: null,
+      url: null,
+      source: "https://x.com/MikeFlipthe500/status/2124934336914883017",
+      recurring: "weekly-monday",
+      inferred: true,
+      standing: false,
+      note: "Usually 4:15 p.m. Eastern, 9:15 p.m. UTC, with @sebstrail. The link is typically posted the same day."
+    },
+    {
+      id: "art-basel-miami-2026",
+      type: "in-person",
+      title: "SPX6900 Art Basel Miami",
+      host: "Marie Rose",
+      start: "2026-12-04T23:00:00Z",
+      end: "2026-12-05T07:00:00Z",
+      timezone: "America/New_York",
+      location: "2812 NW 2nd Ave, Miami, FL 33127",
+      url: "https://luma.com/x6ngu1f8",
+      source: "https://luma.com/x6ngu1f8",
+      recurring: "annual",
+      inferred: false,
+      standing: false,
+      note: "A community party during Miami Art Week, 6 p.m. to 2 a.m. Eastern. Free entry, or an $80 ticket. Announced by the official @spx6900 account."
+    },
+    {
+      id: "sunday-spaces",
+      type: "online",
+      title: "SPX6900 Sunday Spaces Volleyball Practice",
+      host: "@MustStopMurad",
+      start: null,
+      end: null,
+      timezone: "America/New_York",
+      location: null,
+      url: null,
+      source: "https://x.com/MustStopMurad/status/2065173015537631578",
+      recurring: "weekly-sunday",
+      inferred: false,
+      standing: true,
+      note: "Every Sunday, usually 2 p.m. Eastern, 7 p.m. UTC, on Murad’s account. The reminder and Space link are typically posted on Saturday."
+    },
+    {
+      id: "mondaeon",
+      type: "online",
+      title: "Mondaeon",
+      host: "@MikeFlipthe500",
+      start: null,
+      end: null,
+      timezone: "America/New_York",
+      location: null,
+      url: null,
+      source: "https://x.com/MikeFlipthe500/status/2124934336914883017",
+      recurring: "weekly-monday",
+      inferred: false,
+      standing: true,
+      note: "Every Monday, usually 4:15 p.m. Eastern, 9:15 p.m. UTC, hosted with @sebstrail."
+    },
+    {
+      id: "austin-crypto-curious",
+      type: "in-person",
+      title: "Crypto Curious Austin",
+      host: "Ilya",
+      start: null,
+      end: null,
+      timezone: "America/Chicago",
+      location: "Central Market, 4001 N Lamar Blvd, Austin, TX",
+      url: "https://www.meetup.com/crypto-curious-austin-bitcoin-memecoins-what-s-next/",
+      source: "https://www.meetup.com/crypto-curious-austin-bitcoin-memecoins-what-s-next/",
+      recurring: "weekly-saturday",
+      inferred: false,
+      standing: true,
+      note: "Organizers describe this as weekly on Saturdays, 4–7 p.m. local time, at Central Market. No dated next meeting was listed on Meetup as of 24 November 2026."
+    },
+    {
+      id: "nyc-central-park-2026-11-07",
+      type: "in-person",
+      title: "SPX6900 Central Park meetup",
+      host: "@Cryptic_Mang",
+      start: "2026-11-07T17:00:00Z",
+      end: "2026-11-07T23:00:00Z",
+      timezone: "America/New_York",
+      location: "Grand Army Plaza, southeast corner of Central Park, New York",
+      url: null,
+      source: "https://x.com/MustStopMurad/status/2118060917544133035",
+      recurring: null,
+      inferred: false,
+      standing: false,
+      note: "Announced by @MustStopMurad as the first major New York meetup."
+    },
+    {
+      id: "carolinaeon-2026-06-27",
+      type: "in-person",
+      title: "CarolinAeon Conference",
+      host: "Community",
+      start: "2026-06-27T16:00:00Z",
+      end: "2026-06-27T22:00:00Z",
+      timezone: "America/New_York",
+      location: "Greenville, South Carolina",
+      url: "https://www.youtube.com/watch?v=KKo8VcBH82Y",
+      source: "https://x.com/spx6900/status/2070867731029651951",
+      recurring: null,
+      inferred: false,
+      standing: false,
+      note: "A free community conference, 12–6 p.m. Eastern, with a public livestream."
+    },
+    {
+      id: "amsterdam-2026-05-09",
+      type: "in-person",
+      title: "SPX6900 Amsterdam Conference",
+      host: "Community",
+      start: "2026-05-09T07:30:00Z",
+      end: "2026-05-09T16:00:00Z",
+      timezone: "Europe/Amsterdam",
+      location: "Meet Berlage, 9 Oudebrugsteeg, 1012 JN Amsterdam",
+      url: "https://my.weezevent.com/spx6900-conference-amsterdam",
+      source: "https://my.weezevent.com/spx6900-conference-amsterdam",
+      recurring: null,
+      inferred: false,
+      standing: false,
+      note: "The first European conference, 9:30 a.m. to 6 p.m. local time, at the former Amsterdam Stock Exchange."
     }
   ]
 };

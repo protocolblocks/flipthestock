@@ -12,7 +12,8 @@
     return {
       articles: Array.isArray(stacks.articles) ? stacks.articles : [],
       memes: Array.isArray(stacks.memes) ? stacks.memes : [],
-      videos: Array.isArray(stacks.videos) ? stacks.videos : []
+      videos: Array.isArray(stacks.videos) ? stacks.videos : [],
+      events: Array.isArray(stacks.events) ? stacks.events : []
     };
   }
 
@@ -21,6 +22,266 @@
     if (isNaN(date.getTime())) return esc(iso);
     return date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
   }
+
+  var BLOCKED_X_HANDLES = { flipthestock: true };
+
+  function xHandle(value) {
+    var handle = String(value || "").replace(/^@/, "");
+    if (!/^[A-Za-z0-9_]{1,15}$/.test(handle)) return "";
+    if (BLOCKED_X_HANDLES[handle.toLowerCase()]) return "";
+    return handle;
+  }
+
+  function safeHttpUrl(value) {
+    var url = String(value || "");
+    var match = url.match(/^https:\/\/([A-Za-z0-9.-]+)(\/[^\s]*)$/);
+    if (!match) return "";
+    var host = match[1].toLowerCase();
+    var allowed = {
+      "x.com": true,
+      "www.x.com": true,
+      "twitter.com": true,
+      "www.twitter.com": true,
+      "luma.com": true,
+      "www.luma.com": true,
+      "meetup.com": true,
+      "www.meetup.com": true,
+      "youtube.com": true,
+      "www.youtube.com": true,
+      "youtu.be": true,
+      "my.weezevent.com": true
+    };
+    if (!allowed[host]) return "";
+    if (/\/(?:FlipTheStock|flipthestock)(?:\/|$|\?)/i.test(url)) return "";
+    return url;
+  }
+
+  function parseStamp(value) {
+    if (!value) return NaN;
+    var time = Date.parse(value);
+    return isNaN(time) ? NaN : time;
+  }
+
+  function eventEndTime(event) {
+    var end = parseStamp(event && event.end);
+    if (!isNaN(end)) return end;
+    var start = parseStamp(event && event.start);
+    if (isNaN(start)) return NaN;
+    return start + 2 * 60 * 60 * 1000;
+  }
+
+  function isStanding(event) {
+    return !!(event && event.standing);
+  }
+
+  function isExpired(event, now) {
+    var end = eventEndTime(event);
+    return !isNaN(end) && end <= (now || Date.now());
+  }
+
+  function isUpcoming(event, now) {
+    return !!(event && event.start && !isStanding(event) && !isExpired(event, now));
+  }
+
+  function isRecent(event, now) {
+    return !!(event && event.start && !isStanding(event) && event.type === "in-person" && isExpired(event, now));
+  }
+
+  function sortByStart(a, b) {
+    return parseStamp(a.start) - parseStamp(b.start);
+  }
+
+  function upcomingEvents(now) {
+    return data().events.filter(function (event) {
+      return isUpcoming(event, now);
+    }).sort(sortByStart);
+  }
+
+  function standingEvents() {
+    return data().events.filter(isStanding);
+  }
+
+  function recentEvents(now) {
+    return data().events.filter(function (event) {
+      return isRecent(event, now);
+    }).sort(function (a, b) {
+      return parseStamp(b.start) - parseStamp(a.start);
+    });
+  }
+
+  function firstUpcomingOfType(type, now) {
+    var list = upcomingEvents(now);
+    for (var i = 0; i < list.length; i++) {
+      if (list[i].type === type) return list[i];
+    }
+    return null;
+  }
+
+  function clockInZone(date, timeZone) {
+    var text = date.toLocaleTimeString("en-GB", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: timeZone
+    });
+    return text.replace(/\s*(am|pm)/i, function (_, mer) {
+      return mer.toLowerCase() === "am" ? " a.m." : " p.m.";
+    });
+  }
+
+  function formatLocalWhen(date) {
+    var day = date.toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+    var time = date.toLocaleTimeString("en-GB", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZoneName: "short"
+    }).replace(/\s*(am|pm)/i, function (_, mer) {
+      return mer.toLowerCase() === "am" ? " a.m." : " p.m.";
+    });
+    return day + ", " + time;
+  }
+
+  function zoneHints(date) {
+    return clockInZone(date, "America/Edmonton") + " Mountain, " +
+      clockInZone(date, "America/New_York") + " Eastern";
+  }
+
+  function typeLabel(event) {
+    return event && event.type === "in-person" ? "In person" : "X Space";
+  }
+
+  function hostHtml(event) {
+    var raw = String(event && event.host || "");
+    if (raw.charAt(0) === "@") {
+      var handle = xHandle(raw);
+      if (handle) {
+        return '<a class="text-link" href="https://x.com/' + handle + '" target="_blank" rel="noopener noreferrer">@' + esc(handle) + '</a>';
+      }
+    }
+    return raw ? esc(raw) : "";
+  }
+
+  function eventLinks(event) {
+    var url = safeHttpUrl(event && event.url);
+    var source = safeHttpUrl(event && event.source);
+    var parts = [];
+    if (url) {
+      var label = event.type === "in-person" ? "Tickets or details" : "Space link";
+      if (/meetup\.com/i.test(url)) label = "Meetup";
+      if (/luma\.com/i.test(url)) label = "Tickets";
+      if (/youtube\.com|youtu\.be/i.test(url)) label = "Livestream";
+      parts.push('<a class="text-link" href="' + esc(url) + '" target="_blank" rel="noopener noreferrer">' + label + '</a>');
+    }
+    if (source && source !== url) {
+      parts.push('<a class="text-link" href="' + esc(source) + '" target="_blank" rel="noopener noreferrer">Source</a>');
+    }
+    return parts.join('<span class="event-sep"> · </span>');
+  }
+
+  function eventWhenHtml(event) {
+    var start = parseStamp(event && event.start);
+    if (isNaN(start)) return "";
+    var date = new Date(start);
+    var local = formatLocalWhen(date);
+    var hints = zoneHints(date);
+    var flag = event.inferred ? '<span class="flag">Expected</span>' : "";
+    return '<p class="when">' + flag + esc(local) + '</p><p class="when-hint">' + esc(hints) + '</p>';
+  }
+
+  function eventItemHtml(event, opts) {
+    opts = opts || {};
+    var compact = !!opts.compact;
+    var kicker = typeLabel(event);
+    var title = esc(event.title || "Gathering");
+    var host = hostHtml(event);
+    var when = eventWhenHtml(event);
+    var location = event.location ? '<p class="event-place">' + esc(event.location) + '</p>' : "";
+    var note = !compact && event.note ? '<p class="event-note">' + esc(event.note) + '</p>' : "";
+    var links = eventLinks(event);
+    var hostLine = host ? '<p class="credit">Hosted by ' + host + '</p>' : "";
+    if (compact) {
+      return '<article class="event event-compact">' +
+        '<p class="kicker">' + esc(kicker) + '</p>' +
+        '<h3>' + title + '</h3>' +
+        when +
+        (links ? '<p class="event-links">' + links + '</p>' : "") +
+        '</article>';
+    }
+    return '<article class="event">' +
+      '<p class="kicker">' + esc(kicker) + '</p>' +
+      '<h2>' + title + '</h2>' +
+      when +
+      hostLine +
+      location +
+      note +
+      (links ? '<p class="event-links">' + links + '</p>' : "") +
+      '</article>';
+  }
+
+  function standingItemHtml(event) {
+    var host = hostHtml(event);
+    var links = eventLinks(event);
+    return '<article class="event">' +
+      '<p class="kicker">' + esc(typeLabel(event)) + '</p>' +
+      '<h2>' + esc(event.title || "Gathering") + '</h2>' +
+      (host ? '<p class="credit">Hosted by ' + host + '</p>' : "") +
+      (event.location ? '<p class="event-place">' + esc(event.location) + '</p>' : "") +
+      (event.note ? '<p class="event-note">' + esc(event.note) + '</p>' : "") +
+      (links ? '<p class="event-links">' + links + '</p>' : "") +
+      '</article>';
+  }
+
+  function nextGatheringHtml(eventsHref) {
+    var online = firstUpcomingOfType("online");
+    var inPerson = firstUpcomingOfType("in-person");
+    if (!online && !inPerson) return "";
+    var items = "";
+    if (online) items += eventItemHtml(online, { compact: true });
+    if (inPerson) items += eventItemHtml(inPerson, { compact: true });
+    return '<div class="next-box">' +
+      '<p class="kicker">Next gathering</p>' +
+      items +
+      '<p><a class="more" href="' + esc(eventsHref) + '">All gatherings</a></p></div>';
+  }
+
+  window.renderEvents = function (root) {
+    if (!root) return;
+    var upcoming = upcomingEvents();
+    var regulars = standingEvents();
+    var recent = recentEvents();
+    var html = "";
+    html += '<section class="event-band" aria-label="Upcoming">' +
+      '<div class="band-head"><h2>Upcoming</h2></div>';
+    if (upcoming.length) {
+      html += upcoming.map(function (event) { return eventItemHtml(event, {}); }).join("");
+    } else {
+      html += '<p class="event-empty">Nothing dated is on the calendar just now. The regulars below still stand.</p>';
+    }
+    html += '</section>';
+    html += '<section class="event-band" aria-label="Regulars">' +
+      '<div class="band-head"><h2>Regulars</h2></div>';
+    if (regulars.length) {
+      html += regulars.map(standingItemHtml).join("");
+    } else {
+      html += '<p class="event-empty">No regular gatherings are listed.</p>';
+    }
+    html += '</section>';
+    html += '<section class="event-band" aria-label="Recent">' +
+      '<div class="band-head"><h2>Recent</h2></div>';
+    if (recent.length) {
+      html += recent.map(function (event) { return eventItemHtml(event, {}); }).join("");
+    } else {
+      html += '<p class="event-empty">No recent gatherings are listed.</p>';
+    }
+    html += '</section>';
+    root.innerHTML = html;
+  };
 
   function pieceHref(prefix, slug) {
     return prefix + "piece.html?slug=" + encodeURIComponent(slug || "");
@@ -345,7 +606,11 @@
             '<p class="kicker">' + esc(article.kicker || "Latest") + '</p>' +
             '<h3>' + esc(article.title) + '</h3></a></div>';
         }).join("") +
+        nextGatheringHtml("events/") +
         '</div>';
+    } else {
+      var soloBox = nextGatheringHtml("events/");
+      if (soloBox) sideHtml = '<div class="side">' + soloBox + '</div>';
     }
     var most = articles.slice(0, 6).map(function (article, index) {
       return '<li><span>' + (index + 1) + '</span><a href="' + pieceHref("articles/", article.slug) + '">' +

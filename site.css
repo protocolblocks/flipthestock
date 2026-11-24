@@ -137,7 +137,8 @@ a:hover { color: var(--claret); }
 }
 a.kicker:hover, .kicker:hover { color: var(--claret); }
 .page h1, .article h1, .hero-copy h2, .side h2, .rail h2, .band-head h2, .newsletter h2, .primer h2,
-.piece h2, .video h2, .card h3, .tenet h3, .door h3, .timeline h3, .quad h3, .video-row h3, .related h3 {
+.piece h2, .video h2, .event h2, .card h3, .tenet h3, .door h3, .timeline h3, .quad h3, .video-row h3, .related h3,
+.next-box h3, .event h3 {
   font-family: var(--serif);
   font-weight: 500;
   letter-spacing: -0.02em;
@@ -178,6 +179,52 @@ a.kicker:hover, .kicker:hover { color: var(--claret); }
 .related { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
 .related .kicker { margin-top: 0; }
 .related h3 { font-size: 18px; line-height: 1.25; margin: 0; }
+
+.next-box {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ink);
+}
+.next-box .kicker { margin-top: 0; }
+.next-box h3 {
+  font-size: 18px;
+  line-height: 1.25;
+  margin: 0 0 4px;
+}
+.next-box .event-compact { margin: 0 0 12px; padding: 0; border: 0; }
+.next-box .more { display: inline-block; margin-top: 2px; }
+
+.event-band { margin-top: 28px; }
+.event-band .band-head { margin-bottom: 4px; }
+.event {
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.event-band .event:first-of-type { border-top: 0; padding-top: 8px; }
+.event h2 { font-size: 26px; line-height: 1.15; margin: 0 0 6px; }
+.event .kicker { margin-top: 0; }
+.event .when { margin: 0; }
+.flag {
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--claret);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.when-hint, .event-place, .event-note, .event-empty {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 68ch;
+}
+.event-note, .event-empty { font-size: 15px; line-height: 1.45; color: var(--ink); }
+.event-empty { margin-top: 8px; color: var(--muted); }
+.event .credit { display: block; margin-top: 6px; }
+.event-links { margin: 8px 0 0; }
+.event-sep { color: var(--muted); }
+
 .rail h2 {
   font-size: 22px;
   line-height: 1.1;
