@@ -6,6 +6,18 @@
 window.STACKS = {
   articles: [
     {
+      slug: "volleyball-practice-vol-24",
+      kicker: "The room",
+      title: "Volleyball practice, volume 24",
+      date: "2026-11-24",
+      dek: "Sunday’s recurring SPX6900 Space went ahead as scheduled. A recording of Murad’s monologue followed.",
+      html: [
+        "<p>On Sunday afternoon, <a href=\"https://x.com/MustStopMurad/status/2124578901154218041\">@MustStopMurad</a> posted the live link for a recurring X Space the community calls Volleyball Practice. This one was volume 24. He had <a href=\"https://x.com/MustStopMurad/status/2124307459695075399\">flagged it the night before</a> as \"Why Tokenized Movements are the Future of Crypto,\" set for 2 p.m. Eastern, 7 p.m. UTC, on 22 November.</p>",
+        "<p><a href=\"https://x.com/KennyCrypto6900/status/2124591690413465796\">@KennyCrypto6900</a>, writing while the Space was on, said there were \"hundreds of aeons\" in the room \"at the stone cold bottom.\" That headcount has not been confirmed by the host, and X’s own attendance figures were not public after the fact. <a href=\"https://x.com/cryptonut100/status/2124665218592833835\">@cryptonut100</a>, who had earlier pointed people to an 11 a.m. Pacific start, later wrote that the token \"doesn’t get its legitimacy from Wall Street, the media, or anyone’s permission,\" but from \"regular people deciding together to treat it like it’s real.\" That is one listener’s reading, not a finding.</p>",
+        "<p>After the Space ended, <a href=\"https://x.com/leongaban/status/2124667556762128813\">@leongaban</a> posted a recording of Murad’s monologue from the session, and a copy on <a href=\"https://www.youtube.com/watch?v=AllgBzun6ow\">YouTube</a> under the title \"Murad on SPX 6900 - Sunday’s SPX Volley ball space.\" The official @spx6900 account did not post about the gathering. Nothing said in the room is advice from this page.</p>"
+      ].join("")
+    },
+    {
       slug: "origin-story",
       kicker: "Cover",
       title: "How SPX6900 started",
