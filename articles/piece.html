@@ -70,6 +70,23 @@
   <footer><div class="wrap"><p>Fan page. Not affiliated with SPX6900 or the S&amp;P 500. Not financial advice.</p></div></footer>
   <script src="../library.js"></script>
   <script src="../stacks.js"></script>
-  <script>renderPiece(document.getElementById("stack"));</script>
+  <script>
+    renderPiece(document.getElementById("stack"));
+    // renderPiece has set the title from ?slug=. GoatCounter drops query
+    // strings, and it prefers this page's canonical link, so the default
+    // path would merge every article into /articles/piece.html (and a
+    // missing slug into /articles/). Record /articles/<slug> once.
+    window.goatcounter = {
+      path: function () {
+        var slug = new URLSearchParams(window.location.search).get("slug");
+        var articles = (window.STACKS && window.STACKS.articles) || [];
+        var article = articles.filter(function (item) { return item.slug === slug; })[0];
+        if (!article || !/^[a-z0-9-]+$/.test(String(article.slug || ""))) return "/articles/piece.html";
+        return "/articles/" + article.slug;
+      }
+    };
+  </script>
+  <script data-goatcounter="https://flipthestock.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
