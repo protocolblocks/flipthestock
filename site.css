@@ -51,16 +51,27 @@ a:hover { color: var(--claret); }
 .bar {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 16px;
   padding: 14px 0 8px;
 }
 .logo {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.38em;
   font-family: var(--serif);
   font-size: 28px;
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 1;
+}
+.logo .mark {
+  display: block;
+  flex: 0 0 auto;
+  width: auto;
+  height: 1em;
+  aspect-ratio: 14.87 / 26.042;
+  overflow: visible;
 }
 .logo:hover { color: var(--ink); }
 .edition { margin: 0; font-size: 13px; color: var(--muted); }
