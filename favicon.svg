@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-labelledby="title">
+  <title id="title">Flip the Stock</title>
+  <rect width="32" height="32" fill="#fff1e5"/>
+  <g transform="translate(7.5275 22.7000) scale(0.013136 -0.013136)" fill="#33302e">
+    <path d="M956 929V666V402H856L835 604H365V728H835L856 929ZM1108 1416H1148L1211 958L1138 948L954 1277L1071 1225H348V1352H992ZM508 1352V109L663 55V0H79V55L234 109V1243L79 1298V1352Z"/>
+  </g>
+  <rect x="10.400" y="24.250" width="11.200" height="1.350" fill="#990f3d"/>
+</svg>
