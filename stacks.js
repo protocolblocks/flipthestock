@@ -270,9 +270,19 @@
       return '<li><span>' + (index + 1) + '</span><a href="' + pieceHref("articles/", article.slug) + '">' +
         esc(article.title) + '</a></li>';
     }).join("");
+    var coverSrc = "assets/cover.jpg";
+    var coverAlt = "A sheet of chart paper with a faint grid and a single black dot. The rest of the grid is empty.";
+    var leadMeme = data().memes[0];
+    if (leadMeme) {
+      var memeSrc = safeImage(leadMeme.src);
+      if (memeSrc) {
+        coverSrc = "memes/" + memeSrc;
+        coverAlt = leadMeme.alt || leadMeme.caption || coverAlt;
+      }
+    }
     root.innerHTML = sideHtml +
       '<a class="hero-pic" href="' + pieceHref("articles/", lead.slug) + '">' +
-      '<img class="pic" src="assets/cover.jpg" alt="A sheet of chart paper with a faint grid and a single black dot. The rest of the grid is empty."></a>' +
+      '<img class="pic" src="' + esc(coverSrc) + '" alt="' + esc(coverAlt) + '" onerror="this.onerror=null;this.src=\'assets/cover.jpg\'"></a>' +
       '<div class="hero-copy"><a href="' + pieceHref("articles/", lead.slug) + '">' +
       '<p class="kicker">' + esc(lead.kicker || "Cover") + '</p>' +
       '<h2>' + esc(lead.title) + '</h2>' +

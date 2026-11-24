@@ -120,7 +120,7 @@ a.kicker:hover, .kicker:hover { color: var(--claret); }
 .hero-copy { grid-area: copy; align-self: start; }
 .rail { grid-area: rail; align-self: start; }
 .pic { width: 100%; object-fit: cover; background: var(--wheat); }
-.hero-pic .pic { aspect-ratio: 16 / 8.2; }
+.hero-pic .pic { aspect-ratio: 16 / 9; object-fit: contain; background: var(--wheat); }
 .side .pic, .quad .pic { aspect-ratio: 3 / 2; }
 .video-row .pic { aspect-ratio: 16 / 9; }
 .hero-copy h2 { font-size: 34px; line-height: 1.08; margin: 0 0 8px; }
