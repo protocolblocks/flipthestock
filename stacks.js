@@ -343,6 +343,18 @@
       '<aside class="rail" aria-label="Most read"><h2>Most read</h2><ol class="most">' + most + '</ol></aside>';
   };
 
+  function postedDate(entry) {
+    var fmt = { day: "numeric", month: "long", year: "numeric", timeZone: "America/Edmonton" };
+    if (entry.date && /^\d{4}-\d{2}-\d{2}$/.test(String(entry.date))) {
+      var parts = String(entry.date).split("-");
+      return new Date(Date.UTC(+parts[0], +parts[1] - 1, +parts[2], 12)).toLocaleDateString("en-GB", fmt);
+    }
+    var m = String(entry.x || entry.href || "").match(/\/status\/(\d{15,20})/);
+    if (m) return new Date(Math.floor(Number(m[1]) / 4194304) + 1288834974657).toLocaleDateString("en-GB", fmt);
+    var d = String(entry.note || "").match(/\b(\d{1,2} (?:January|February|March|April|May|June|July|August|September|October|November|December) \d{4})\b/);
+    return d ? d[1] : "";
+  }
+
   window.renderFrontMemes = function (root) {
     var memes = data().memes.slice(0, 4);
     if (!memes.length) {
@@ -359,7 +371,7 @@
       return open +
         '<img class="pic" src="memes/' + esc(src) + '" alt="' + esc(meme.alt || "") + '">' +
         '<h3>' + esc(meme.caption) + '</h3>' +
-        '<p class="credit">' + esc(meme.credit || "Post on X") + '</p></a>';
+        (postedDate(meme) ? '<p class="credit">' + esc(postedDate(meme)) + '</p>' : '') + '</a>';
     }).join("");
   };
 
@@ -372,7 +384,7 @@
     root.innerHTML = videos.map(function (video) {
       var key = videoKey(video);
       if (!key) return "";
-      var note = String(video.note || "").split(". ")[0] || String(video.credit || "");
+      var note = postedDate(video);
       var x = xPost(video);
       var thumb = x
         ? posterSrc(video.poster)
