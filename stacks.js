@@ -144,6 +144,23 @@
     return "m-" + name;
   }
 
+  // Cover for the left-hand "This issue" thumbnail. Uses the archive only
+  // (everything after memes[0]), so it never matches the meme of the day on
+  // the main hero. The index is (library length * 7) % archive length: it
+  // changes when the daily routine prepends a new memes[0], and 7 keeps the
+  // pick from always being the previous day's neighbour.
+  function archiveCoverMeme() {
+    var memes = validMemes();
+    if (memes.length < 2) return null;
+    var leadSrc = safeImage(memes[0].src);
+    var archive = memes.slice(1).filter(function (meme) {
+      var src = safeImage(meme.src);
+      return src && src !== leadSrc;
+    });
+    if (!archive.length) return null;
+    return archive[(memes.length * 7) % archive.length];
+  }
+
   function pageForMemeHash(memes) {
     var hash = String(location.hash || "").replace(/^#/, "");
     if (!hash) return 0;
@@ -303,8 +320,22 @@
     var related = articles.slice(2, 4);
     var sideHtml = "";
     if (side) {
-      sideHtml = '<div class="side"><a href="' + pieceHref("articles/", side.slug) + '">' +
-        '<img class="pic" src="memes/wall/no-chart.jpg" alt="A dark empty chart with green text reading We are here and an arrow pointing at a single dot.">' +
+      var sideImgSrc = "memes/wall/no-chart.jpg";
+      var sideImgAlt = "A dark empty chart with green text reading We are here and an arrow pointing at a single dot.";
+      var sideImgHref = pieceHref("articles/", side.slug);
+      var coverMeme = archiveCoverMeme();
+      if (coverMeme) {
+        var coverMemeSrc = safeImage(coverMeme.src);
+        if (coverMemeSrc) {
+          var coverMemeId = memeAnchor(coverMemeSrc);
+          sideImgSrc = "memes/" + coverMemeSrc;
+          sideImgAlt = coverMeme.alt || coverMeme.caption || sideImgAlt;
+          sideImgHref = "memes/" + (coverMemeId ? "#" + coverMemeId : "");
+        }
+      }
+      sideHtml = '<div class="side"><a href="' + sideImgHref + '">' +
+        '<img class="pic" src="' + esc(sideImgSrc) + '" alt="' + esc(sideImgAlt) + '"></a>' +
+        '<a href="' + pieceHref("articles/", side.slug) + '">' +
         '<p class="kicker">' + esc(side.kicker || "Latest") + '</p>' +
         '<h2>' + esc(side.title) + '</h2>' +
         '<p class="dek">' + esc(side.dek) + '</p>' +
