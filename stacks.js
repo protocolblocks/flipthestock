@@ -36,6 +36,30 @@
     return '<div class="empty"><div class="idx">Empty</div><h2>' + esc(title) + '</h2><p>' + esc(text) + '</p></div>';
   }
 
+  var SITE = "Flip the Stock";
+  var ORIGIN = "https://www.flipthestock.com";
+
+  function metaContent(id, value) {
+    var el = document.getElementById(id);
+    if (el) el.setAttribute("content", value);
+  }
+
+  function setPieceMeta(title, description, url, type, jsonLd, robots) {
+    document.title = title;
+    metaContent("meta-description", description);
+    metaContent("og-title", title);
+    metaContent("og-description", description);
+    metaContent("og-url", url);
+    metaContent("og-type", type);
+    metaContent("twitter-title", title);
+    metaContent("twitter-description", description);
+    metaContent("meta-robots", robots);
+    var canonical = document.getElementById("canonical");
+    if (canonical) canonical.setAttribute("href", url);
+    var ld = document.getElementById("page-jsonld");
+    if (ld && jsonLd) ld.textContent = JSON.stringify(jsonLd).replace(/</g, "\\u003c");
+  }
+
   window.renderArticles = function (root) {
     var articles = data().articles.slice().sort(function (a, b) {
       return String(b.date || "").localeCompare(String(a.date || ""));
@@ -60,9 +84,50 @@
     if (!article) {
       root.innerHTML = '<a class="back" href="./">All articles</a>' +
         empty("That piece is not on the shelf.", "The link may be old, or the piece has not been filed yet.");
+      var missingUrl = ORIGIN + "/articles/";
+      var missingDescription = "That piece is not on the shelf. The link may be old, or it has not been filed yet.";
+      setPieceMeta(
+        "Article not found — " + SITE,
+        missingDescription,
+        missingUrl,
+        "website",
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Article not found",
+          "url": missingUrl,
+          "description": missingDescription,
+          "isPartOf": { "@type": "WebSite", "name": SITE, "url": ORIGIN + "/" },
+          "inLanguage": "en"
+        },
+        "noindex, follow"
+      );
       return;
     }
-    document.title = article.title + " — There Is No Chart";
+    var pieceUrl = ORIGIN + "/articles/piece.html?slug=" + encodeURIComponent(article.slug || "");
+    var pieceDescription = article.dek || "A written piece on SPX6900, filed on Flip the Stock.";
+    var articleLd = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": article.title,
+      "description": pieceDescription,
+      "inLanguage": "en",
+      "mainEntityOfPage": pieceUrl,
+      "url": pieceUrl,
+      "image": ORIGIN + "/assets/og.png",
+      "author": { "@type": "Organization", "name": SITE, "url": ORIGIN + "/" },
+      "publisher": { "@type": "Organization", "name": SITE, "url": ORIGIN + "/" },
+      "isPartOf": { "@type": "WebSite", "name": SITE, "url": ORIGIN + "/" }
+    };
+    if (article.date) articleLd.datePublished = article.date;
+    setPieceMeta(
+      article.title + " — " + SITE,
+      pieceDescription,
+      pieceUrl,
+      "article",
+      articleLd,
+      "index, follow"
+    );
     var body = String(article.html || "").replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
     root.innerHTML = '<a class="back" href="./">All articles</a>' +
       '<article class="article">' +
