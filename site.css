@@ -169,7 +169,7 @@ a.kicker:hover, .kicker:hover { color: var(--claret); }
 .quad h3, .video-row h3 { font-size: 18px; line-height: 1.25; margin: 8px 0 0; }
 .video-row h3 { font-size: 16px; }
 .quad .credit, .video-row .credit { margin: 6px 0 0; }
-.video-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px 20px; }
+.video-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
 .primer {
   margin-top: 28px;
   background: var(--wheat);

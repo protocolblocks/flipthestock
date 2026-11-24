@@ -279,36 +279,20 @@
   };
 
   window.renderFrontVideos = function (root) {
-    var videos = validVideos();
+    var videos = validVideos().slice(0, 5);
     if (!videos.length) {
       root.innerHTML = empty("No reels filed.", "The best videos will play here.");
-      placePager(root, 1, 0);
       return;
     }
-
-    function draw(page, scroll) {
-      var totalPages = Math.ceil(videos.length / VIDEO_PAGE_SIZE);
-      page = clampPage(page, totalPages);
-      var slice = videos.slice((page - 1) * VIDEO_PAGE_SIZE, page * VIDEO_PAGE_SIZE);
-      root.innerHTML = slice.map(function (video) {
-        var id = String(video.id || "");
-        var note = String(video.note || "").split(". ")[0];
-        return '<a href="videos/#v-' + id + '">' +
-          '<img class="pic" src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="">' +
-          '<h3>' + esc(video.title) + '</h3>' +
-          (note ? '<p class="credit">' + esc(note) + '</p>' : '') +
-          '</a>';
-      }).join("");
-      placePager(root, page, totalPages, function (next) {
-        draw(next, true);
-      });
-      if (scroll) {
-        var section = document.getElementById("videos") || root;
-        section.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    }
-
-    draw(1, false);
+    root.innerHTML = videos.map(function (video) {
+      var id = String(video.id || "");
+      var note = String(video.note || "").split(". ")[0];
+      return '<a href="videos/#v-' + id + '">' +
+        '<img class="pic" src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="">' +
+        '<h3>' + esc(video.title) + '</h3>' +
+        (note ? '<p class="credit">' + esc(note) + '</p>' : '') +
+        '</a>';
+    }).join("");
   };
 
   window.renderMemes = function (root) {
