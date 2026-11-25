@@ -44,11 +44,12 @@ def header(p, current, has_form):
     <div class="markets">
       <div class="wrap markets-bar">
         <p class="edition"></p>
-        <a class="ticker" href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer" aria-label="SPX6900 price on CoinGecko">
-          <span class="ticker-live">Live</span>
+        <a class="ticker" href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer" aria-label="SPX6900 price">
+          <span class="ticker-live" hidden>Live</span>
           <span class="ticker-name">SPX6900</span>
           <span class="ticker-price">—</span>
           <span class="ticker-change" hidden></span>
+          <span class="ticker-source" hidden></span>
         </a>
       </div>
     </div>
@@ -109,7 +110,8 @@ def footer(p, has_form):
                          a(p + "events/", "Events"), a(p + "videos/", "Videos"), a(p + "memes/", "Memes"),
                          a(p + "learn/", "Learn")]),
         col("Community", [a(p + "contact/", "Contact"),
-                           a(nl, "Newsletter"), a(p + "events/", "Gatherings calendar")]),
+                           a(nl, "Newsletter"), a(p + "events/", "Gatherings calendar"),
+                           a(p + "feed.xml", "RSS")]),
         col("SPX6900", [ext("https://spx6900.com", "Official site: spx6900.com"),
                         a(p + "learn/#addresses", "Contract addresses"),
                         ext("https://www.coingecko.com/en/coins/spx6900", "Live price on CoinGecko")]),
@@ -121,7 +123,7 @@ def footer(p, has_form):
 %s
       </nav>
       <div class="foot-print">
-        <p>Nothing here is an offer or financial advice. The token can go to zero. Prices in the top bar come from CoinGecko and may be delayed.</p>
+        <p>Nothing here is an offer or financial advice. The token can go to zero. Prices in the top bar come from CoinGecko or DexScreener and may be delayed.</p>
         <p>© 2026 Flip the Stock. A user community site for SPX6900.</p>
       </div>
     </div>
@@ -149,6 +151,16 @@ def replace(html, pattern, marker, new):
 FONTS_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500'
               '&family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700'
               '&display=swap" rel="stylesheet">')
+
+RSS_LINK = ('<link rel="alternate" type="application/rss+xml" title="Flip the Stock" '
+            'href="https://www.flipthestock.com/feed.xml">')
+
+
+def ensure_rss_link(html):
+    pattern = re.compile(r'<link\s+rel="alternate"\s+type="application/rss\+xml"[^>]*>')
+    if pattern.search(html):
+        return pattern.sub(RSS_LINK, html, count=1)
+    return html.replace("</head>", "  %s\n</head>" % RSS_LINK, 1)
 
 def article_pages():
     extra = []
@@ -187,6 +199,7 @@ def sync():
         f = ROOT / path
         html = f.read_text()
         html = re.sub(r'<link href="https://fonts\.googleapis\.com/css2\?[^"]*" rel="stylesheet">', lambda m: FONTS_LINK, html, count=1)
+        html = ensure_rss_link(html)
         has_form = input_id is not None
         html = replace(html, r'<header class="mast">.*?</header>', "header", header(p, current, has_form))
         html = replace(html, r'<footer>.*?</footer>', "footer", footer(p, has_form))

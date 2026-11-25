@@ -5,7 +5,7 @@ Run from the repo root after adding or editing articles:
     python3 _tools/build_articles.py
 
 It writes articles/<slug>/index.html (with the shared chrome from
-sync_chrome.py), updates article entries in sitemap.xml, and removes
+sync_chrome.py), refreshes sitemap.xml and /feed.xml, and removes
 generated pages whose slugs are no longer in library.js. Jekyll skips
 folders starting with "_", so this file is not published.
 """
@@ -17,7 +17,8 @@ import os
 import re
 import subprocess
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
+from email.utils import format_datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -43,7 +44,7 @@ def esc(value) -> str:
     return html.escape("" if value is None else str(value), quote=True)
 
 
-def load_articles() -> list:
+def load_stacks() -> dict:
     code = r"""
 const fs = require("fs");
 const vm = require("vm");
@@ -52,12 +53,11 @@ const ctx = { window: {} };
 vm.createContext(ctx);
 vm.runInContext(src, ctx, { timeout: 5000 });
 const stacks = ctx.window.STACKS || {};
-const articles = stacks.articles;
-if (!Array.isArray(articles)) {
-  console.error("library.js did not define window.STACKS.articles as an array");
+if (!stacks || typeof stacks !== "object") {
+  console.error("library.js did not define window.STACKS");
   process.exit(2);
 }
-process.stdout.write(JSON.stringify(articles));
+process.stdout.write(JSON.stringify(stacks));
 """
     env = os.environ.copy()
     env["LIBRARY_JS"] = str(ROOT / "library.js")
@@ -70,13 +70,20 @@ process.stdout.write(JSON.stringify(articles));
     )
     if result.returncode != 0:
         sys.stderr.write(result.stderr or result.stdout or "node failed to parse library.js\n")
-        raise SystemExit("build_articles: could not read articles from library.js")
+        raise SystemExit("build_articles: could not read library.js")
     try:
         data = json.loads(result.stdout)
     except json.JSONDecodeError as e:
         raise SystemExit("build_articles: node returned invalid JSON: %s" % e)
+    if not isinstance(data, dict):
+        raise SystemExit("build_articles: STACKS payload was not an object")
+    return data
+
+
+def load_articles(stacks=None) -> list:
+    data = (stacks or load_stacks()).get("articles") or []
     if not isinstance(data, list):
-        raise SystemExit("build_articles: articles payload was not a list")
+        raise SystemExit("build_articles: window.STACKS.articles is not an array")
     return data
 
 
@@ -281,6 +288,7 @@ def page_html(article, articles) -> str:
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#fff1e5">
   <link rel="canonical" href="%s">
+  %s
   <meta property="og:site_name" content="%s">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="en_US">
@@ -366,6 +374,7 @@ def page_html(article, articles) -> str:
         esc(page_title),
         esc(description),
         esc(url),
+        sync_chrome.RSS_LINK,
         esc(SITE),
         esc(page_title),
         esc(description),
@@ -435,48 +444,172 @@ def remove_stale(keep: set[str]) -> list[str]:
     return removed
 
 
-def update_sitemap(articles: list) -> bool:
+DATE_RE = re.compile(r"(\d{4}-\d{2}-\d{2})")
+
+# Section pages that should always appear in the sitemap. lastmod is kept
+# from the existing file when we cannot derive a newer date from library.js.
+STATIC_SITEMAP = [
+    ("/learn/", "2026-11-23"),
+    ("/market-data/", "2026-11-25"),
+    ("/contact/", "2026-11-24"),
+]
+
+
+def iso_date(value) -> str:
+    text = str(value or "")
+    m = DATE_RE.search(text)
+    return m.group(1) if m else ""
+
+
+def article_date(article) -> str:
+    date = iso_date(article.get("date"))
+    return date or datetime.now(timezone.utc).date().isoformat()
+
+
+def newest_date(values) -> str:
+    dates = [d for d in values if d]
+    return max(dates) if dates else ""
+
+
+def existing_lastmods() -> dict:
     path = ROOT / "sitemap.xml"
-    text = path.read_text()
-    text, n = re.subn(
-        r"  <url>\n    <loc>https://www\.flipthestock\.com/articles/(?:piece\.html\?slug=[A-Za-z0-9-]+|[a-z0-9]+(?:-[a-z0-9]+)*/)</loc>\n    <lastmod>[^<]*</lastmod>\n  </url>\n",
-        "",
-        text,
+    if not path.exists():
+        return {}
+    return dict(re.findall(
+        r"<loc>https://www\.flipthestock\.com([^<]*)</loc>\s*<lastmod>([^<]+)</lastmod>",
+        path.read_text(),
+    ))
+
+
+def lastmod_for(path: str, derived: str, previous: dict, fallback: str = "") -> str:
+    candidates = [derived, previous.get(path, ""), fallback]
+    return newest_date(candidates) or datetime.now(timezone.utc).date().isoformat()
+
+
+def sitemap_url(path: str, lastmod: str) -> str:
+    return (
+        "  <url>\n    <loc>%s%s</loc>\n    <lastmod>%s</lastmod>\n  </url>\n"
+        % (ORIGIN, path, lastmod)
     )
-    entries = []
+
+
+def update_sitemap(articles: list, stacks: dict) -> bool:
+    previous = existing_lastmods()
+    memes = stacks.get("memes") or []
+    videos = stacks.get("videos") or []
+    meme_dates = [iso_date(m.get("src") or "") for m in memes if isinstance(m, dict)]
+    video_dates = [
+        iso_date(v.get("poster") or v.get("note") or "")
+        for v in videos if isinstance(v, dict)
+    ]
+    article_dates = [article_date(a) for a in articles]
+    newest_article = newest_date(article_dates)
+    home_date = lastmod_for(
+        "/",
+        newest_date(article_dates + meme_dates + video_dates),
+        previous,
+        "2026-11-25",
+    )
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>\n',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n',
+        sitemap_url("/", home_date),
+        sitemap_url("/articles/", lastmod_for("/articles/", newest_article, previous, newest_article)),
+    ]
     for article in articles:
-        date = str(article.get("date") or "")
-        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
-            date = datetime.now(TZ).date().isoformat()
-        entries.append(
-            "  <url>\n    <loc>%s/articles/%s/</loc>\n    <lastmod>%s</lastmod>\n  </url>\n"
-            % (ORIGIN, article["slug"], date)
-        )
-    block = "".join(entries)
-    newest = None
-    dates = [str(a.get("date") or "") for a in articles if re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(a.get("date") or ""))]
-    if dates:
-        newest = max(dates)
-        text, _ = re.subn(
-            r"(<loc>https://www\.flipthestock\.com/articles/</loc>\n    <lastmod>)[^<]+",
-            r"\g<1>" + newest,
-            text,
-            count=1,
-        )
-    anchor = "</url>\n"
-    # Insert after the articles index entry specifically
-    index_end = re.search(
-        r"  <url>\n    <loc>https://www\.flipthestock\.com/articles/</loc>\n    <lastmod>[^<]*</lastmod>\n  </url>\n",
-        text,
+        lines.append(sitemap_url("/articles/%s/" % article["slug"], article_date(article)))
+    lines.append(sitemap_url("/memes/", lastmod_for("/memes/", newest_date(meme_dates), previous, "2026-11-23")))
+    lines.append(sitemap_url("/videos/", lastmod_for("/videos/", newest_date(video_dates), previous, "2026-11-23")))
+    # Event dates are occurrence times, not page-edit dates, so keep the
+    # existing lastmod unless the sitemap was missing this URL.
+    lines.append(sitemap_url("/events/", lastmod_for("/events/", "", previous, "2026-11-24")))
+    for path, fallback in STATIC_SITEMAP:
+        lines.append(sitemap_url(path, lastmod_for(path, "", previous, fallback)))
+    lines.append(sitemap_url("/feed.xml", lastmod_for("/feed.xml", newest_article, previous, newest_article)))
+    lines.append("</urlset>\n")
+    return write_if_changed(ROOT / "sitemap.xml", "".join(lines))
+
+
+def rfc822(iso_date: str) -> str:
+    try:
+        d = datetime.strptime(iso_date, "%Y-%m-%d")
+    except ValueError:
+        d = datetime.now(timezone.utc)
+        return format_datetime(d)
+    return format_datetime(datetime(d.year, d.month, d.day, tzinfo=timezone.utc))
+
+
+def cdata(text: str) -> str:
+    return "<![CDATA[" + str(text or "").replace("]]>", "]]]]><![CDATA[>") + "]]>"
+
+
+def feed_item(article) -> str:
+    url = "%s/articles/%s/" % (ORIGIN, article["slug"])
+    title = str(article.get("title") or "Untitled")
+    dek = str(article.get("dek") or "")
+    body = sanitize_body(article.get("html"))
+    encoded = ""
+    if dek:
+        encoded += "<p>%s</p>\n" % esc(dek)
+    if body:
+        encoded += body
+    if not encoded:
+        encoded = "<p>%s</p>" % esc(title)
+    pub = rfc822(article_date(article))
+    desc = dek or title
+    return (
+        "    <item>\n"
+        "      <title>%s</title>\n"
+        "      <link>%s</link>\n"
+        "      <guid isPermaLink=\"true\">%s</guid>\n"
+        "      <pubDate>%s</pubDate>\n"
+        "      <description>%s</description>\n"
+        "      <content:encoded>%s</content:encoded>\n"
+        "    </item>\n"
+        % (esc(title), esc(url), esc(url), esc(pub), esc(desc), cdata(encoded))
     )
-    if not index_end:
-        raise SystemExit("build_articles: articles index URL not found in sitemap.xml")
-    text = text[: index_end.end()] + block + text[index_end.end():]
-    return write_if_changed(path, text)
+
+
+def write_feed(articles: list) -> bool:
+    items = articles[:20]
+    newest = article_date(items[0]) if items else datetime.now(timezone.utc).date().isoformat()
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" '
+        'xmlns:atom="http://www.w3.org/2005/Atom">\n'
+        "  <channel>\n"
+        "    <title>%s</title>\n"
+        "    <link>%s/</link>\n"
+        "    <description>%s</description>\n"
+        "    <language>en-us</language>\n"
+        "    <lastBuildDate>%s</lastBuildDate>\n"
+        '    <atom:link href="%s/feed.xml" rel="self" type="application/rss+xml"/>\n'
+        "%s"
+        "  </channel>\n"
+        "</rss>\n"
+        % (
+            esc(SITE),
+            ORIGIN,
+            esc("Written pieces from Flip the Stock, a user community site for SPX6900. Not financial advice."),
+            esc(rfc822(newest)),
+            ORIGIN,
+            "".join(feed_item(a) for a in items),
+        )
+    )
+    return write_if_changed(ROOT / "feed.xml", xml)
+
+
+def validate_xml(path: Path) -> None:
+    import xml.etree.ElementTree as ET
+    try:
+        ET.parse(path)
+    except ET.ParseError as e:
+        raise SystemExit("build_articles: %s is not well-formed XML: %s" % (path.name, e))
 
 
 def main() -> int:
-    articles = valid_articles(load_articles())
+    stacks = load_stacks()
+    articles = valid_articles(load_articles(stacks))
     if not articles:
         raise SystemExit("build_articles: no valid articles found in library.js")
     written = 0
@@ -490,10 +623,16 @@ def main() -> int:
     removed = remove_stale({a["slug"] for a in articles})
     for slug in removed:
         print("removed stale articles/%s/" % slug)
-    if update_sitemap(articles):
+    if update_sitemap(articles, stacks):
         print("updated sitemap.xml")
     else:
         print("sitemap.xml already current")
+    if write_feed(articles):
+        print("updated feed.xml")
+    else:
+        print("feed.xml already current")
+    validate_xml(ROOT / "sitemap.xml")
+    validate_xml(ROOT / "feed.xml")
     print("articles: %s written, %s unchanged, %s removed" % (
         written, len(articles) - written, len(removed)))
     return 0

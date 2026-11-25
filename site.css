@@ -78,7 +78,7 @@ body > header, body > section, body > footer { width: 100%; }
   color: var(--paper);
 }
 .ticker:hover { color: var(--paper); text-decoration: underline; text-underline-offset: 2px; }
-.ticker-live {
+.ticker-live, .ticker-source {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -95,7 +95,10 @@ body > header, body > section, body > footer { width: 100%; }
   background: #d9cfc6;
   vertical-align: 0.08em;
 }
+.ticker.is-live .ticker-live::before { background: #8fd1a2; }
+.ticker.is-delayed .ticker-live::before { background: #8a827a; }
 .ticker-name { letter-spacing: 0.04em; }
+.ticker-source { font-weight: 600; letter-spacing: 0.06em; }
 .ticker-price, .ticker-change { font-variant-numeric: tabular-nums; letter-spacing: 0; }
 .ticker-change { padding: 1px 4px; border: 1px solid currentColor; }
 .ticker-change.is-up { color: #8fd1a2; }
