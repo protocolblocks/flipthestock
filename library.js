@@ -12,6 +12,18 @@
 window.STACKS = {
   articles: [
     {
+      slug: "restraint-on-a-bad-day",
+      kicker: "Community",
+      title: "Ansem’s wallet was drained. The advice was restraint",
+      date: "2026-11-25",
+      dek: "A wallet tied to the trader behind $ANSEM was drained on Tuesday. Prominent SPX6900 voices asked the crowd not to gloat.",
+      html: [
+        "<p>Early on Tuesday, 24 November, the trader @blknoiz06, known as Ansem, <a href=\"https://x.com/blknoiz06/status/2125182437063790806\">posted</a> that his \"pump wallet is hacked.\" He said he believed someone had got into his Bullpen profile, where a Solana private key had been imported. Later that morning <a href=\"https://x.com/BullpenFi/status/2125267130870272331\">@BullpenFi said</a> it had found unauthorized transfers involving 18 to 19 accounts opened during its early beta, between April and June 2024, his among them. By the evening the company <a href=\"https://x.com/BullpenFi/status/2125426084036657343\">said</a> it was working with the FBI and other authorities to trace and freeze the funds. Who was behind it had not been made public.</p>",
+        "<p>Ansem's name is attached to $ANSEM, a Solana memecoin. In the week before, some SPX6900 posters had <a href=\"https://x.com/Yannick472699/status/2125188017765621887\">held it up as a contrast</a> to their own token. On Tuesday the louder response from the same crowd was a request to stop. @1d34h4z4rd <a href=\"https://x.com/1d34h4z4rd/status/2125243952534360557\">quoted Proverbs 24:17</a>, \"Do not rejoice when your enemies fall,\" and called grave dancing \"an ersatz victory.\" Replying, <a href=\"https://x.com/6400more/status/2125250981143146535\">@6400more wrote</a> that \"Ansem holders are in a lot of pain and we should open our hearts to them,\" and signed off: \"Be kind aeons.\" Shortly after, <a href=\"https://x.com/MustStopMurad/status/2125275928838205744\">@MustStopMurad posted</a>: \"We don't need to attack others while they are down. We just need to persist with our own cause.\" He named no one.</p>",
+        "<p>Not everyone took the note. @matuaxbt <a href=\"https://x.com/matuaxbt/status/2125302788267864464\">objected</a> to Murad \"making Ansem a victim.\" Others treated the day as a recruiting opportunity: <a href=\"https://x.com/realthigh/status/2125235380106809687\">@realthigh told</a> the token's holders, \"you have a home at spx6900.\" Bullpen says the incident is still under investigation.</p>"
+      ].join(""),
+    },
+    {
       slug: "they-call-themselves-aeons",
       kicker: "The word",
       title: "They call themselves Aeons",
