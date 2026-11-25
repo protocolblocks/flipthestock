@@ -26,8 +26,8 @@ PAGES = [
     ("404.html", "/", None, None, None),
 ]
 
-NAV = [("Home", ""), ("Articles", "articles/"), ("Memes", "memes/"), ("Videos", "videos/"),
-       ("Events", "events/"), ("Learn", "learn/"), ("Market Data", "market-data/")]
+NAV = [("Home", ""), ("Articles", "articles/"), ("Market Data", "market-data/"),
+       ("Events", "events/"), ("Videos", "videos/"), ("Memes", "memes/"), ("Learn", "learn/")]
 
 
 def header(p, current, has_form):
@@ -101,9 +101,9 @@ def footer(p, has_form):
     a = lambda href, text: '<a href="%s">%s</a>' % (href, text)
     ext = lambda href, text: '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>' % (href, text)
     cols = "\n".join([
-        col("Sections", [a(r, "Home"), a(p + "articles/", "Articles"), a(p + "memes/", "Memes"),
-                         a(p + "videos/", "Videos"), a(p + "events/", "Events"), a(p + "learn/", "Learn"),
-                         a(p + "market-data/", "Market Data")]),
+        col("Sections", [a(r, "Home"), a(p + "articles/", "Articles"), a(p + "market-data/", "Market Data"),
+                         a(p + "events/", "Events"), a(p + "videos/", "Videos"), a(p + "memes/", "Memes"),
+                         a(p + "learn/", "Learn")]),
         col("Community", [a(p + "contact/", "Contact"),
                            a(nl, "Newsletter"), a(p + "events/", "Gatherings calendar")]),
         col("SPX6900", [ext("https://spx6900.com", "Official site: spx6900.com"),

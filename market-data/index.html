@@ -70,11 +70,11 @@
         <nav class="nav-links" aria-label="Site">
           <a href="../">Home</a>
           <a href="../articles/">Articles</a>
-          <a href="../memes/">Memes</a>
-          <a href="../videos/">Videos</a>
-          <a href="../events/">Events</a>
-          <a href="../learn/">Learn</a>
           <a href="../market-data/" aria-current="page">Market Data</a>
+          <a href="../events/">Events</a>
+          <a href="../videos/">Videos</a>
+          <a href="../memes/">Memes</a>
+          <a href="../learn/">Learn</a>
         </nav>
       </div>
     </div>
@@ -91,17 +91,32 @@
       <section class="data-block" id="holders" aria-labelledby="holders-heading">
         <div class="section-head"><h2 id="holders-heading">Holders</h2></div>
 
-        <div class="figure figure-lead">
-          <span class="figure-label">Wallets holding SPX</span>
-          <span class="figure-value" id="holders-total-value">—</span>
-          <p class="figure-note" id="holders-total-note">Loading the latest count…</p>
+        <div class="md-lead">
+          <div class="md-lead-figure">
+            <span class="figure-label">Wallets holding SPX</span>
+            <span class="figure-value" id="holders-total-value">—</span>
+            <p class="figure-note" id="holders-total-note">Loading the latest count…</p>
+          </div>
+          <div class="md-history" id="holders-history"></div>
         </div>
 
-        <div class="figure-grid" id="holders-chains" aria-label="Holders by chain"></div>
+        <div class="md-table-wrap">
+          <table class="md-table">
+            <thead>
+              <tr>
+                <th scope="col">Chain</th>
+                <th scope="col" class="num">Holders</th>
+                <th scope="col" class="num">Share</th>
+                <th scope="col" class="bar-col"><span class="vh">Share of total</span></th>
+              </tr>
+            </thead>
+            <tbody id="holders-chains"></tbody>
+          </table>
+        </div>
 
-        <p class="data-note" id="holders-method"></p>
+        <div class="md-note" id="holders-method"></div>
         <noscript>
-          <p class="data-note">JavaScript is off, so the figures cannot be drawn here. The latest saved counts are in <a href="../data/holders.json">data/holders.json</a>.</p>
+          <p class="md-note">JavaScript is off, so the figures cannot be drawn here. The latest saved counts are in <a href="../data/holders.json">data/holders.json</a>.</p>
         </noscript>
       </section>
     </div>
@@ -137,11 +152,11 @@
           <ul>
             <li><a href="../">Home</a></li>
             <li><a href="../articles/">Articles</a></li>
-            <li><a href="../memes/">Memes</a></li>
-            <li><a href="../videos/">Videos</a></li>
-            <li><a href="../events/">Events</a></li>
-            <li><a href="../learn/">Learn</a></li>
             <li><a href="../market-data/">Market Data</a></li>
+            <li><a href="../events/">Events</a></li>
+            <li><a href="../videos/">Videos</a></li>
+            <li><a href="../memes/">Memes</a></li>
+            <li><a href="../learn/">Learn</a></li>
           </ul>
         </div>
         <div class="foot-col">
