@@ -16,6 +16,9 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   margin: 0;
   background: var(--paper);
   color: var(--ink);
@@ -39,51 +42,25 @@ a:hover { color: var(--claret); }
   z-index: 40;
 }
 .skip:focus { top: 8px; }
+main { flex: 1 0 auto; width: 100%; }
+body > header, body > section, body > footer { width: 100%; }
 
 .wrap { width: min(var(--wrap), calc(100% - 40px)); margin: 0 auto; }
 
-.mast {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: var(--paper);
-  border-bottom: 1px solid var(--ink);
-}
-.bar {
+/* Site chrome, modelled on ft.com: dark markets strip, centred capitals
+   wordmark with Subscribe, uppercase section nav with a teal current marker.
+   Markup comes from _tools/sync_chrome.py so every page matches. */
+.mast { position: static; background: var(--paper); border-bottom: 1px solid var(--line); }
+.markets { background: var(--navy); color: var(--paper); }
+.markets-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  padding: 14px 0 8px;
+  min-height: 36px;
+  padding: 6px 0;
 }
-.logo {
-  display: inline-flex;
-  align-items: flex-start;
-  gap: 0.38em;
-  font-family: var(--serif);
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-.logo .mark {
-  display: block;
-  flex: 0 0 auto;
-  width: auto;
-  height: 1em;
-  aspect-ratio: 24 / 28;
-  overflow: visible;
-}
-.logo:hover { color: var(--ink); }
-.edition { margin: 0; font-size: 13px; color: var(--muted); }
-.mast-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 3px;
-  text-align: right;
-  min-width: 0;
-}
+.edition { margin: 0; color: #d9cfc6; font-size: 12px; font-weight: 600; }
 .ticker {
   display: inline-flex;
   flex-wrap: wrap;
@@ -92,19 +69,18 @@ a:hover { color: var(--claret); }
   gap: 0.2em 0.55em;
   max-width: 100%;
   font-family: var(--sans);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 1.25;
-  color: var(--ink);
-  text-decoration: none;
+  color: var(--paper);
 }
-.ticker:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+.ticker:hover { color: var(--paper); text-decoration: underline; text-underline-offset: 2px; }
 .ticker-live {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: #d9cfc6;
 }
 .ticker-live::before {
   content: "";
@@ -113,20 +89,52 @@ a:hover { color: var(--claret); }
   height: 5px;
   margin-right: 0.35em;
   border-radius: 50%;
-  background: var(--muted);
+  background: #d9cfc6;
   vertical-align: 0.08em;
 }
 .ticker-name { letter-spacing: 0.04em; }
-.ticker-price, .ticker-change {
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0;
+.ticker-price, .ticker-change { font-variant-numeric: tabular-nums; letter-spacing: 0; }
+.ticker-change { padding: 1px 4px; border: 1px solid currentColor; }
+.ticker-change.is-up { color: #8fd1a2; }
+.ticker-change.is-down { color: #ff8aa8; }
+.brand {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0 16px;
+  border-bottom: 1px solid var(--line);
 }
-.ticker-change.is-up { color: var(--up); }
-.ticker-change.is-down { color: var(--claret); }
-
-.nav-links { display: flex; flex-wrap: wrap; gap: 6px 22px; padding: 8px 0 9px; }
-.nav-links a { font-size: 14px; font-weight: 600; padding: 2px 0; }
-.nav-links a[aria-current="page"] { box-shadow: inset 0 -2px 0 var(--claret); }
+.logo {
+  font-family: var(--serif);
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.logo:hover { color: var(--ink); }
+.brand-cta {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--navy);
+  color: var(--paper);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+}
+.brand-cta:hover { color: var(--paper); background: #1b1e26; }
+.nav-links { display: flex; flex-wrap: wrap; gap: 4px 20px; padding: 0; }
+.nav-links a {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 9px 0 7px;
+}
+.nav-links a[aria-current="page"] { color: var(--teal); box-shadow: inset 0 -3px 0 var(--teal); }
 
 .page { padding: 22px 0 56px; }
 .kicker {
@@ -160,55 +168,7 @@ a.kicker:hover, .kicker:hover { color: var(--claret); }
 
 .pic { width: 100%; object-fit: cover; background: var(--wheat); }
 
-/* Front page, modelled on the ft.com homepage: dark markets strip, centred
-   wordmark, top-stories grid with hairline column rules, dotted slice heads. */
-.home .mast { position: static; border-bottom: 1px solid var(--line); }
-.markets { background: var(--navy); color: var(--paper); }
-.markets-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  min-height: 36px;
-  padding: 6px 0;
-}
-.home .edition { color: #d9cfc6; font-size: 12px; font-weight: 600; }
-.home .ticker, .home .ticker:hover { color: var(--paper); font-size: 12px; }
-.home .ticker-live { color: #d9cfc6; }
-.home .ticker-live::before { background: #d9cfc6; }
-.home .ticker-change { padding: 1px 4px; border: 1px solid currentColor; }
-.home .ticker-change.is-up { color: #8fd1a2; }
-.home .ticker-change.is-down { color: #ff8aa8; }
-.brand {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  padding: 22px 0 18px;
-  border-bottom: 1px solid var(--line);
-}
-.home .brand .logo { font-size: 46px; font-weight: 600; letter-spacing: -0.02em; }
-.brand-cta {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  background: var(--navy);
-  color: var(--paper);
-  font-size: 12px;
-  font-weight: 700;
-  padding: 6px 10px;
-}
-.brand-cta:hover { color: var(--paper); background: #1b1e26; }
-.home .nav-links { gap: 4px 20px; padding: 0; }
-.home .nav-links a {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 9px 0 7px;
-}
-.home .nav-links a[aria-current="page"] { color: var(--teal); box-shadow: inset 0 -3px 0 var(--teal); }
-
+/* Front page, modelled on the ft.com homepage. */
 .front { padding-top: 26px; }
 .ft-tag {
   display: block;
@@ -400,14 +360,14 @@ a.kicker:hover, .kicker:hover { color: var(--claret); }
   margin-bottom: 14px;
 }
 .band-head h2, .section-head h2 { font-size: 22px; margin: 0; }
-.band-head a, a.more, .back, .text-link, footer a {
+.band-head a, a.more, .back, .text-link {
   color: var(--teal);
   font-size: 14px;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-.band-head a:hover, a.more:hover, .back:hover, .text-link:hover, footer a:hover { color: var(--teal); }
+.band-head a:hover, a.more:hover, .back:hover, .text-link:hover { color: var(--teal); }
 .shelf { display: block; margin-top: 28px; }
 .piece {
   display: grid;
@@ -468,7 +428,6 @@ a.kicker:hover, .kicker:hover { color: var(--claret); }
   background: var(--wheat);
 }
 .meme figcaption { padding-top: 10px; }
-.meme figcaption span { display: block; font-family: var(--serif); font-size: 20px; line-height: 1.25; }
 .credit { display: inline-block; margin-top: 6px; }
 a.credit { color: var(--teal); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
 a.credit:hover { color: var(--teal); }
@@ -580,29 +539,29 @@ dialog button {
   cursor: pointer;
 }
 
-footer { border-top: 1px solid var(--line); margin-top: 28px; padding: 16px 0 40px; color: var(--muted); font-size: 13px; }
-footer p { margin: 0 0 10px; max-width: 85ch; }
-
-.newsletter {
-  color: var(--ink);
-  margin: 0 0 16px;
-  padding: 0 0 16px;
-  border-bottom: 1px solid var(--line);
-  max-width: 36rem;
+/* Newsletter promo above the footer, like ft.com's newsletter promos. */
+.promo { margin-top: 40px; background: var(--wheat); }
+.promo-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 40px;
+  align-items: center;
+  padding: 28px 0;
 }
-.newsletter .kicker { margin-top: 0; }
-.newsletter h2 {
-  font-size: 22px;
-  line-height: 1.2;
-  margin: 0 0 6px;
+.promo h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
 }
-.newsletter .dek { margin: 0 0 12px; color: var(--ink); }
+.promo .dek { color: #5d5753; }
 .newsletter-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px 10px;
-  align-items: center;
-  max-width: 28rem;
+  gap: 8px;
+  align-items: end;
 }
 .newsletter-form label {
   grid-column: 1 / -1;
@@ -610,21 +569,57 @@ footer p { margin: 0 0 10px; max-width: 85ch; }
   font-weight: 600;
 }
 .newsletter-form input[type="email"] {
-  width: 100%;
-  min-height: 32px;
-  padding: 0 10px;
+  min-height: 40px;
+  padding: 0 12px;
   border: 1px solid var(--ink);
-  border-radius: 2px;
-  background: var(--paper);
+  border-radius: 0;
+  background: #fff;
   color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+}
+.newsletter-form input[type="email"]:focus { outline: 2px solid var(--teal); outline-offset: 0; }
+.newsletter-form .btn { min-height: 40px; }
+.newsletter-help { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+
+/* Footer, modelled on ft.com: slate columns of links, small print, black strip. */
+.site-foot { margin-top: 0; background: var(--navy); color: #c9c3bd; font-size: 14px; }
+.promo + .site-foot { margin-top: 0; }
+main + .site-foot, dialog + .site-foot { margin-top: 48px; }
+.foot-cols {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 24px;
+  padding: 28px 0 20px;
+}
+.foot-col h2 {
+  margin: 0 0 14px;
+  color: #fff;
   font-family: var(--sans);
   font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0;
 }
-.newsletter-form input[type="email"]:focus {
-  outline: 2px solid var(--teal);
-  outline-offset: 1px;
+.foot-col ul { list-style: none; margin: 0; padding: 0; }
+.foot-col li { margin: 0 0 11px; line-height: 1.3; }
+.site-foot a { color: #c9c3bd; font-size: 14px; font-weight: 400; text-decoration: none; }
+.site-foot a:hover { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
+.foot-print { padding: 16px 0 24px; border-top: 1px solid #4a4e57; font-size: 12px; line-height: 1.5; }
+.foot-print p { margin: 0 0 6px; max-width: 110ch; }
+.foot-strip { background: #000; }
+.foot-strip-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  min-height: 46px;
+  padding: 10px 0;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  font-style: italic;
 }
-.newsletter-help { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+.site-foot .foot-logo, .site-foot .foot-logo:hover { color: #fff; font-size: 22px; text-decoration: none; font-style: normal; }
 
 .intro {
   display: grid;
@@ -777,13 +772,287 @@ body.is-logged-on .log-line { display: block; }
 .chain code { font-size: 13px; overflow-wrap: anywhere; }
 .callout { margin-top: 16px; border-left: 3px solid var(--claret); padding: 2px 0 2px 14px; }
 
+/* Section, article and editorial pages, modelled on ft.com section pages
+   (/companies, /markets) and the ft.com article page. */
+.page { padding: 22px 0 8px; }
+.page h1, .sec-head h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
+}
+.sec-head { padding-bottom: 16px; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
+.sec-head .ft-tag { margin-bottom: 4px; }
+.sec-head .dek { color: #5d5753; font-size: 16px; max-width: 72ch; }
+.kicker { color: var(--claret); font-size: 14px; font-weight: 500; }
+
+.sec-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 8fr) minmax(0, 3.4fr);
+  gap: 48px;
+  align-items: start;
+}
+.sec-main { min-width: 0; }
+.sec-main > .shelf { margin-top: 0; max-width: none; }
+.rail { min-width: 0; }
+.rail-block { margin-bottom: 32px; }
+.rail-block .ft-most-head, .rail-head {
+  margin: 0 0 10px;
+  padding-top: 8px;
+  border-top: 4px solid var(--ink);
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.rail-block .ft-most-head a, .rail-head a { color: var(--ink); }
+.rail-letter p { margin: 0 0 10px; font-size: 14px; color: #5d5753; }
+.rail-letter .btn { color: var(--paper); }
+
+/* FT column heads: thick ink bar, plain title. */
+.col-head {
+  margin: 28px 0 0;
+  padding-top: 8px;
+  border-top: 4px solid var(--ink);
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.sec-main > .col-head:first-child, .event-band:first-child .col-head { margin-top: 0; }
+
+/* Dotted centred labels, as on the homepage. */
+.band-head, .section-head {
+  display: block;
+  position: relative;
+  margin: 0 0 18px;
+  padding-top: 12px;
+  border-top: 0;
+  text-align: center;
+  background: radial-gradient(circle, var(--ink) 0.55px, transparent 0.9px) 0 0 / 3px 3px repeat-x;
+}
+.band-head::before, .section-head::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 3px;
+  height: 3px;
+  background: radial-gradient(circle, var(--ink) 0.55px, transparent 0.9px) 0 0 / 3px 3px repeat-x;
+}
+.band-head h2, .section-head h2 {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Lead card on section pages: wheat panel, big headline. */
+.sec-lead {
+  display: block;
+  padding: 22px 24px 20px;
+  margin-bottom: 28px;
+  background: var(--wheat);
+  color: inherit;
+}
+.sec-lead:hover { color: inherit; }
+.sec-lead:hover .sec-lead-title { color: var(--claret); }
+.sec-lead-title {
+  display: block;
+  margin: 0 0 12px;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.sec-lead .ft-dek { display: block; font-size: 16px; max-width: 60ch; }
+
+/* FT stream: date column, tag, headline, standfirst, timestamp, hairlines. */
+.stream { list-style: none; margin: 0; padding: 0; }
+.stream-item {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.stream-date {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: right;
+}
+.stream-body { display: block; color: inherit; }
+.stream-body:hover { color: inherit; }
+.stream-body:hover .stream-title { color: var(--claret); }
+.stream-title {
+  display: block;
+  margin: 0 0 6px;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 21px;
+  line-height: 1.22;
+}
+.stream-body .ft-dek { display: block; font-size: 14px; }
+.stream-body .ft-stamp { margin-top: 8px; }
+
+/* Memes as an FT stream: copy left, thumbnail right; first item leads. */
+.wall { display: block; margin-top: 0; }
+.meme {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 20px;
+  align-items: start;
+  margin: 0;
+  padding: 16px 0;
+  border-top: 0;
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 20px;
+}
+.meme button {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  background: var(--wheat);
+}
+.meme img { width: 100%; height: 100%; object-fit: contain; }
+.meme figcaption { padding-top: 0; }
+.meme .meme-title {
+  display: block;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 21px;
+  line-height: 1.22;
+}
+.meme .ft-stamp { margin-top: 8px; }
+.meme .credit { display: inline-block; margin-top: 8px; font-size: 13px; }
+.meme-lead {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 24px;
+  padding: 0;
+  margin-bottom: 12px;
+  background: var(--wheat);
+  border-bottom: 0;
+}
+.meme-lead figcaption { padding: 22px 0 22px 24px; }
+.meme-lead .meme-title { font-size: 32px; line-height: 1.1; }
+.meme-lead button { aspect-ratio: 4 / 3; background: #f2dfce; }
+
+/* Videos: lead video across the column, then a two-up grid. */
+.reel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: 0; gap: 28px 28px; margin-top: 0; }
+.video { padding-top: 0; border-top: 0; scroll-margin-top: 20px; position: relative; }
+.video .ft-tag { margin: 12px 0 4px; color: var(--claret); font-size: 14px; }
+.video .ft-stamp { color: var(--muted); font-size: 11px; }
+.video h2 {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.22;
+  margin: 0 0 6px;
+}
+.video .ft-stamp { margin: 0 0 6px; }
+.video-lead { grid-column: 1 / -1; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+.video-lead h2 { font-size: 30px; line-height: 1.12; }
+.video-lead p { font-size: 15px; }
+
+/* Events stream. */
+.event-band { margin-top: 0; margin-bottom: 28px; }
+.event { padding: 16px 0; border-top: 0; border-bottom: 1px solid var(--line); }
+.event-band .event:first-of-type { padding-top: 14px; }
+.event h2 { font-size: 23px; line-height: 1.2; margin: 0 0 6px; font-weight: 500; }
+
+/* Article page: ft.com article layout. */
+.article-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 680px) minmax(0, 300px);
+  justify-content: space-between;
+  gap: 48px;
+  align-items: start;
+  padding-top: 12px;
+}
+.article { max-width: 680px; padding-top: 0; }
+.article-tag { margin: 0 0 10px; }
+.article-tag .ft-tag { display: inline; font-size: 16px; }
+.article h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(34px, 4.4vw, 48px);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  margin: 0 0 14px;
+}
+.article-dek { margin: 0 0 20px; color: #5d5753; font-size: 20px; line-height: 1.4; }
+.byline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  padding: 12px 0;
+  margin-bottom: 22px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+.byline p { margin: 0; }
+.byline b { color: var(--teal); font-weight: 600; }
+.byline-date {
+  margin-left: 12px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.share { display: flex; gap: 14px; align-items: center; }
+.share a, .share button {
+  appearance: none;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.share a:hover, .share button:hover { background: var(--ink); color: var(--paper); }
+.article-body { font-family: var(--serif); font-size: 20px; line-height: 1.6; }
+.article-body p { margin: 0 0 1.1em; }
+.article-body a { color: var(--teal); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+.article-foot { margin: 24px 0 0; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.article-foot .back { margin: 0; }
+.related-slice { margin-top: 36px; }
+.related-slice .ft-teaser h3 { font-size: 19px; }
+
+/* Editorial pages (learn, contact, thanks, 404): hairlines, no boxes. */
+.page-copy { margin-top: 0; max-width: 680px; font-family: var(--serif); font-size: 19px; line-height: 1.55; }
+.page-copy .actions .btn { font-family: var(--sans); }
+.intro .kicker { margin-top: 0; }
+.card, .tenet, .door { background: transparent; padding: 14px 0 0; border: 0; border-top: 1px solid var(--line); }
+.card h3, .tenet h3, .door h3 { font-weight: 500; }
+.shelf { margin-top: 24px; max-width: 760px; }
+.piece { padding: 14px 0; border-top: 0; border-bottom: 1px solid var(--line); }
+.piece h2 { font-size: 22px; font-weight: 500; }
+.piece p { color: #5d5753; font-size: 14px; }
+
 @media (max-width: 980px) {
   .ft-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); row-gap: 22px; }
   .ft-hero > .ft-picks { grid-column: 1 / -1; padding-top: 16px; border-top: 1px solid var(--line); }
   .ft-hero > .ft-picks::before, .ft-row > :nth-child(odd)::before { display: none; }
   .ft-lead h2 { font-size: 38px; }
   .ft-row { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 22px; }
-  .reel, .wall { grid-template-columns: 1fr 1fr; }
+  .sec-layout, .article-layout { grid-template-columns: 1fr; gap: 28px; }
+  .rail { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+  .foot-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .intro, .question, .cards, .tenet-layout, .supply { grid-template-columns: 1fr; }
   .doors { grid-template-columns: 1fr 1fr; }
   .tenets { grid-template-columns: 1fr; }
@@ -794,25 +1063,34 @@ body.is-logged-on .log-line { display: block; }
 }
 @media (max-width: 640px) {
   .wrap { width: min(var(--wrap), calc(100% - 28px)); }
-  .bar { display: block; }
-  .mast-meta {
-    margin-top: 8px;
-    align-items: flex-start;
-    text-align: left;
-  }
-  .ticker { justify-content: flex-start; }
-  .logo { font-size: 24px; }
-  .nav-links { gap: 2px 16px; }
-  .nav-links a { padding: 10px 0; }
-  .reel, .wall, .doors { grid-template-columns: 1fr; }
-  .home .mast-meta { margin: 0; }
+  .reel, .doors { grid-template-columns: minmax(0, 1fr); }
+  .video, .frame, .frame-x { min-width: 0; max-width: 100%; }
   .markets-bar { min-height: 32px; }
-  .home .edition { font-size: 11px; }
-  .brand { justify-content: space-between; padding: 14px 0 12px; }
-  .home .brand .logo { font-size: 28px; }
+  .edition { font-size: 11px; }
+  .brand { justify-content: space-between; align-items: center; padding: 14px 0 12px; }
+  .logo { font-size: 23px; letter-spacing: 0.03em; }
   .brand-cta { position: static; transform: none; }
-  .home .nav-links { flex-wrap: nowrap; overflow-x: auto; gap: 18px; }
-  .home .nav-links a { padding: 11px 0 9px; white-space: nowrap; }
+  .nav-links { flex-wrap: nowrap; overflow-x: auto; justify-content: space-between; gap: 10px; scrollbar-width: none; }
+  .nav-links a { padding: 11px 0 9px; white-space: nowrap; font-size: 11px; letter-spacing: 0.02em; }
+  .page h1, .sec-head h1 { font-size: 30px; }
+  .rail { display: block; }
+  .sec-lead { padding: 18px 16px; margin-left: -14px; margin-right: -14px; }
+  .sec-lead-title { font-size: 28px; }
+  .stream-item { grid-template-columns: 1fr; gap: 4px; }
+  .stream-date { display: none; }
+  .meme { grid-template-columns: minmax(0, 1fr) 120px; gap: 14px; }
+  .meme .meme-title { font-size: 18px; }
+  .meme-lead { display: flex; flex-direction: column-reverse; gap: 0; margin-left: -14px; margin-right: -14px; }
+  .meme-lead figcaption { padding: 14px 16px 18px; }
+  .meme-lead .meme-title { font-size: 26px; }
+  .video-lead h2 { font-size: 24px; }
+  .article h1 { font-size: 32px; }
+  .article-dek { font-size: 18px; }
+  .article-body { font-size: 18px; }
+  .promo-inner { grid-template-columns: 1fr; gap: 16px; padding: 22px 0; }
+  .promo h2 { font-size: 26px; }
+  .foot-cols { grid-template-columns: 1fr 1fr; gap: 8px 20px; }
+  .foot-strip-inner { flex-direction: column; align-items: flex-start; gap: 4px; }
   .front { padding-top: 18px; }
   .ft-hero { display: block; padding-bottom: 20px; }
   .ft-hero > *::before, .ft-row > *::before { display: none; }
@@ -832,7 +1110,7 @@ body.is-logged-on .log-line { display: block; }
   .newsletter-form .btn { justify-self: start; }
   .chain { grid-template-columns: 1fr; justify-items: start; }
   .chain .copy { margin-top: 4px; }
-  .block, .page h1, .video, .meme { scroll-margin-top: 128px; }
+  .block, .page h1, .video, .meme { scroll-margin-top: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

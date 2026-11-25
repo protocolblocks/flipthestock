@@ -244,7 +244,7 @@
     var recent = recentEvents();
     var html = "";
     html += '<section class="event-band" aria-label="Upcoming">' +
-      '<div class="band-head"><h2>Upcoming</h2></div>';
+      '<h2 class="col-head">Upcoming</h2>';
     if (upcoming.length) {
       html += upcoming.map(function (event) { return eventItemHtml(event, {}); }).join("");
     } else {
@@ -252,7 +252,7 @@
     }
     html += '</section>';
     html += '<section class="event-band" aria-label="Regulars">' +
-      '<div class="band-head"><h2>Regulars</h2></div>';
+      '<h2 class="col-head">Regulars</h2>';
     if (regulars.length) {
       html += regulars.map(standingItemHtml).join("");
     } else {
@@ -260,7 +260,7 @@
     }
     html += '</section>';
     html += '<section class="event-band" aria-label="Recent">' +
-      '<div class="band-head"><h2>Recent</h2></div>';
+      '<h2 class="col-head">Recent</h2>';
     if (recent.length) {
       html += recent.map(function (event) { return eventItemHtml(event, {}); }).join("");
     } else {
@@ -474,20 +474,31 @@
   }
 
   window.renderArticles = function (root) {
-    var articles = data().articles.slice().sort(function (a, b) {
-      return String(b.date || "").localeCompare(String(a.date || ""));
-    });
+    var articles = sortedArticles();
     if (!articles.length) {
       root.innerHTML = empty("The shelf is empty.", "Written pieces will be filed here, newest first.");
       return;
     }
-    root.innerHTML = articles.map(function (article, index) {
+    var lead = articles[0];
+    var leadHref = "piece.html?slug=" + encodeURIComponent(lead.slug || "");
+    var html = '<a class="sec-lead" href="' + leadHref + '">' +
+      '<span class="ft-tag">' + esc(lead.kicker || "Latest") + '</span>' +
+      '<span class="sec-lead-title">' + esc(lead.title) + '</span>' +
+      '<span class="ft-dek">' + esc(lead.dek) + '</span>' +
+      '<span class="ft-stamp">' + esc(stampText(lead.date)) + '</span></a>';
+    var lastDate = null;
+    html += '<h2 class="col-head">Latest articles</h2><ol class="stream">' + articles.slice(1).map(function (article) {
       var slug = encodeURIComponent(article.slug || "");
-      return '<a class="piece" href="piece.html?slug=' + slug + '">' +
-        '<div class="idx">' + String(index + 1).padStart(2, "0") + '</div>' +
-        '<h2>' + esc(article.title) + '</h2>' +
-        '<p>' + esc(article.dek) + '</p></a>';
-    }).join("");
+      var showDate = article.date !== lastDate;
+      lastDate = article.date;
+      return '<li class="stream-item"><p class="stream-date">' + (showDate ? formatDate(article.date) : "") + '</p>' +
+        '<a class="stream-body" href="piece.html?slug=' + slug + '">' +
+        '<span class="ft-tag">' + esc(article.kicker || "Latest") + '</span>' +
+        '<span class="stream-title">' + esc(article.title) + '</span>' +
+        '<span class="ft-dek">' + esc(article.dek) + '</span>' +
+        '<span class="ft-stamp">' + esc(stampText(article.date)) + '</span></a></li>';
+    }).join("") + '</ol>';
+    root.innerHTML = html;
   };
 
   window.renderPiece = function (root) {
@@ -542,11 +553,32 @@
       "index, follow"
     );
     var body = String(article.html || "").replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
-    root.innerHTML = '<a class="back" href="./">All articles</a>' +
-      '<article class="article">' +
+    var shareX = "https://x.com/intent/post?text=" + encodeURIComponent(article.title) + "&url=" + encodeURIComponent(pieceUrl);
+    var more = sortedArticles().filter(function (item) { return item.slug !== article.slug; }).slice(0, 4);
+    root.innerHTML = '<div class="article-layout"><article class="article">' +
+      '<p class="article-tag"><a class="ft-tag" href="./">' + esc(article.kicker || "Articles") + '</a></p>' +
       '<h1>' + esc(article.title) + '</h1>' +
       '<p class="article-dek">' + esc(article.dek) + '</p>' +
-      '<div class="article-body">' + body + '</div></article>';
+      '<div class="byline"><p><b>Flip the Stock</b>' +
+      (article.date ? '<span class="byline-date">' + formatDate(article.date) + '</span>' : '') + '</p>' +
+      '<p class="share"><a href="' + esc(shareX) + '" target="_blank" rel="noopener noreferrer">Share on X</a>' +
+      '<button type="button" class="share-copy" data-url="' + esc(pieceUrl) + '">Copy link</button></p></div>' +
+      '<div class="article-body">' + body + '</div>' +
+      '<p class="article-foot">Nothing here is an offer or financial advice. <a class="back" href="./">All articles</a></p></article>' +
+      '<aside class="rail" id="article-rail" aria-label="More on this site"></aside></div>' +
+      (more.length ? '<section class="ft-slice related-slice" aria-label="More from Flip the Stock">' +
+        '<h2 class="ft-slice-head"><a href="./">More from Flip the Stock</a></h2><div class="ft-row">' +
+        more.map(function (item) {
+          return '<article class="ft-teaser"><a href="piece.html?slug=' + encodeURIComponent(item.slug || "") + '">' +
+            '<p class="ft-tag">' + esc(item.kicker || "Latest") + '</p><h3>' + esc(item.title) + '</h3>' +
+            '<p class="ft-dek">' + esc(item.dek) + '</p></a>' + stampHtml(item.date) + '</article>';
+        }).join("") + '</div></section>' : '');
+    renderRail(document.getElementById("article-rail"), "../");
+    var copy = root.querySelector(".share-copy");
+    if (copy) copy.addEventListener("click", function () {
+      var url = copy.getAttribute("data-url");
+      if (navigator.clipboard) navigator.clipboard.writeText(url).then(function () { copy.textContent = "Link copied"; });
+    });
   };
 
   function safePostUrl(value) {
@@ -657,14 +689,39 @@
     renderMostRead(document.getElementById("most-read-slot"));
   };
 
-  window.renderMostRead = function (root) {
+  window.renderMostRead = function (root, prefix) {
     if (!root) return;
+    prefix = prefix || "";
     var most = sortedArticles().slice(0, 5).map(function (article, index) {
-      return '<li><span class="ft-num">' + (index + 1) + '</span><a href="' + pieceHref("articles/", article.slug) + '">' +
+      return '<li><span class="ft-num">' + (index + 1) + '</span><a href="' + pieceHref(prefix + "articles/", article.slug) + '">' +
         esc(article.title) + '</a></li>';
     }).join("");
-    root.innerHTML = '<p class="ft-most-head"><a href="articles/">Most read</a></p>' +
+    root.innerHTML = '<p class="ft-most-head"><a href="' + esc(prefix) + 'articles/">Most read</a></p>' +
       (most ? '<ol class="ft-most-list">' + most + '</ol>' : '<p class="event-empty">Nothing filed yet.</p>');
+  };
+
+  /* Right rail for section and article pages, like ft.com's: Most read,
+     the next gathering, and a newsletter nudge. */
+  window.renderRail = function (root, prefix, opts) {
+    if (!root) return;
+    opts = opts || {};
+    prefix = prefix || "../";
+    var html = '<section class="rail-block" aria-label="Most read"><div class="ft-most" data-most></div></section>';
+    if (!opts.noEvents) {
+      var online = firstUpcomingOfType("online");
+      var inPerson = firstUpcomingOfType("in-person");
+      var items = "";
+      if (online) items += eventItemHtml(online, { compact: true });
+      if (inPerson) items += eventItemHtml(inPerson, { compact: true });
+      if (!items) items = '<p class="event-empty">Nothing dated is on the calendar just now. The regulars still meet.</p>';
+      html += '<section class="rail-block ft-picks" aria-label="Next gathering"><h2 class="rail-head"><a href="' + esc(prefix) + 'events/">Next gathering</a></h2>' +
+        items + '</section>';
+    }
+    html += '<section class="rail-block rail-letter" aria-label="Newsletter"><h2 class="rail-head">The monthly letter</h2>' +
+      '<p>The writing, the memes, and the videos, once a month.</p>' +
+      '<p><a class="btn" href="#newsletter">Sign up</a></p></section>';
+    root.innerHTML = html;
+    renderMostRead(root.querySelector("[data-most]"), prefix);
   };
 
   function postedDate(entry) {
@@ -759,9 +816,14 @@
           : "";
         var id = memeAnchor(src);
         var number = (page - 1) * MEME_PAGE_SIZE + index + 1;
-        return '<figure class="meme"' + (id ? ' id="' + id + '"' : '') + '><button type="button" data-src="' + esc(src) + '" data-alt="' + esc(meme.alt) + '">' +
-          '<img src="' + esc(src) + '" alt="' + esc(meme.alt || "Meme " + number) + '"></button>' +
-          '<figcaption><span>' + esc(meme.caption) + '</span>' + credit + '</figcaption></figure>';
+        var lead = page === 1 && index === 0;
+        var when = postedDate(meme);
+        return '<figure class="meme' + (lead ? ' meme-lead' : '') + '"' + (id ? ' id="' + id + '"' : '') + '>' +
+          '<figcaption><span class="ft-tag">' + (lead ? "Meme of the day" : "Meme") + '</span>' +
+          '<span class="meme-title">' + esc(meme.caption) + '</span>' +
+          (when ? '<span class="ft-stamp">' + esc(when) + '</span>' : '') + credit + '</figcaption>' +
+          '<button type="button" data-src="' + esc(src) + '" data-alt="' + esc(meme.alt) + '" aria-label="Enlarge meme">' +
+          '<img src="' + esc(src) + '" alt="' + esc(meme.alt || "Meme " + number) + '"></button></figure>';
       }).join("");
       placePager(root, page, totalPages, function (next) {
         setPageQuery(next);
@@ -794,7 +856,7 @@
       var totalPages = Math.ceil(videos.length / VIDEO_PAGE_SIZE);
       page = clampPage(page, totalPages);
       var slice = videos.slice((page - 1) * VIDEO_PAGE_SIZE, page * VIDEO_PAGE_SIZE);
-      root.innerHTML = slice.map(function (video) {
+      root.innerHTML = slice.map(function (video, index) {
         var x = xPost(video);
         if (x) {
           var poster = posterSrc(video.poster);
@@ -806,10 +868,12 @@
           var credit = video.credit
             ? '<p><a class="credit" href="' + esc(x.href) + '" target="_blank" rel="noopener noreferrer">' + esc(video.credit) + '</a></p>'
             : "";
-          return '<article class="video" id="v-' + x.id + '"><div class="frame frame-x">' + fallback +
+          return '<article class="video' + (page === 1 && index === 0 ? ' video-lead' : '') + '" id="v-' + x.id + '"><div class="frame frame-x">' + fallback +
             '<blockquote class="twitter-tweet" data-dnt="true" data-media-max-width="560">' +
             '<a href="' + esc(x.href) + '">' + esc(video.title || "View on X") + '</a></blockquote></div>' +
+            '<p class="ft-tag">' + (page === 1 && index === 0 ? "Video of the week" : "Video") + '</p>' +
             '<h2>' + esc(video.title) + '</h2>' +
+            (postedDate(video) ? '<p class="ft-stamp">' + esc(postedDate(video)) + '</p>' : '') +
             (video.note ? '<p>' + esc(video.note) + '</p>' : '') +
             credit +
             '</article>';
@@ -817,8 +881,10 @@
         var id = youtubeId(video);
         if (!id) return "";
         var src = "https://www.youtube-nocookie.com/embed/" + id;
-        return '<article class="video" id="v-' + id + '"><div class="frame"><iframe src="' + src + '" title="' + esc(video.title) + '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>' +
+        return '<article class="video' + (page === 1 && index === 0 ? ' video-lead' : '') + '" id="v-' + id + '"><div class="frame"><iframe src="' + src + '" title="' + esc(video.title) + '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>' +
+          '<p class="ft-tag">' + (page === 1 && index === 0 ? "Video of the week" : "Video") + '</p>' +
           '<h2>' + esc(video.title) + '</h2>' +
+          (postedDate(video) ? '<p class="ft-stamp">' + esc(postedDate(video)) + '</p>' : '') +
           (video.note ? '<p>' + esc(video.note) + '</p>' : '') +
           '</article>';
       }).join("");

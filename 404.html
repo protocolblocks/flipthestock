@@ -49,10 +49,10 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
+  <!-- chrome:header -->
   <header class="mast">
-    <div class="wrap bar">
-      <a class="logo" href="/"><svg class="mark" viewBox="0 0 24 28" aria-hidden="true" focusable="false"><path fill="none" stroke="#33302e" stroke-width="1.1" stroke-linejoin="miter" d="M21 8.8 V21 H3 V6.2 H21"/><path fill="none" stroke="#33302e" stroke-width="1.45" stroke-linecap="square" stroke-linejoin="miter" d="M6 16 9.8 18.2 12.6 15.2"/><path fill="none" stroke="#990f3d" stroke-width="1.65" stroke-linecap="square" d="M12.6 15.2 20.2 4.2"/><path fill="none" stroke="#990f3d" stroke-width="1.65" stroke-linecap="square" stroke-linejoin="miter" d="M16.2 4.6 20.2 4.2 19.7 8.3"/></svg>Flip the Stock</a>
-      <div class="mast-meta">
+    <div class="markets">
+      <div class="wrap markets-bar">
         <p class="edition"></p>
         <a class="ticker" href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer" aria-label="SPX6900 price on CoinGecko">
           <span class="ticker-live">Live</span>
@@ -62,9 +62,13 @@
         </a>
       </div>
     </div>
+    <div class="wrap brand">
+      <a class="logo" href="/">Flip the Stock</a>
+      <a class="brand-cta" href="/#newsletter">Subscribe</a>
+    </div>
     <div class="wrap">
       <nav class="nav-links" aria-label="Site">
-        <a href="/">Latest</a>
+        <a href="/">Home</a>
         <a href="/articles/">Articles</a>
         <a href="/memes/">Memes</a>
         <a href="/videos/">Videos</a>
@@ -73,11 +77,14 @@
       </nav>
     </div>
   </header>
+  <!-- /chrome:header -->
   <main id="main" class="page">
     <div class="wrap">
-      <p class="kicker">404</p>
+      <header class="sec-head">
+      <p class="ft-tag">404</p>
       <h1>This page is not in the paper.</h1>
       <p class="dek">The address may be old, or it was never filed. The rest of the issue is still here.</p>
+      </header>
       <p><a class="more" href="/">Back to the latest</a></p>
       <div class="shelf">
         <a class="piece" href="/">
@@ -108,12 +115,60 @@
       </div>
     </div>
   </main>
-  <footer>
+  <!-- chrome:footer -->
+  <footer class="site-foot">
     <div class="wrap">
-      <p>Nothing here is an offer or financial advice. The token can go to zero.</p>
-      <p><a href="/contact/">Contact</a></p>
+      <nav class="foot-cols" aria-label="Footer">
+        <div class="foot-col">
+          <h2>Sections</h2>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/articles/">Articles</a></li>
+            <li><a href="/memes/">Memes</a></li>
+            <li><a href="/videos/">Videos</a></li>
+            <li><a href="/events/">Events</a></li>
+            <li><a href="/learn/">Learn</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h2>Community</h2>
+          <ul>
+            <li><a href="/contact/">Contact</a></li>
+            <li><a href="https://x.com/BankerHQ" target="_blank" rel="noopener noreferrer">DM @BankerHQ on X</a></li>
+            <li><a href="/#newsletter">Newsletter</a></li>
+            <li><a href="/events/">Gatherings calendar</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h2>SPX6900</h2>
+          <ul>
+            <li><a href="https://spx6900.com" target="_blank" rel="noopener noreferrer">Official site: spx6900.com</a></li>
+            <li><a href="/learn/#addresses">Contract addresses</a></li>
+            <li><a href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer">Live price on CoinGecko</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h2>About</h2>
+          <ul>
+            <li><span>An independent fan site</span></li>
+            <li><span>Not affiliated with SPX6900</span></li>
+            <li><a href="/sitemap.xml">Sitemap</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="foot-print">
+        <p>Nothing here is an offer or financial advice. The token can go to zero. Prices in the top bar come from CoinGecko and may be delayed.</p>
+        <p>© 2026 Flip the Stock. An independent fan site for SPX6900; not affiliated with the project.</p>
+      </div>
+    </div>
+    <div class="foot-strip">
+      <div class="wrap foot-strip-inner">
+        <a class="logo foot-logo" href="/">Flip the Stock</a>
+        <span>A fan page for SPX6900</span>
+      </div>
     </div>
   </footer>
+  <!-- /chrome:footer -->
   <script src="/edition.js"></script>
   <script src="/ticker.js"></script>
 </body>
