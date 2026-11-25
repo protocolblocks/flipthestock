@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Market Data — Flip the Stock</title>
+  <meta name="description" content="Holder counts for SPX6900, by chain, and other market figures as they are added. A community site. Not financial advice.">
+  <meta name="theme-color" content="#fff1e5">
+  <link rel="canonical" href="https://www.flipthestock.com/market-data/">
+  <meta property="og:site_name" content="Flip the Stock">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="Market Data — Flip the Stock">
+  <meta property="og:description" content="Holder counts for SPX6900, by chain, and other market figures as they are added. A community site. Not financial advice.">
+  <meta property="og:url" content="https://www.flipthestock.com/market-data/">
+  <meta property="og:image" content="https://www.flipthestock.com/assets/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Flip the Stock masthead on cream paper, with a single black dot on an otherwise blank chart.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Market Data — Flip the Stock">
+  <meta name="twitter:description" content="Holder counts for SPX6900, by chain, and other market figures as they are added. A community site. Not financial advice.">
+  <meta name="twitter:image" content="https://www.flipthestock.com/assets/og.png">
+  <meta name="twitter:image:alt" content="Flip the Stock masthead on cream paper, with a single black dot on an otherwise blank chart.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500&family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../site.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Market Data",
+    "url": "https://www.flipthestock.com/market-data/",
+    "description": "Holder counts for SPX6900, by chain, and other market figures as they are added. A community site. Not financial advice.",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Flip the Stock",
+      "url": "https://www.flipthestock.com/"
+    },
+    "inLanguage": "en"
+  }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <!-- chrome:header -->
+  <header class="mast">
+    <div class="markets">
+      <div class="wrap markets-bar">
+        <p class="edition"></p>
+        <a class="ticker" href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer" aria-label="SPX6900 price on CoinGecko">
+          <span class="ticker-live">Live</span>
+          <span class="ticker-name">SPX6900</span>
+          <span class="ticker-price">—</span>
+          <span class="ticker-change" hidden></span>
+        </a>
+      </div>
+    </div>
+    <div class="wrap brand">
+      <a class="logo" href="../">Flip the Stock</a>
+      <a class="brand-cta" href="#newsletter">Subscribe</a>
+    </div>
+    <div class="nav-bar">
+      <div class="wrap">
+        <nav class="nav-links" aria-label="Site">
+          <a href="../">Home</a>
+          <a href="../articles/">Articles</a>
+          <a href="../memes/">Memes</a>
+          <a href="../videos/">Videos</a>
+          <a href="../events/">Events</a>
+          <a href="../learn/">Learn</a>
+          <a href="../market-data/" aria-current="page">Market Data</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <!-- /chrome:header -->
+  <main id="main" class="page">
+    <div class="wrap">
+      <header class="sec-head">
+      <p class="ft-tag">Markets</p>
+      <h1>Market Data</h1>
+      <p class="dek">Holder counts for SPX6900, shown as a total and by chain. More figures will be added here over time.</p>
+      </header>
+
+      <section class="data-block" id="holders" aria-labelledby="holders-heading">
+        <div class="section-head"><h2 id="holders-heading">Holders</h2></div>
+
+        <div class="figure figure-lead">
+          <span class="figure-label">Wallets holding SPX</span>
+          <span class="figure-value" id="holders-total-value">—</span>
+          <p class="figure-note" id="holders-total-note">Loading the latest count…</p>
+        </div>
+
+        <div class="figure-grid" id="holders-chains" aria-label="Holders by chain"></div>
+
+        <p class="data-note" id="holders-method"></p>
+        <noscript>
+          <p class="data-note">JavaScript is off, so the figures cannot be drawn here. The latest saved counts are in <a href="../data/holders.json">data/holders.json</a>.</p>
+        </noscript>
+      </section>
+    </div>
+  </main>
+  <!-- chrome:newsletter -->
+  <section class="promo" id="newsletter" aria-label="Newsletter">
+    <div class="wrap promo-inner">
+      <div class="promo-copy">
+        <p class="ft-tag">Newsletter</p>
+        <h2>A monthly letter</h2>
+        <p class="dek">Keep up with the latest happenings in the SPX6900 community — the writing, the memes, and the videos.</p>
+      </div>
+      <div class="newsletter">
+        <form class="newsletter-form embeddable-buttondown-form" action="https://buttondown.com/api/emails/embed-subscribe/flipthestock" method="post">
+          <label for="newsletter-email-market-data">Email address</label>
+          <input id="newsletter-email-market-data" type="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+          <input type="hidden" name="embed" value="1">
+          <input type="hidden" name="tag" value="market-data">
+          <button class="btn" type="submit">Subscribe</button>
+        </form>
+        <p class="newsletter-help">One email a month. We’ll send a confirmation link first.</p>
+      </div>
+    </div>
+  </section>
+  <!-- /chrome:newsletter -->
+
+  <!-- chrome:footer -->
+  <footer class="site-foot">
+    <div class="wrap">
+      <nav class="foot-cols" aria-label="Footer">
+        <div class="foot-col">
+          <h2>Sections</h2>
+          <ul>
+            <li><a href="../">Home</a></li>
+            <li><a href="../articles/">Articles</a></li>
+            <li><a href="../memes/">Memes</a></li>
+            <li><a href="../videos/">Videos</a></li>
+            <li><a href="../events/">Events</a></li>
+            <li><a href="../learn/">Learn</a></li>
+            <li><a href="../market-data/">Market Data</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h2>Community</h2>
+          <ul>
+            <li><a href="../contact/">Contact</a></li>
+            <li><a href="#newsletter">Newsletter</a></li>
+            <li><a href="../events/">Gatherings calendar</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h2>SPX6900</h2>
+          <ul>
+            <li><a href="https://spx6900.com" target="_blank" rel="noopener noreferrer">Official site: spx6900.com</a></li>
+            <li><a href="../learn/#addresses">Contract addresses</a></li>
+            <li><a href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer">Live price on CoinGecko</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="foot-print">
+        <p>Nothing here is an offer or financial advice. The token can go to zero. Prices in the top bar come from CoinGecko and may be delayed.</p>
+        <p>© 2026 Flip the Stock. A user community site for SPX6900.</p>
+      </div>
+    </div>
+    <div class="foot-strip">
+      <div class="wrap foot-strip-inner">
+        <a class="logo foot-logo" href="../">Flip the Stock</a>
+      </div>
+    </div>
+  </footer>
+  <!-- /chrome:footer -->
+  <script src="../edition.js"></script>
+  <script src="../ticker.js"></script>
+  <script src="holders.js"></script>
+  <script data-goatcounter="https://flipthestock.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

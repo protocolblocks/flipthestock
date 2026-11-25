@@ -1,0 +1,52 @@
+{
+  "updated_at": "2026-11-25T08:23:03-06:00",
+  "total": 242667,
+  "label": "Wallets holding SPX",
+  "note": "This counts wallets with a non-zero balance, including exchange and contract wallets. Wallets are counted per chain, so someone holding on more than one chain is counted more than once. The total adds the Ethereum token to the bridged copies on Base and Solana. Bridged copies on BNB Chain and Sui are omitted because no reliable free source returned a current figure.",
+  "chains": [
+    {
+      "id": "ethereum",
+      "name": "Ethereum",
+      "contract": "0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C",
+      "holders": 49751,
+      "source": "Ethplorer",
+      "source_url": "https://ethplorer.io/address/0xe0f63a424a4439cbe457d80e4f4b51ad25b2c56c"
+    },
+    {
+      "id": "base",
+      "name": "Base",
+      "contract": "0x50dA645f148798F68EF2d7dB7C1CB22A6819bb2C",
+      "holders": 113831,
+      "source": "GeckoTerminal",
+      "source_url": "https://www.geckoterminal.com/base/tokens/0x50da645f148798f68ef2d7db7c1cb22a6819bb2c"
+    },
+    {
+      "id": "solana",
+      "name": "Solana",
+      "contract": "J3NKxxXZcnNiMjKw9hYb2K4LUxgwB6t1FtPtQVsv3KFr",
+      "holders": 79085,
+      "source": "GeckoTerminal",
+      "source_url": "https://www.geckoterminal.com/solana/tokens/J3NKxxXZcnNiMjKw9hYb2K4LUxgwB6t1FtPtQVsv3KFr"
+    }
+  ],
+  "omitted": [
+    {
+      "id": "bnb",
+      "name": "BNB Chain",
+      "contract": "0x7c6563b36B2144E7F3175c92977b0e19cE4966de",
+      "reason": "No reliable free source returned a current holder count."
+    },
+    {
+      "id": "sui",
+      "name": "Sui",
+      "contract": "0x0ee60b2540f5373903679500d0f88710cbb106d47c6dae028fb9c4795a835dda::coin::COIN",
+      "reason": "No reliable free source returned a current holder count."
+    }
+  ],
+  "history": [
+    {
+      "date": "2026-11-25",
+      "total": 242667
+    }
+  ]
+}
