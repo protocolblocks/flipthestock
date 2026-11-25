@@ -77,6 +77,13 @@ window.STACKS = {
   ],
   memes: [
     {
+      src: "wall/2026-11-24-spiritual-gold.jpg",
+      alt: "A three-row graphic: a gold coin labeled Physical Gold (Backed by Physics), the Bitcoin logo labeled Digital Gold (Backed by Math), and an SPX6900 coin labeled Spiritual Gold (Backed by Belief).",
+      caption: "Three kinds of gold. The last is SPX6900, backed by belief.",
+      credit: "Post on X · @matuaxbt",
+      href: "https://x.com/matuaxbt/status/2125361383726608473"
+    },
+    {
       src: "wall/2026-11-23-painting-the-wall.jpg",
       alt: "A man in a backwards cap and tank top rolls teal paint onto a wall, captioned Me in November 2026 instead of buying SPX6900 at $0.25.",
       caption: "The regret trade. A fresh coat of paint where a position should have been.",
