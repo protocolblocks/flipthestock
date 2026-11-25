@@ -2,10 +2,12 @@
   "default": "wall/no-chart.jpg",
   "memes": [
     {
-      "src": "wall/no-chart.jpg"
+      "src": "wall/no-chart.jpg",
+      "objectPosition": "center bottom"
     },
     {
-      "src": "wall/2026-11-23-painting-the-wall.jpg"
+      "src": "wall/2026-11-23-painting-the-wall.jpg",
+      "objectPosition": "center 40%"
     }
   ]
 }

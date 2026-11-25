@@ -1235,9 +1235,21 @@ main + .site-foot, dialog + .site-foot { margin-top: 48px; }
    headline and standfirst, a lead figure, a slim contents rail,
    and a reading column with consistent section rules. */
 .learn-page { padding-top: 28px; padding-bottom: 64px; }
-.learn-lead { margin: 0 0 36px; padding-bottom: 8px; }
-.learn-lead .kicker { margin-top: 0; }
+.learn-lead {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  grid-template-areas:
+    "kicker ."
+    "title  figure"
+    "dek    figure";
+  column-gap: 36px;
+  row-gap: 0;
+  align-items: start;
+  margin: 0 0 36px;
+}
+.learn-lead .kicker { grid-area: kicker; margin-top: 0; margin-bottom: 4px; }
 .learn-lead h1 {
+  grid-area: title;
   font-family: var(--serif);
   font-weight: 500;
   font-size: clamp(42px, 6vw, 58px);
@@ -1247,14 +1259,31 @@ main + .site-foot, dialog + .site-foot { margin-top: 48px; }
   margin: 0 0 16px;
 }
 .learn-standfirst {
+  grid-area: dek;
   margin: 0;
-  max-width: 38rem;
+  max-width: 36rem;
   color: #5d5753;
   font-size: 20px;
   line-height: 1.4;
 }
-.learn-lead .shot { margin-top: 28px; }
-.learn-lead .shot img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; background: var(--wheat); }
+.learn-lead .shot {
+  grid-area: figure;
+  margin: 0;
+  min-width: 0;
+}
+.learn-lead .shot img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  max-height: 240px;
+  object-fit: cover;
+  background: var(--wheat);
+}
+.learn-lead .shot figcaption {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 2px 12px;
+}
 
 .learn-body {
   display: grid;
@@ -1462,7 +1491,16 @@ main + .site-foot, dialog + .site-foot { margin-top: 48px; }
     padding-top: 8px;
   }
   .learn-toc a { padding-left: 0; }
+  .learn-lead {
+    display: block;
+  }
   .learn-lead h1 { max-width: none; }
+  .learn-lead .shot { margin-top: 20px; }
+  .learn-lead .shot img {
+    aspect-ratio: 16 / 7;
+    max-height: 200px;
+  }
+  .learn-lead .shot figcaption { justify-content: space-between; }
   .learn-callout { padding: 20px 18px 22px; }
   .learn-page .supply { grid-template-columns: 1fr; border-bottom: 0; }
   .learn-page .stat { padding: 10px 0; border-bottom: 1px solid var(--line); }
