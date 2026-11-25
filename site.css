@@ -738,7 +738,7 @@ body.is-logged-on .log-line { display: block; }
 .weather-read { margin: 10px 0 0; font-size: 15px; }
 .weather-note { margin: 6px 0 0; font-size: 13px; color: var(--muted); }
 
-.tenet-layout { margin: 0; }
+.tenets-wrap { margin: 0; }
 .tenets {
   grid-template-columns: 1fr 1fr;
   column-gap: 48px;
