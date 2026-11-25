@@ -140,9 +140,14 @@ def replace(html, pattern, marker, new):
     return out
 
 
+FONTS_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500'
+              '&family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700'
+              '&display=swap" rel="stylesheet">')
+
 for path, p, current, input_id, tag in PAGES:
     f = ROOT / path
     html = f.read_text()
+    html = re.sub(r'<link href="https://fonts\.googleapis\.com/css2\?[^"]*" rel="stylesheet">', lambda m: FONTS_LINK, html, count=1)
     has_form = input_id is not None
     html = replace(html, r'<header class="mast">.*?</header>', "header", header(p, current, has_form))
     html = replace(html, r'<footer>.*?</footer>', "footer", footer(p, has_form))

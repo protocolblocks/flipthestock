@@ -10,6 +10,9 @@
   --up: #3c6e4f;
   --serif: Newsreader, Georgia, serif;
   --sans: "Public Sans", "Segoe UI", sans-serif;
+  /* Wordmark: ft.com draws "FINANCIAL TIMES" as an SVG in Financier Display
+     (licensed). Frank Ruhl Libre 500 (OFL) is the closest open match. */
+  --wordmark: "Frank Ruhl Libre", Newsreader, Georgia, serif;
   --wrap: 1180px;
 }
 
@@ -106,11 +109,11 @@ body > header, body > section, body > footer { width: 100%; }
 /* Full-bleed hairlines above and below the section nav, as on ft.com. */
 .nav-bar { border-top: 1px solid var(--line); }
 .logo {
-  font-family: var(--serif);
-  font-size: 40px;
+  font-family: var(--wordmark);
+  font-size: 36px;
   font-weight: 500;
   line-height: 1;
-  letter-spacing: 0.035em;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: var(--ink);
 }
@@ -1069,7 +1072,7 @@ body.is-logged-on .log-line { display: block; }
   .markets-bar { min-height: 32px; }
   .edition { font-size: 11px; }
   .brand { justify-content: space-between; align-items: center; padding: 14px 0 12px; }
-  .logo { font-size: 23px; letter-spacing: 0.03em; }
+  .logo { font-size: 23px; letter-spacing: 0; }
   .brand-cta { position: static; transform: none; }
   .nav-links { flex-wrap: nowrap; overflow-x: auto; justify-content: space-between; gap: 10px; scrollbar-width: none; }
   .nav-links a { padding: 11px 0 9px; white-space: nowrap; font-size: 11px; letter-spacing: 0.02em; }
