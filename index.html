@@ -56,12 +56,11 @@
   }
   </script>
 </head>
-<body>
+<body class="home">
   <a class="skip" href="#main">Skip to content</a>
   <header class="mast">
-    <div class="wrap bar">
-      <a class="logo" href="./"><svg class="mark" viewBox="0 0 24 28" aria-hidden="true" focusable="false"><path fill="none" stroke="#33302e" stroke-width="1.1" stroke-linejoin="miter" d="M21 8.8 V21 H3 V6.2 H21"/><path fill="none" stroke="#33302e" stroke-width="1.45" stroke-linecap="square" stroke-linejoin="miter" d="M6 16 9.8 18.2 12.6 15.2"/><path fill="none" stroke="#990f3d" stroke-width="1.65" stroke-linecap="square" d="M12.6 15.2 20.2 4.2"/><path fill="none" stroke="#990f3d" stroke-width="1.65" stroke-linecap="square" stroke-linejoin="miter" d="M16.2 4.6 20.2 4.2 19.7 8.3"/></svg>Flip the Stock</a>
-      <div class="mast-meta">
+    <div class="markets">
+      <div class="wrap markets-bar">
         <p class="edition" id="edition"></p>
         <a class="ticker" href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer" aria-label="SPX6900 price on CoinGecko">
           <span class="ticker-live">Live</span>
@@ -71,9 +70,13 @@
         </a>
       </div>
     </div>
+    <div class="wrap brand">
+      <a class="logo" href="./"><svg class="mark" viewBox="0 0 24 28" aria-hidden="true" focusable="false"><path fill="none" stroke="#33302e" stroke-width="1.1" stroke-linejoin="miter" d="M21 8.8 V21 H3 V6.2 H21"/><path fill="none" stroke="#33302e" stroke-width="1.45" stroke-linecap="square" stroke-linejoin="miter" d="M6 16 9.8 18.2 12.6 15.2"/><path fill="none" stroke="#990f3d" stroke-width="1.65" stroke-linecap="square" d="M12.6 15.2 20.2 4.2"/><path fill="none" stroke="#990f3d" stroke-width="1.65" stroke-linecap="square" stroke-linejoin="miter" d="M16.2 4.6 20.2 4.2 19.7 8.3"/></svg>Flip the Stock</a>
+      <a class="brand-cta" href="#newsletter-email-home">Subscribe</a>
+    </div>
     <div class="wrap">
       <nav class="nav-links" aria-label="Site">
-        <a href="./" aria-current="page">Latest</a>
+        <a href="./" aria-current="page">Home</a>
         <a href="articles/">Articles</a>
         <a href="memes/">Memes</a>
         <a href="videos/">Videos</a>
@@ -87,39 +90,25 @@
     <div class="wrap">
       <div class="front" id="news-grid" aria-label="This issue"></div>
 
-      <section class="band" id="memes" aria-label="Meme of the day">
-        <div class="band-head">
-          <h2>Meme of the day</h2>
-          <a href="memes/">All memes</a>
-        </div>
-        <div class="quad" id="meme-row"></div>
+      <section class="ft-slice" id="memes" aria-label="Memes">
+        <h2 class="ft-slice-head"><a href="memes/">Memes</a></h2>
+        <div class="ft-row" id="meme-row"></div>
       </section>
 
-      <section class="band" id="videos" aria-label="Video of the week">
-        <div class="band-head">
-          <h2>Video of the week</h2>
-          <a href="videos/">All videos</a>
-        </div>
-        <div class="quad video-row" id="video-row"></div>
+      <section class="ft-slice" id="videos" aria-label="Videos">
+        <h2 class="ft-slice-head"><a href="videos/">Videos</a></h2>
+        <div class="ft-row" id="video-row"></div>
       </section>
 
-      <div class="fp-row">
-        <section class="fp-main" aria-label="Learn">
-          <div class="band-head">
-            <h2>Learn</h2>
-            <a href="learn/">Open the learn page</a>
-          </div>
-          <div class="primer">
-            <div>
-              <h3>The background, the tenets, and the contracts sit on one page.</h3>
-              <p class="dek">Home is still the Ethereum contract. Copies on Solana, Base, BNB Chain, and Sui are bridges. Confirm them on spx6900.com before you trust a token with this name.</p>
-              <p><a class="more" href="learn/">Read the primer</a></p>
-            </div>
-            <img class="pic" src="assets/sticker.jpg" alt="Plush mascot in a black hoodie and lime visor, holding a blank card.">
-          </div>
-        </section>
-        <aside class="fp-col rail" id="most-read" aria-label="Most read"></aside>
-      </div>
+      <section class="ft-slice" id="learn" aria-label="Learn">
+        <h2 class="ft-slice-head"><a href="learn/">Learn</a></h2>
+        <div class="ft-row ft-learn">
+          <article class="ft-teaser"><a href="learn/#bit"><p class="ft-tag">For newcomers</p><h3>The bit, said plainly</h3><p class="ft-dek">A meme coin that borrows the S&amp;P 500’s ticker and then ignores the index.</p></a></article>
+          <article class="ft-teaser"><a href="learn/#tenets"><p class="ft-tag">Tenets</p><h3>Stop trading. Believe in something.</h3><p class="ft-dek">The lines they repeat, and what each one is for.</p></a></article>
+          <article class="ft-teaser"><a href="learn/#lore"><p class="ft-tag">History</p><h3>How the joke held</h3><p class="ft-dek">From August 2023 to now, in dated steps.</p></a></article>
+          <article class="ft-teaser"><a href="learn/#addresses"><p class="ft-tag">The contracts</p><h3>Home is still the Ethereum contract</h3><p class="ft-dek">Copies on Solana, Base, BNB Chain, and Sui are bridges. Confirm them on spx6900.com before you trust a token with this name.</p></a></article>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -149,7 +138,6 @@
     renderNews(document.getElementById("news-grid"));
     renderFrontMemes(document.getElementById("meme-row"));
     renderFrontVideos(document.getElementById("video-row"));
-    renderMostRead(document.getElementById("most-read"));
   </script>
   <script src="edition.js"></script>
   <script src="ticker.js"></script>

@@ -561,9 +561,26 @@
     });
   }
 
-  function bandHead(title, href, label) {
-    return '<div class="band-head"><h2>' + esc(title) + '</h2>' +
-      (href ? '<a href="' + esc(href) + '">' + esc(label) + '</a>' : '') + '</div>';
+  function stampText(iso) {
+    var m = String(iso || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return "";
+    var then = Date.UTC(+m[1], +m[2] - 1, +m[3]);
+    var today = new Date().toLocaleDateString("en-CA", { timeZone: "America/Edmonton" }).split("-");
+    var now = Date.UTC(+today[0], +today[1] - 1, +today[2]);
+    var days = Math.round((now - then) / 86400000);
+    if (days === 0) return "Today";
+    if (days === 1) return "Yesterday";
+    if (days > 1 && days < 7) return days + " days ago";
+    return new Date(then + 43200000).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+  }
+
+  function stampHtml(iso) {
+    var text = stampText(iso);
+    return text ? '<p class="ft-stamp">' + esc(text) + '</p>' : "";
+  }
+
+  function frontMemes() {
+    return validMemes();
   }
 
   function frontGatheringHtml(eventsHref) {
@@ -575,92 +592,79 @@
     if (!items) {
       items = '<p class="event-empty">Nothing dated is on the calendar just now. The regulars still meet.</p>';
     }
-    return '<section class="fp-col next-box" aria-label="Next gathering">' +
-      bandHead("Next gathering", eventsHref, "All gatherings") + items + '</section>';
+    return '<aside class="ft-picks next-box" aria-label="Next gathering">' +
+      '<p class="ft-label"><a href="' + esc(eventsHref) + '">Next gathering</a></p>' + items +
+      '<p class="ft-all"><a class="more" href="' + esc(eventsHref) + '">All gatherings</a></p></aside>';
+  }
+
+  function teaserHtml(article, withDek) {
+    return '<article class="ft-teaser"><a href="' + pieceHref("articles/", article.slug) + '">' +
+      '<p class="ft-tag">' + esc(article.kicker || "Latest") + '</p>' +
+      '<h3>' + esc(article.title) + '</h3>' +
+      (withDek && article.dek ? '<p class="ft-dek">' + esc(article.dek) + '</p>' : '') +
+      '</a>' + stampHtml(article.date) + '</article>';
   }
 
   window.renderNews = function (root) {
     var articles = sortedArticles();
+    var memes = frontMemes();
+    var picks = frontGatheringHtml("events/");
     if (!articles.length) {
-      root.innerHTML = empty("Nothing filed yet.", "The latest piece will lead this page.") +
-        '<div class="fp-row">' + frontGatheringHtml("events/") + '</div>';
+      root.innerHTML = '<section class="ft-hero">' +
+        '<div class="ft-lead">' + empty("Nothing filed yet.", "The latest piece will lead this page.") + '</div>' +
+        '<div class="ft-feature"></div>' + picks + '</section>';
       return;
     }
     var lead = articles[0];
-    var side = articles[1];
-    var related = articles.slice(2, 4);
     var leadHref = pieceHref("articles/", lead.slug);
-
-    var coverSrc = "assets/cover.jpg";
-    var coverAlt = "A sheet of chart paper with a faint grid and a single black dot. The rest of the grid is empty.";
-    var leadMeme = data().memes[0];
-    if (leadMeme) {
-      var memeSrc = safeImage(leadMeme.src);
-      if (memeSrc) {
-        coverSrc = "memes/" + memeSrc;
-        coverAlt = leadMeme.alt || leadMeme.caption || coverAlt;
-      }
-    }
-    var leadHtml = '<section class="fp-lead" aria-label="Lead story">' +
-      '<div class="fp-lead-copy"><a href="' + leadHref + '">' +
-      '<p class="kicker">' + esc(lead.kicker || "Cover") + '</p>' +
+    var related = articles.slice(1, 3);
+    var leadImg = safeImage(lead.image);
+    var leadPic = leadImg
+      ? '<a class="ft-lead-pic" href="' + leadHref + '"><img class="pic" src="' + esc(leadImg) + '" alt="' + esc(lead.imageAlt || "") + '"></a>'
+      : "";
+    var leadHtml = '<div class="ft-lead">' +
+      '<a href="' + leadHref + '">' +
+      '<p class="ft-tag">' + esc(lead.kicker || "Cover") + '</p>' +
       '<h2>' + esc(lead.title) + '</h2>' +
-      '<p class="dek">' + esc(lead.dek) + '</p></a>' +
-      '<p class="when">' + formatDate(lead.date) + '</p>' +
-      '<p><a class="more" href="' + leadHref + '">Read the story</a></p></div>' +
-      '<a class="fp-lead-pic" href="' + leadHref + '">' +
-      '<img class="pic" src="' + esc(coverSrc) + '" alt="' + esc(coverAlt) + '" onerror="this.onerror=null;this.src=\'assets/cover.jpg\'"></a>' +
-      '</section>';
+      '<p class="ft-dek">' + esc(lead.dek) + '</p></a>' +
+      stampHtml(lead.date) + leadPic +
+      (related.length ? '<ul class="ft-related">' + related.map(function (article) {
+        return '<li><a href="' + pieceHref("articles/", article.slug) + '">' + esc(article.title) + '</a></li>';
+      }).join("") + '</ul>' : '') +
+      '</div>';
 
-    var latestHtml = "";
-    if (side) {
-      var sideImgSrc = "memes/wall/no-chart.jpg";
-      var sideImgAlt = "A dark empty chart with green text reading We are here and an arrow pointing at a single dot.";
-      var sideImgHref = pieceHref("articles/", side.slug);
-      var coverMeme = archiveCoverMeme();
-      if (coverMeme) {
-        var coverMemeSrc = safeImage(coverMeme.src);
-        if (coverMemeSrc) {
-          var coverMemeId = memeAnchor(coverMemeSrc);
-          sideImgSrc = "memes/" + coverMemeSrc;
-          sideImgAlt = coverMeme.alt || coverMeme.caption || sideImgAlt;
-          sideImgHref = "memes/" + (coverMemeId ? "#" + coverMemeId : "");
-        }
-      }
-      latestHtml = '<div class="fp-feature">' +
-        '<a class="fp-feature-pic" href="' + sideImgHref + '">' +
-        '<img class="pic" src="' + esc(sideImgSrc) + '" alt="' + esc(sideImgAlt) + '"></a>' +
-        '<a class="fp-feature-copy" href="' + pieceHref("articles/", side.slug) + '">' +
-        '<p class="kicker">' + esc(side.kicker || "Latest") + '</p>' +
-        '<h3>' + esc(side.title) + '</h3>' +
-        '<p class="dek">' + esc(side.dek) + '</p>' +
-        '<p class="when">' + formatDate(side.date) + '</p></a></div>' +
-        (related.length ? '<div class="fp-related">' + related.map(function (article) {
-          return '<a href="' + pieceHref("articles/", article.slug) + '">' +
-            '<p class="kicker">' + esc(article.kicker || "Latest") + '</p>' +
-            '<h3>' + esc(article.title) + '</h3>' +
-            '<p class="when">' + formatDate(article.date) + '</p></a>';
-        }).join("") + '</div>' : '');
-    } else {
-      latestHtml = '<p class="event-empty">More pieces will be filed here.</p>';
+    var featureHtml = '<div class="ft-feature"></div>';
+    var meme = memes[0];
+    if (meme) {
+      var src = safeImage(meme.src);
+      var id = memeAnchor(src);
+      var href = "memes/" + (id ? "#" + id : "");
+      featureHtml = '<div class="ft-feature"><a href="' + href + '">' +
+        '<span class="ft-feature-pic"><img class="pic" src="memes/' + esc(src) + '" alt="' + esc(meme.alt || "") + '" onerror="this.onerror=null;this.src=\'assets/cover.jpg\'"></span>' +
+        '<span class="ft-feature-panel"><span class="ft-tag">Meme of the day</span>' +
+        '<span class="ft-feature-title">' + esc(meme.caption || "") + '</span></span></a></div>';
     }
 
-    root.innerHTML = leadHtml +
-      '<div class="fp-row">' +
-      '<section class="fp-main" aria-label="Latest articles">' +
-      bandHead("Latest articles", "articles/", "All articles") + latestHtml + '</section>' +
-      frontGatheringHtml("events/") +
-      '</div>';
+    var top = articles.slice(3, 6);
+    var topHtml = top.length
+      ? '<section class="ft-slice" aria-label="Top stories">' +
+        '<h2 class="ft-slice-head"><a href="articles/">Top stories</a></h2>' +
+        '<div class="ft-row">' + top.map(function (a) { return teaserHtml(a, true); }).join("") +
+        '<aside class="ft-most" id="most-read-slot" aria-label="Most read"></aside></div></section>'
+      : '<section class="ft-slice" aria-label="Most read"><div class="ft-row"><aside class="ft-most" id="most-read-slot" aria-label="Most read"></aside></div></section>';
+
+    root.innerHTML = '<section class="ft-hero" aria-label="Lead stories">' + leadHtml + featureHtml + picks + '</section>' + topHtml;
+    renderMostRead(document.getElementById("most-read-slot"));
   };
 
   window.renderMostRead = function (root) {
     if (!root) return;
-    var most = sortedArticles().slice(0, 6).map(function (article, index) {
-      return '<li><span class="idx">' + (index + 1) + '</span><a href="' + pieceHref("articles/", article.slug) + '">' +
+    var most = sortedArticles().slice(0, 5).map(function (article, index) {
+      return '<li><span class="ft-num">' + (index + 1) + '</span><a href="' + pieceHref("articles/", article.slug) + '">' +
         esc(article.title) + '</a></li>';
     }).join("");
-    root.innerHTML = bandHead("Most read", "articles/", "Archive") +
-      (most ? '<ol class="most">' + most + '</ol>' : '<p class="event-empty">Nothing filed yet.</p>');
+    root.innerHTML = '<p class="ft-most-head"><a href="articles/">Most read</a></p>' +
+      (most ? '<ol class="ft-most-list">' + most + '</ol>' : '<p class="event-empty">Nothing filed yet.</p>');
   };
 
   function postedDate(entry) {
@@ -676,7 +680,7 @@
   }
 
   window.renderFrontMemes = function (root) {
-    var memes = data().memes.slice(0, 4);
+    var memes = frontMemes().slice(1, 5);
     if (!memes.length) {
       root.innerHTML = empty("Nothing on the wall.", "Meme images will be hung here.");
       return;
@@ -688,10 +692,12 @@
       var open = href
         ? '<a href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">'
         : '<a href="memes/">';
-      return open +
-        '<img class="pic" src="memes/' + esc(src) + '" alt="' + esc(meme.alt || "") + '">' +
-        '<h3>' + esc(meme.caption) + '</h3>' +
-        (postedDate(meme) ? '<p class="credit">' + esc(postedDate(meme)) + '</p>' : '') + '</a>';
+      var when = postedDate(meme);
+      return '<article class="ft-card">' + open +
+        '<span class="ft-thumb ft-thumb-meme"><img class="pic" src="memes/' + esc(src) + '" alt="' + esc(meme.alt || "") + '"></span>' +
+        '<span class="ft-card-body"><span class="ft-tag">Meme</span>' +
+        '<span class="ft-card-title">' + esc(meme.caption) + '</span>' +
+        (when ? '<span class="ft-stamp">' + esc(when) + '</span>' : '') + '</span></a></article>';
     }).join("");
   };
 
@@ -701,7 +707,7 @@
       root.innerHTML = empty("No reels filed.", "The best videos will play here.");
       return;
     }
-    root.innerHTML = videos.map(function (video) {
+    root.innerHTML = videos.map(function (video, index) {
       var key = videoKey(video);
       if (!key) return "";
       var note = postedDate(video);
@@ -709,11 +715,11 @@
       var thumb = x
         ? posterSrc(video.poster)
         : "https://i.ytimg.com/vi/" + youtubeId(video) + "/hqdefault.jpg";
-      return '<a href="videos/#v-' + key + '">' +
-        '<img class="pic" src="' + esc(thumb) + '" alt="">' +
-        '<h3>' + esc(video.title) + '</h3>' +
-        (note ? '<p class="credit">' + esc(note) + '</p>' : '') +
-        '</a>';
+      return '<article class="ft-card"><a href="videos/#v-' + key + '">' +
+        '<span class="ft-thumb"><img class="pic" src="' + esc(thumb) + '" alt=""><span class="ft-play" aria-hidden="true"></span></span>' +
+        '<span class="ft-card-body"><span class="ft-tag">' + (index === 0 ? "Video of the week" : "Video") + '</span>' +
+        '<span class="ft-card-title">' + esc(video.title) + '</span>' +
+        (note ? '<span class="ft-stamp">' + esc(note) + '</span>' : '') + '</span></a></article>';
     }).join("");
   };
 
