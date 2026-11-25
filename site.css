@@ -1092,7 +1092,7 @@ body.is-logged-on .log-line { display: block; }
 }
 .md-lead-figure .figure-value {
   margin: 8px 0 12px;
-  font-size: clamp(56px, 9vw, 96px);
+  font-size: clamp(38px, 4.5vw, 52px);
 }
 .figure-note, .md-note, .md-note p {
   margin: 0;
@@ -1283,7 +1283,7 @@ body.is-logged-on .log-line { display: block; }
   .newsletter-form .btn { justify-self: start; }
   .chain { grid-template-columns: 1fr; justify-items: start; }
   .md-lead { gap: 22px; padding-bottom: 22px; }
-  .md-lead-figure .figure-value { font-size: 56px; }
+  .md-lead-figure .figure-value { font-size: 38px; }
   .md-table th, .md-table td { padding-right: 10px; }
   .md-table tbody td.num { font-size: 18px; }
   .md-table .bar-col { min-width: 72px; width: 22%; }
