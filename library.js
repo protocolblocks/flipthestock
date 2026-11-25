@@ -93,6 +93,13 @@ window.STACKS = {
   ],
   memes: [
     {
+      src: "wall/2026-11-24-flip-the-stock-market-poster.jpg",
+      alt: "An anime-style illustration of a long-haired blonde elf with a cross painted on her cheek, seated on a stool beside a small winged figure holding an SPX6900 coin. Text reads: be delusional enough to believe that it's possible, be disciplined enough to prove yourself right. SPX6900, flip the stock market.",
+      caption: "Delusion first, discipline second. The poster asks for both.",
+      credit: "Post on X · @MustStopMurad",
+      href: "https://x.com/MustStopMurad/status/2125323275823915420"
+    },
+    {
       src: "wall/2026-11-24-spiritual-gold.jpg",
       alt: "A three-row graphic: a gold coin labeled Physical Gold (Backed by Physics), the Bitcoin logo labeled Digital Gold (Backed by Math), and an SPX6900 coin labeled Spiritual Gold (Backed by Belief).",
       caption: "Three kinds of gold. The last is SPX6900, backed by belief.",
