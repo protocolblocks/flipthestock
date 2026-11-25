@@ -145,7 +145,7 @@
     var available = catalog.filter(function (entry) {
       return !sameSrc(entry.src, homeSrc);
     });
-    if (available.length < 2) return fallback;
+    if (!available.length) return fallback;
     var dateStr = opts.date || edmontonDate(opts.now);
     var dayNum = dayNumber(dateStr);
     var chosen = pickFrom(available, dayNum);
@@ -214,6 +214,52 @@
       });
   }
 
+  function watchLearnToc() {
+    var toc = document.querySelector(".learn-toc");
+    if (!toc) return;
+    var links = [].slice.call(toc.querySelectorAll('a[href^="#"]'));
+    var sections = links.map(function (a) {
+      var id = (a.getAttribute("href") || "").replace(/^#/, "");
+      return { id: id, el: document.getElementById(id), a: a };
+    }).filter(function (s) { return s.id && s.el; });
+    if (!sections.length) return;
+
+    function setCurrent(id) {
+      links.forEach(function (a) {
+        if ((a.getAttribute("href") || "") === "#" + id) a.setAttribute("aria-current", "location");
+        else a.removeAttribute("aria-current");
+      });
+    }
+
+    function update() {
+      var mark = Math.min(160, Math.round((window.innerHeight || 600) * 0.22));
+      var current = sections[0].id;
+      for (var i = 0; i < sections.length; i++) {
+        if (sections[i].el.getBoundingClientRect().top <= mark) current = sections[i].id;
+      }
+      setCurrent(current);
+    }
+
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function () {
+        update();
+        ticking = false;
+      });
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    toc.addEventListener("click", function (event) {
+      var a = event.target.closest && event.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = (a.getAttribute("href") || "").replace(/^#/, "");
+      if (id) setCurrent(id);
+    });
+    update();
+  }
+
   var api = {
     edmontonDate: edmontonDate,
     dayNumber: dayNumber,
@@ -223,6 +269,7 @@
     indexForDay: indexForDay,
     paint: paint,
     load: load,
+    watchLearnToc: watchLearnToc,
     sameSrc: sameSrc,
     safeSrc: safeSrc
   };
@@ -234,6 +281,9 @@
   if (typeof document !== "undefined" && typeof window !== "undefined") {
     if (document.getElementById("learn-hero")) {
       load();
+    }
+    if (document.querySelector(".learn-toc")) {
+      watchLearnToc();
     }
   }
 })(typeof window !== "undefined" ? window : this);

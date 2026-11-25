@@ -23,7 +23,7 @@ PAGES = [
     ("memes/index.html", "../", "Memes", "newsletter-email-memes", "memes"),
     ("videos/index.html", "../", "Videos", "newsletter-email-videos", "videos"),
     ("events/index.html", "../", "Events", "newsletter-email-events", "events"),
-    ("learn/index.html", "../", "Learn", "newsletter-email-learn", "learn"),
+    ("explained/index.html", "../", "Explained", "newsletter-email-explained", "learn"),
     ("market-data/index.html", "../", "Market Data", "newsletter-email-market-data", "market-data"),
     ("contact/index.html", "../", None, "newsletter-email-contact", "contact"),
     ("thanks/index.html", "../", None, None, None),
@@ -31,7 +31,7 @@ PAGES = [
 ]
 
 NAV = [("Home", ""), ("Articles", "articles/"), ("Market Data", "market-data/"),
-       ("Events", "events/"), ("Videos", "videos/"), ("Memes", "memes/"), ("Learn", "learn/")]
+       ("Events", "events/"), ("Videos", "videos/"), ("Memes", "memes/"), ("Explained", "explained/")]
 
 
 def header(p, current, has_form):
@@ -108,12 +108,12 @@ def footer(p, has_form):
     cols = "\n".join([
         col("Sections", [a(r, "Home"), a(p + "articles/", "Articles"), a(p + "market-data/", "Market Data"),
                          a(p + "events/", "Events"), a(p + "videos/", "Videos"), a(p + "memes/", "Memes"),
-                         a(p + "learn/", "Learn")]),
+                         a(p + "explained/", "Explained")]),
         col("Community", [a(p + "contact/", "Contact"),
                            a(nl, "Newsletter"), a(p + "events/", "Gatherings calendar"),
                            a(p + "feed.xml", "RSS")]),
         col("SPX6900", [ext("https://spx6900.com", "Official site: spx6900.com"),
-                        a(p + "learn/#addresses", "Contract addresses"),
+                        a(p + "explained/#addresses", "Contract addresses"),
                         ext("https://www.coingecko.com/en/coins/spx6900", "Live price on CoinGecko")]),
     ])
     return '''<!-- chrome:footer -->

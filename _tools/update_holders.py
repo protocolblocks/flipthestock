@@ -21,7 +21,7 @@ OUT = ROOT / "data" / "holders.json"
 TZ = ZoneInfo("America/Edmonton")
 UA = "FlipTheStock/1.0 (+https://www.flipthestock.com/; market-data holder counts)"
 
-# Official contracts, copied from the site's Learn page (and spx6900.com).
+# Official contracts, copied from the site's Explained page (and spx6900.com).
 ETH = "0xE0f63A424a4439cBE457D80E4f4b51aD25b2c56C"
 BASE = "0x50dA645f148798F68EF2d7dB7C1CB22A6819bb2C"
 SOL = "J3NKxxXZcnNiMjKw9hYb2K4LUxgwB6t1FtPtQVsv3KFr"

@@ -98,7 +98,7 @@ window.STACKS = {
       dek: "Copies on Solana, Base, BNB Chain, and Sui are bridges. A bridge can fail on its own.",
       html: [
         "<p>The token people mean when they say SPX6900 started on Ethereum. The project site also lists copies on Solana, Base, BNB Chain, and Sui. Those are bridged. The site’s own warning is that a bridge can fail even when the story does not.</p>",
-        "<p>The comfortable contract, in the project’s words, is the Ethereum one. The five addresses, and the supply figures printed beside them, are on the learn page here and on spx6900.com. Compare them there. The name gets reused by copycats.</p>",
+        "<p>The comfortable contract, in the project’s words, is the Ethereum one. The five addresses, and the supply figures printed beside them, are on the Explained page here and on spx6900.com. Compare them there. The name gets reused by copycats.</p>",
         "<p>This is a map, not a reason to buy. Money put into the token can go to zero.</p>"
       ].join("")
     }

@@ -110,7 +110,7 @@ for (var i = 0; i < 30; i++) {
   assert(entry.src === a || entry.src === b, "skip leaves one of the other approved memes");
 }
 
-// Fewer than 2 after excluding homepage => default
+// A single non-homepage approved meme is shown, even if it is the only one
 var onlyHomeAndDefault = {
   default: "wall/no-chart.jpg",
   memes: [
@@ -119,12 +119,19 @@ var onlyHomeAndDefault = {
   ]
 };
 var fb = hero.pickLearnMeme(onlyHomeAndDefault, { date: "2026-11-25", memes: library, homeSrc: home });
-assert(fb && fb.src === a, "falls back to default when fewer than 2 remain after excluding the homepage meme");
+assert(fb && fb.src === a, "a single remaining non-homepage meme is shown");
 
-// A single approved meme => default (which is that meme)
 var one = { default: "wall/no-chart.jpg", memes: [{ src: "wall/no-chart.jpg" }] };
 var only = hero.pickLearnMeme(one, { date: "2026-11-25", memes: library, homeSrc: home });
-assert(only && only.src === a, "falls back to default when the approved list has fewer than 2 memes");
+assert(only && only.src === a, "a single approved meme that is not the homepage lead is shown");
+
+// The only candidate is today's homepage lead => default
+var onlyIsHome = {
+  default: "wall/no-chart.jpg",
+  memes: [{ src: "wall/2026-11-24-flip-the-stock-market-poster.jpg" }]
+};
+var homeOnly = hero.pickLearnMeme(onlyIsHome, { date: "2026-11-25", memes: library, homeSrc: home });
+assert(homeOnly && homeOnly.src === a, "falls back to the default when the only candidate is the homepage lead");
 
 // Unknown or unsafe src is ignored
 var dirty = {
