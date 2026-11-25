@@ -7,7 +7,7 @@ It rewrites the <header class="mast">, the newsletter promo and the <footer>
 on every page so they never drift. Jekyll skips folders starting with "_",
 so this file is not published.
 """
-import re, pathlib
+import hashlib, re, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
@@ -194,6 +194,38 @@ def all_pages():
     return list(PAGES) + article_pages()
 
 
+
+ASSET_FILES = (
+    "site.css",
+    "library.js",
+    "stacks.js",
+    "ticker.js",
+    "edition.js",
+    "learn-hero.js",
+)
+
+
+def file_version(name: str) -> str:
+    path = ROOT / name
+    if not path.is_file():
+        return "0"
+    return hashlib.sha1(path.read_bytes()).hexdigest()[:8]
+
+
+def bust_asset_urls(html: str) -> str:
+    """Append a content-hash query to local CSS and JS so browsers pick up changes."""
+    for name in ASSET_FILES:
+        ver = file_version(name)
+        pattern = re.compile(
+            r'((?:href|src)=")(/?(?:\.\./)*)%s(?:\?[^"]*)?(")' % re.escape(name)
+        )
+        html = pattern.sub(
+            lambda m, n=name, v=ver: "%s%s%s?v=%s%s" % (m.group(1), m.group(2), n, v, m.group(3)),
+            html,
+        )
+    return html
+
+
 def sync():
     for path, p, current, input_id, tag in all_pages():
         f = ROOT / path
@@ -209,6 +241,7 @@ def sync():
             html = replace(html, None, "newsletter", promo(input_id, tag))
         if "<!-- chrome:footer -->" in html and '<body class="home">' not in html and path == "index.html":
             pass
+        html = bust_asset_urls(html)
         f.write_text(html)
         print("synced", path)
 

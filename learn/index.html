@@ -29,7 +29,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500&family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../site.css">
+  <link rel="stylesheet" href="../site.css?v=2de8547b">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -84,14 +84,12 @@
   </header>
   <!-- /chrome:header -->
 
-  <main id="main" class="page">
+  <main id="main" class="page learn-page">
     <div class="wrap">
-      <div class="intro">
-        <div>
-          <p class="kicker">For newcomers</p>
-          <h1>The background</h1>
-          <p class="dek">SPX6900 borrowed the S&amp;P ticker and then ignored the index. This is the short version: the joke, the lines they repeat, how it held together, and the contracts to check before you trust the name.</p>
-        </div>
+      <header class="learn-lead">
+        <p class="kicker">For newcomers</p>
+        <h1>The background</h1>
+        <p class="learn-standfirst">SPX6900 borrowed the S&amp;P ticker and then ignored the index. This is the short version: the joke, the lines they repeat, how it held together, and the contracts to check before you trust the name.</p>
         <figure class="shot" id="learn-hero" data-prefix="../">
           <img src="../memes/wall/no-chart.jpg" width="840" height="520" alt="A dark empty chart with green text reading We are here and an arrow pointing at a single dot.">
           <figcaption>
@@ -99,145 +97,166 @@
             <span><a href="https://x.com/MustStopMurad/status/1851221015289799104" target="_blank" rel="noopener noreferrer">Post on X · @MustStopMurad</a></span>
           </figcaption>
         </figure>
-      </div>
+      </header>
 
-      <section class="block" id="bit">
-        <div class="section-head"><h2>The bit, said plainly</h2></div>
-        <div class="cards">
-          <article class="card">
-            <div class="idx">A</div>
-            <h3>Satire with a ticker</h3>
-            <p>$SPX is a meme coin that borrows the S&amp;P 500’s ticker and then ignores the index. It does not hold those companies, track that market, or give anyone a claim on it. The project’s own site says there is no intrinsic value and no expectation of financial return.</p>
-          </article>
-          <article class="card">
-            <div class="idx">B</div>
-            <h3>The crew left</h3>
-            <p>It launched on Ethereum in August 2023. The site’s status line is “vanished”: supply burned, contract renounced, liquidity locked for 69 years, sealed until 2092. What remains is a crowd repeating one absurd goal.</p>
-          </article>
-          <article class="card">
-            <div class="idx">C</div>
-            <h3>Aeons do the labor</h3>
-            <p>Holders make posters, stickers, meetups, and timelines. They call themselves Aeons. The product is the belief, said out loud, for longer than a meme usually lasts.</p>
-          </article>
-        </div>
-      </section>
+      <div class="learn-body">
+        <nav class="learn-toc" aria-label="In this guide">
+          <h2>In this guide</h2>
+          <ol>
+            <li><a href="#bit">The bit, said plainly</a></li>
+            <li><a href="#question">Have we flipped the stock market?</a></li>
+            <li><a href="#tenets">Tenets they repeat</a></li>
+            <li><a href="#lore">How the joke held</a></li>
+            <li><a href="#addresses">Supply and addresses</a></li>
+          </ol>
+        </nav>
 
-      <section class="block" id="question" aria-labelledby="q-title">
-        <div class="question" style="grid-template-columns: 1fr;">
-          <div>
-            <p class="kicker">Price is binary</p>
-            <h2 id="q-title">Have we flipped the stock market?</h2>
-            <p>The community treats every other number as weather. A quote can move all day. The answer they care about is yes or no, and the target they named is $69 trillion.</p>
-            <div class="actions">
-              <button class="btn btn-lime" id="log-on" type="button">Log on</button>
+        <div class="learn-main">
+          <section class="block" id="bit">
+            <div class="section-head"><h2>The bit, said plainly</h2></div>
+            <div class="learn-points">
+              <article>
+                <div class="idx">A</div>
+                <h3>Satire with a ticker</h3>
+                <p>$SPX is a meme coin that borrows the S&amp;P 500’s ticker and then ignores the index. It does not hold those companies, track that market, or give anyone a claim on it. The project’s own site says there is no intrinsic value and no expectation of financial return.</p>
+              </article>
+              <article>
+                <div class="idx">B</div>
+                <h3>The crew left</h3>
+                <p>It launched on Ethereum in August 2023. The site’s status line is “vanished”: supply burned, contract renounced, liquidity locked for 69 years, sealed until 2092. What remains is a crowd repeating one absurd goal.</p>
+              </article>
+              <article>
+                <div class="idx">C</div>
+                <h3>Aeons do the labor</h3>
+                <p>Holders make posters, stickers, meetups, and timelines. They call themselves Aeons. The product is the belief, said out loud, for longer than a meme usually lasts.</p>
+              </article>
             </div>
-            <p class="log-line" id="log-line">Logged on. The answer did not change. That is the point.</p>
-            <div class="weather">
-              <p class="weather-label">Distance to the punchline</p>
-              <div class="meter" role="img" aria-label="A hairline, because the distance to 69 trillion is still almost the whole bar.">
-                <div class="meter-fill" id="meter-fill"></div>
+          </section>
+
+          <section class="block" id="question" aria-labelledby="q-title">
+            <div class="section-head"><h2>The question</h2></div>
+            <div class="learn-callout">
+              <p class="kicker">Price is binary</p>
+              <h3 id="q-title">Have we flipped the stock market?</h3>
+              <p>The community treats every other number as weather. A quote can move all day. The answer they care about is yes or no, and the target they named is $69 trillion.</p>
+              <figure class="learn-meter">
+                <figcaption>Distance to the punchline</figcaption>
+                <div class="meter" role="img" aria-label="A hairline, because the distance to 69 trillion is still almost the whole bar.">
+                  <div class="meter-fill" id="meter-fill"></div>
+                </div>
+                <p class="weather-read" id="weather-read">The target is $69,000,000,000,000. The mark on this bar is a hairline until a live quote arrives.</p>
+                <p class="weather-note" id="weather-note">CoinGecko, when this page can reach it. A quote is not the chart.</p>
+              </figure>
+            </div>
+          </section>
+
+          <section class="block" id="tenets">
+            <div class="section-head"><h2>Tenets they repeat</h2></div>
+            <div class="tenets-wrap">
+              <div class="tenets">
+                <article class="tenet"><div class="idx">01</div><h3>Stop trading.</h3><p>Their way of saying the flip is a long hold. The next ticker can wait.</p></article>
+                <article class="tenet"><div class="idx">02</div><h3>Believe in something.</h3><p>Attention is the whole engine. The joke works if people keep it.</p></article>
+                <article class="tenet"><div class="idx">03</div><h3>DCA is the way.</h3><p>Buy a little over time. Timing a chart they refuse to acknowledge is off-script.</p></article>
+                <article class="tenet"><div class="idx">04</div><h3>We logged on.</h3><p>Showing up is the work: posts, posters, rooms, the same line again.</p></article>
+                <article class="tenet"><div class="idx">05</div><h3>There is no chart.</h3><p>Price talk misses the gag. The mark that counts is the yes or no above.</p></article>
+                <article class="tenet"><div class="idx">06</div><h3>Price is binary.</h3><p>Have we flipped the stock market, or not. The middle is weather.</p></article>
+                <article class="tenet"><div class="idx">07</div><h3>One goal.</h3><p>Flip the stock market. Outgrow the thing the name is mocking.</p></article>
+                <article class="tenet"><div class="idx">08</div><h3>One target.</h3><p>$69,000,000,000,000. A punchline people now say with a straight face.</p></article>
               </div>
-              <p class="weather-read" id="weather-read">The target is $69,000,000,000,000. The mark on this bar is a hairline until a live quote arrives.</p>
-              <p class="weather-note" id="weather-note">CoinGecko, when this page can reach it. A quote is not the chart.</p>
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      <section class="block" id="tenets">
-        <div class="section-head"><h2>Tenets they repeat</h2></div>
-        <div class="tenets-wrap">
-          <div class="tenets">
-            <article class="tenet"><div class="idx">01</div><h3>Stop trading.</h3><p>Their way of saying the flip is a long hold. The next ticker can wait.</p></article>
-            <article class="tenet"><div class="idx">02</div><h3>Believe in something.</h3><p>Attention is the whole engine. The joke works if people keep it.</p></article>
-            <article class="tenet"><div class="idx">03</div><h3>DCA is the way.</h3><p>Buy a little over time. Timing a chart they refuse to acknowledge is off-script.</p></article>
-            <article class="tenet"><div class="idx">04</div><h3>We logged on.</h3><p>Showing up is the work: posts, posters, rooms, the same line again.</p></article>
-            <article class="tenet"><div class="idx">05</div><h3>There is no chart.</h3><p>Price talk misses the gag. The mark that counts is the yes or no above.</p></article>
-            <article class="tenet"><div class="idx">06</div><h3>Price is binary.</h3><p>Have we flipped the stock market, or not. The middle is weather.</p></article>
-            <article class="tenet"><div class="idx">07</div><h3>One goal.</h3><p>Flip the stock market. Outgrow the thing the name is mocking.</p></article>
-            <article class="tenet"><div class="idx">08</div><h3>One target.</h3><p>$69,000,000,000,000. A punchline people now say with a straight face.</p></article>
-          </div>
-        </div>
-      </section>
+          <section class="block" id="lore">
+            <div class="section-head"><h2>How the joke held</h2></div>
+            <ol class="timeline">
+              <li>
+                <div class="when">August 2023</div>
+                <div>
+                  <h3>Fair launch on Ethereum.</h3>
+                  <p>The project site says liquidity was locked for 69 years at launch. The token’s home chain is still Ethereum.</p>
+                </div>
+              </li>
+              <li>
+                <div class="when">Soon after</div>
+                <div>
+                  <h3>Vanished.</h3>
+                  <p>The same page lists the dev status as vanished: supply burned, contract renounced. About 69,006,909 tokens, 6.90% of the billion, are the burned amount they publish. Circulating supply on that page is 930,993,091.</p>
+                </div>
+              </li>
+              <li>
+                <div class="when">After that</div>
+                <div>
+                  <h3>The holders kept the lights on.</h3>
+                  <p>Writeups of SPX6900 describe a community takeover. No company. No roadmap. The accounts, the posters, and the meetups belong to the people repeating the bit.</p>
+                </div>
+              </li>
+              <li>
+                <div class="when">Slogans</div>
+                <div>
+                  <h3>Two sentences did most of the work.</h3>
+                  <p>“Stop trading and believe in something.” “Flip the stock market.” They landed on avatars, merch, and the front door of spx6900.com.</p>
+                </div>
+              </li>
+              <li>
+                <div class="when">Now</div>
+                <div>
+                  <h3>One token, several bridges.</h3>
+                  <p>The site lists bridged copies on Solana, Base, BNB Chain, and Sui, and it warns that bridges carry their own risk. It points holders back to Ethereum for the original token.</p>
+                </div>
+              </li>
+            </ol>
+          </section>
 
-      <section class="block" id="lore">
-        <div class="section-head"><h2>How the joke held</h2></div>
-        <ol class="timeline">
-          <li>
-            <div class="when">August 2023</div>
-            <div>
-              <h3>Fair launch on Ethereum.</h3>
-              <p>The project site says liquidity was locked for 69 years at launch. The token’s home chain is still Ethereum.</p>
+          <section class="block" id="addresses">
+            <div class="section-head"><h2>Supply, then addresses</h2></div>
+            <div class="supply">
+              <div class="stat"><span>Max supply</span><strong>1,000,000,000</strong><em>as printed on spx6900.com</em></div>
+              <div class="stat"><span>Burned</span><strong>69,006,909</strong><em>6.90% of supply</em></div>
+              <div class="stat"><span>Circulating</span><strong>930,993,091</strong><em>93.10% of supply</em></div>
             </div>
-          </li>
-          <li>
-            <div class="when">Soon after</div>
-            <div>
-              <h3>Vanished.</h3>
-              <p>The same page lists the dev status as vanished: supply burned, contract renounced. About 69,006,909 tokens, 6.90% of the billion, are the burned amount they publish. Circulating supply on that page is 930,993,091.</p>
+            <p class="note">These five addresses are copied from the project’s about page. Compare them there before you trust a token with this name. Copycats reuse it.</p>
+            <div class="learn-table-wrap">
+              <table class="learn-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Chain</th>
+                    <th scope="col">Contract address</th>
+                    <th scope="col"><span class="vh">Copy</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Ethereum</th>
+                    <td><code>0xe0f63a424a4439cbe457d80e4f4b51ad25b2c56c</code></td>
+                    <td><button class="copy" type="button" data-copy="0xe0f63a424a4439cbe457d80e4f4b51ad25b2c56c">Copy</button></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Solana</th>
+                    <td><code>J3NKxxXZcnNiMjKw9hYb2K4LUxgwB6t1FtPtQVsv3KFr</code></td>
+                    <td><button class="copy" type="button" data-copy="J3NKxxXZcnNiMjKw9hYb2K4LUxgwB6t1FtPtQVsv3KFr">Copy</button></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Base</th>
+                    <td><code>0x50da645f148798f68ef2d7db7c1cb22a6819bb2c</code></td>
+                    <td><button class="copy" type="button" data-copy="0x50da645f148798f68ef2d7db7c1cb22a6819bb2c">Copy</button></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">BNB Chain</th>
+                    <td><code>0x7c6563b36B2144E7F3175c92977b0e19cE4966de</code></td>
+                    <td><button class="copy" type="button" data-copy="0x7c6563b36B2144E7F3175c92977b0e19cE4966de">Copy</button></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Sui</th>
+                    <td><code>0x0ee60b2540f5373903679500d0f88710cbb106d47c6dae028fb9c4795a835dda::coin::COIN</code></td>
+                    <td><button class="copy" type="button" data-copy="0x0ee60b2540f5373903679500d0f88710cbb106d47c6dae028fb9c4795a835dda::coin::COIN">Copy</button></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-          </li>
-          <li>
-            <div class="when">After that</div>
-            <div>
-              <h3>The holders kept the lights on.</h3>
-              <p>Writeups of SPX6900 describe a community takeover. No company. No roadmap. The accounts, the posters, and the meetups belong to the people repeating the bit.</p>
-            </div>
-          </li>
-          <li>
-            <div class="when">Slogans</div>
-            <div>
-              <h3>Two sentences did most of the work.</h3>
-              <p>“Stop trading and believe in something.” “Flip the stock market.” They landed on avatars, merch, and the front door of spx6900.com.</p>
-            </div>
-          </li>
-          <li>
-            <div class="when">Now</div>
-            <div>
-              <h3>One token, several bridges.</h3>
-              <p>The site lists bridged copies on Solana, Base, BNB Chain, and Sui, and it warns that bridges carry their own risk. It points holders back to Ethereum for the original token.</p>
-            </div>
-          </li>
-        </ol>
-      </section>
-
-      <section class="block" id="addresses">
-        <div class="section-head"><h2>Supply, then addresses</h2></div>
-        <div class="supply">
-          <div class="stat"><span>Max supply</span><strong>1,000,000,000</strong><em>as printed on spx6900.com</em></div>
-          <div class="stat"><span>Burned</span><strong>69,006,909</strong><em>6.90% of supply</em></div>
-          <div class="stat"><span>Circulating</span><strong>930,993,091</strong><em>93.10% of supply</em></div>
+            <p class="callout">Ethereum is home. Solana, Base, BNB, and Sui are bridged copies. The project site says a bridge can fail even when the token’s story does not, and it tells holders the Ethereum contract is the comfortable one.</p>
+          </section>
         </div>
-        <p class="note">These five addresses are copied from the project’s about page. Compare them there before you trust a token with this name. Copycats reuse it.</p>
-        <div class="chains">
-          <article class="chain">
-            <b>ETH</b>
-            <code>0xe0f63a424a4439cbe457d80e4f4b51ad25b2c56c</code>
-            <button class="copy" type="button" data-copy="0xe0f63a424a4439cbe457d80e4f4b51ad25b2c56c">Copy</button>
-          </article>
-          <article class="chain">
-            <b>SOL</b>
-            <code>J3NKxxXZcnNiMjKw9hYb2K4LUxgwB6t1FtPtQVsv3KFr</code>
-            <button class="copy" type="button" data-copy="J3NKxxXZcnNiMjKw9hYb2K4LUxgwB6t1FtPtQVsv3KFr">Copy</button>
-          </article>
-          <article class="chain">
-            <b>BASE</b>
-            <code>0x50da645f148798f68ef2d7db7c1cb22a6819bb2c</code>
-            <button class="copy" type="button" data-copy="0x50da645f148798f68ef2d7db7c1cb22a6819bb2c">Copy</button>
-          </article>
-          <article class="chain">
-            <b>BNB</b>
-            <code>0x7c6563b36B2144E7F3175c92977b0e19cE4966de</code>
-            <button class="copy" type="button" data-copy="0x7c6563b36B2144E7F3175c92977b0e19cE4966de">Copy</button>
-          </article>
-          <article class="chain">
-            <b>SUI</b>
-            <code>0x0ee60b2540f5373903679500d0f88710cbb106d47c6dae028fb9c4795a835dda::coin::COIN</code>
-            <button class="copy" type="button" data-copy="0x0ee60b2540f5373903679500d0f88710cbb106d47c6dae028fb9c4795a835dda::coin::COIN">Copy</button>
-          </article>
-        </div>
-        <p class="callout">Ethereum is home. Solana, Base, BNB, and Sui are bridged copies. The project site says a bridge can fail even when the token’s story does not, and it tells holders the Ethereum contract is the comfortable one.</p>
-      </section>
+      </div>
     </div>
   </main>
 
@@ -313,16 +332,9 @@
   <script>
     (function () {
       var TARGET = 69000000000000;
-      var logOn = document.getElementById("log-on");
       var fill = document.getElementById("meter-fill");
       var read = document.getElementById("weather-read");
       var note = document.getElementById("weather-note");
-
-      logOn.addEventListener("click", function () {
-        document.body.classList.add("is-logged-on");
-        logOn.disabled = true;
-        logOn.textContent = "Logged on";
-      });
 
       document.querySelectorAll(".copy").forEach(function (button) {
         button.addEventListener("click", function () {
@@ -360,6 +372,8 @@
         }).format(n);
       }
 
+      if (!fill || !read || !note) return;
+
       fetch("https://api.coingecko.com/api/v3/simple/price?ids=spx6900&vs_currencies=usd&include_market_cap=true&include_24hr_change=true")
         .then(function (res) { if (!res.ok) throw new Error("quote failed"); return res.json(); })
         .then(function (data) {
@@ -377,10 +391,10 @@
         });
     })();
   </script>
-  <script src="../library.js"></script>
-  <script src="../learn-hero.js"></script>
-  <script src="../edition.js"></script>
-  <script src="../ticker.js"></script>
+  <script src="../library.js?v=8ebc379a"></script>
+  <script src="../learn-hero.js?v=6f1653dc"></script>
+  <script src="../edition.js?v=d1af8f9d"></script>
+  <script src="../ticker.js?v=179352f9"></script>
   <script data-goatcounter="https://flipthestock.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>

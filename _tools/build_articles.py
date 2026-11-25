@@ -277,7 +277,7 @@ def page_html(article, articles) -> str:
         '<span class="byline-date">%s</span>' % date_label if date_label else ""
     )
 
-    return """%s
+    html = """%s
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -402,6 +402,8 @@ def page_html(article, articles) -> str:
         chrome_promo,
         chrome_footer,
     )
+    return sync_chrome.bust_asset_urls(html)
+
 
 
 def _q(value: str) -> str:
