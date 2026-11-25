@@ -102,13 +102,11 @@ def footer(p, has_form):
     cols = "\n".join([
         col("Sections", [a(r, "Home"), a(p + "articles/", "Articles"), a(p + "memes/", "Memes"),
                          a(p + "videos/", "Videos"), a(p + "events/", "Events"), a(p + "learn/", "Learn")]),
-        col("Community", [a(p + "contact/", "Contact"), ext("https://x.com/BankerHQ", "DM @BankerHQ on X"),
-                          a(nl, "Newsletter"), a(p + "events/", "Gatherings calendar")]),
+        col("Community", [a(p + "contact/", "Contact"),
+                           a(nl, "Newsletter"), a(p + "events/", "Gatherings calendar")]),
         col("SPX6900", [ext("https://spx6900.com", "Official site: spx6900.com"),
                         a(p + "learn/#addresses", "Contract addresses"),
                         ext("https://www.coingecko.com/en/coins/spx6900", "Live price on CoinGecko")]),
-        col("About", ['<span>An independent fan site</span>', '<span>Not affiliated with SPX6900</span>',
-                      a(("/" if p == "/" else p) + "sitemap.xml", "Sitemap")]),
     ])
     return '''<!-- chrome:footer -->
   <footer class="site-foot">
@@ -118,13 +116,12 @@ def footer(p, has_form):
       </nav>
       <div class="foot-print">
         <p>Nothing here is an offer or financial advice. The token can go to zero. Prices in the top bar come from CoinGecko and may be delayed.</p>
-        <p>© 2026 Flip the Stock. An independent fan site for SPX6900; not affiliated with the project.</p>
+        <p>© 2026 Flip the Stock. A user community site for SPX6900; not affiliated with the project.</p>
       </div>
     </div>
     <div class="foot-strip">
       <div class="wrap foot-strip-inner">
         <a class="logo foot-logo" href="%s">Flip the Stock</a>
-        <span>A fan page for SPX6900</span>
       </div>
     </div>
   </footer>
