@@ -123,7 +123,7 @@
       </section>
 
       <section class="block" id="question" aria-labelledby="q-title">
-        <div class="question">
+        <div class="question" style="grid-template-columns: 1fr;">
           <div>
             <p class="kicker">Price is binary</p>
             <h2 id="q-title">Have we flipped the stock market?</h2>
@@ -131,7 +131,7 @@
             <div class="actions">
               <button class="btn btn-lime" id="log-on" type="button">Log on</button>
             </div>
-            <p class="log-line" id="log-line">Logged on. The stamp did not change. That is the point.</p>
+            <p class="log-line" id="log-line">Logged on. The answer did not change. That is the point.</p>
             <div class="weather">
               <p class="weather-label">Distance to the punchline</p>
               <div class="meter" role="img" aria-label="A hairline, because the distance to 69 trillion is still almost the whole bar.">
@@ -140,9 +140,6 @@
               <p class="weather-read" id="weather-read">The target is $69,000,000,000,000. The mark on this bar is a hairline until a live quote arrives.</p>
               <p class="weather-note" id="weather-note">CoinGecko, when this page can reach it. A quote is not the chart.</p>
             </div>
-          </div>
-          <div class="stamp-wrap">
-            <div class="stamp" id="stamp" aria-label="No">NO</div>
           </div>
         </div>
       </section>
@@ -155,7 +152,7 @@
             <article class="tenet"><div class="idx">02</div><h3>Believe in something.</h3><p>Attention is the whole engine. The joke works if people keep it.</p></article>
             <article class="tenet"><div class="idx">03</div><h3>DCA is the way.</h3><p>Buy a little over time. Timing a chart they refuse to acknowledge is off-script.</p></article>
             <article class="tenet"><div class="idx">04</div><h3>We logged on.</h3><p>Showing up is the work: posts, posters, rooms, the same line again.</p></article>
-            <article class="tenet"><div class="idx">05</div><h3>There is no chart.</h3><p>Price talk misses the gag. The mark that counts is the stamp above.</p></article>
+            <article class="tenet"><div class="idx">05</div><h3>There is no chart.</h3><p>Price talk misses the gag. The mark that counts is the yes or no above.</p></article>
             <article class="tenet"><div class="idx">06</div><h3>Price is binary.</h3><p>Have we flipped the stock market, or not. The middle is weather.</p></article>
             <article class="tenet"><div class="idx">07</div><h3>One goal.</h3><p>Flip the stock market. Outgrow the thing the name is mocking.</p></article>
             <article class="tenet"><div class="idx">08</div><h3>One target.</h3><p>$69,000,000,000,000. A punchline people now say with a straight face.</p></article>
@@ -372,11 +369,11 @@
           fill.style.width = "8px";
           var pctText = pct >= 0.01 ? pct.toFixed(2) : pct.toFixed(5);
           read.textContent = money(row.usd) + " a token. Market cap " + money(row.usd_market_cap) + ". That is " + pctText + "% of $69 trillion.";
-          note.textContent = "CoinGecko, just now. The bar stays a hairline on purpose. Still not a chart. The stamp is still no.";
+          note.textContent = "CoinGecko, just now. The bar stays a hairline on purpose. Still not a chart. The answer is still no.";
         })
         .catch(function () {
-          read.textContent = "Live quote didn’t load. The target is still $69 trillion, and the stamp is still no.";
-          note.textContent = "A quote will not change the stamp.";
+          read.textContent = "Live quote didn’t load. The target is still $69 trillion, and the answer is still no.";
+          note.textContent = "A quote will not change the answer.";
         });
     })();
   </script>
