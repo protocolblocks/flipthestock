@@ -449,7 +449,7 @@ DATE_RE = re.compile(r"(\d{4}-\d{2}-\d{2})")
 # Section pages that should always appear in the sitemap. lastmod is kept
 # from the existing file when we cannot derive a newer date from library.js.
 STATIC_SITEMAP = [
-    ("/learn/", "2026-11-23"),
+    ("/learn/", "2026-11-25"),
     ("/market-data/", "2026-11-25"),
     ("/contact/", "2026-11-24"),
 ]

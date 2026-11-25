@@ -1,0 +1,11 @@
+{
+  "default": "wall/no-chart.jpg",
+  "memes": [
+    {
+      "src": "wall/no-chart.jpg"
+    },
+    {
+      "src": "wall/2026-11-23-painting-the-wall.jpg"
+    }
+  ]
+}
