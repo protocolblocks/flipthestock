@@ -11,6 +11,10 @@ import re, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 
+# Static article pages stamped by _tools/build_articles.py so sync can
+# keep their header, footer and font link in step with the rest of the site.
+ARTICLE_MARKER = "<!-- generated:article"
+
 # file, link prefix, current nav label, newsletter input id, newsletter tag
 PAGES = [
     ("index.html", "", "Home", "newsletter-email-home", "homepage"),
@@ -146,18 +150,55 @@ FONTS_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+L
               '&family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700'
               '&display=swap" rel="stylesheet">')
 
-for path, p, current, input_id, tag in PAGES:
-    f = ROOT / path
-    html = f.read_text()
-    html = re.sub(r'<link href="https://fonts\.googleapis\.com/css2\?[^"]*" rel="stylesheet">', lambda m: FONTS_LINK, html, count=1)
-    has_form = input_id is not None
-    html = replace(html, r'<header class="mast">.*?</header>', "header", header(p, current, has_form))
-    html = replace(html, r'<footer>.*?</footer>', "footer", footer(p, has_form))
-    if has_form and "<!-- chrome:newsletter -->" not in html:
-        html = html.replace("<!-- chrome:footer -->", promo(input_id, tag) + "\n\n  <!-- chrome:footer -->", 1)
-    elif has_form:
-        html = replace(html, None, "newsletter", promo(input_id, tag))
-    if "<!-- chrome:footer -->" in html and '<body class="home">' not in html and path == "index.html":
-        pass
-    f.write_text(html)
-    print("synced", path)
+def article_pages():
+    extra = []
+    root = ROOT / "articles"
+    if not root.is_dir():
+        return extra
+    for path in sorted(root.iterdir()):
+        index = path / "index.html"
+        if not path.is_dir() or not index.is_file():
+            continue
+        try:
+            text = index.read_text()
+        except OSError:
+            continue
+        if ARTICLE_MARKER not in text:
+            continue
+        slug = path.name
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug):
+            continue
+        extra.append((
+            "articles/%s/index.html" % slug,
+            "../../",
+            "Articles",
+            "newsletter-email-article-%s" % slug,
+            "article",
+        ))
+    return extra
+
+
+def all_pages():
+    return list(PAGES) + article_pages()
+
+
+def sync():
+    for path, p, current, input_id, tag in all_pages():
+        f = ROOT / path
+        html = f.read_text()
+        html = re.sub(r'<link href="https://fonts\.googleapis\.com/css2\?[^"]*" rel="stylesheet">', lambda m: FONTS_LINK, html, count=1)
+        has_form = input_id is not None
+        html = replace(html, r'<header class="mast">.*?</header>', "header", header(p, current, has_form))
+        html = replace(html, r'<footer>.*?</footer>', "footer", footer(p, has_form))
+        if has_form and "<!-- chrome:newsletter -->" not in html:
+            html = html.replace("<!-- chrome:footer -->", promo(input_id, tag) + "\n\n  <!-- chrome:footer -->", 1)
+        elif has_form:
+            html = replace(html, None, "newsletter", promo(input_id, tag))
+        if "<!-- chrome:footer -->" in html and '<body class="home">' not in html and path == "index.html":
+            pass
+        f.write_text(html)
+        print("synced", path)
+
+
+if __name__ == "__main__":
+    sync()

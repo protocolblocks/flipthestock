@@ -8,6 +8,26 @@
   <meta name="robots" id="meta-robots" content="index, follow">
   <meta name="theme-color" content="#fff1e5">
   <link rel="canonical" id="canonical" href="https://www.flipthestock.com/articles/piece.html">
+  <script>
+    window.__pieceRedirect = (function () {
+      try {
+        var slug = new URLSearchParams(window.location.search).get("slug") || "";
+        if (!/^[a-z0-9-]+$/.test(slug)) return Promise.resolve(false);
+        var dest = "/articles/" + slug + "/";
+        var canonical = document.getElementById("canonical");
+        if (canonical) canonical.setAttribute("href", "https://www.flipthestock.com" + dest);
+        return fetch(dest, { credentials: "same-origin" }).then(function (res) {
+          if (res.ok) {
+            window.location.replace(dest);
+            return true;
+          }
+          return false;
+        }).catch(function () { return false; });
+      } catch (err) {
+        return Promise.resolve(false);
+      }
+    })();
+  </script>
   <meta property="og:site_name" content="Flip the Stock">
   <meta property="og:type" id="og-type" content="website">
   <meta property="og:locale" content="en_US">
@@ -154,7 +174,11 @@
   <script src="../library.js"></script>
   <script src="../stacks.js"></script>
   <script>
-    renderPiece(document.getElementById("stack"));
+    var pieceRoot = document.getElementById("stack");
+    var redirecting = window.__pieceRedirect || Promise.resolve(false);
+    redirecting.then(function (redirected) {
+      if (!redirected) renderPiece(pieceRoot);
+    });
     // renderPiece has set the title from ?slug=. GoatCounter drops query
     // strings, and it prefers this page's canonical link, so the default
     // path would merge every article into /articles/piece.html (and a
@@ -165,7 +189,7 @@
         var articles = (window.STACKS && window.STACKS.articles) || [];
         var article = articles.filter(function (item) { return item.slug === slug; })[0];
         if (!article || !/^[a-z0-9-]+$/.test(String(article.slug || ""))) return "/articles/piece.html";
-        return "/articles/" + article.slug;
+        return "/articles/" + article.slug + "/";
       }
     };
   </script>

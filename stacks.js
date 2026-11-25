@@ -271,7 +271,9 @@
   };
 
   function pieceHref(prefix, slug) {
-    return prefix + "piece.html?slug=" + encodeURIComponent(slug || "");
+    var safe = String(slug || "");
+    if (!/^[a-z0-9-]+$/.test(safe)) return prefix || "./";
+    return (prefix || "") + safe + "/";
   }
 
   function safeImage(src) {
@@ -480,7 +482,7 @@
       return;
     }
     var lead = articles[0];
-    var leadHref = "piece.html?slug=" + encodeURIComponent(lead.slug || "");
+    var leadHref = pieceHref("", lead.slug);
     var html = '<a class="sec-lead" href="' + leadHref + '">' +
       '<span class="ft-tag">' + esc(lead.kicker || "Latest") + '</span>' +
       '<span class="sec-lead-title">' + esc(lead.title) + '</span>' +
@@ -488,11 +490,10 @@
       '<span class="ft-stamp">' + esc(stampText(lead.date)) + '</span></a>';
     var lastDate = null;
     html += '<h2 class="col-head">Latest articles</h2><ol class="stream">' + articles.slice(1).map(function (article) {
-      var slug = encodeURIComponent(article.slug || "");
       var showDate = article.date !== lastDate;
       lastDate = article.date;
       return '<li class="stream-item"><p class="stream-date">' + (showDate ? formatDate(article.date) : "") + '</p>' +
-        '<a class="stream-body" href="piece.html?slug=' + slug + '">' +
+        '<a class="stream-body" href="' + pieceHref("", article.slug) + '">' +
         '<span class="ft-tag">' + esc(article.kicker || "Latest") + '</span>' +
         '<span class="stream-title">' + esc(article.title) + '</span>' +
         '<span class="ft-dek">' + esc(article.dek) + '</span>' +
@@ -569,7 +570,7 @@
       (more.length ? '<section class="ft-slice related-slice" aria-label="More from Flip the Stock">' +
         '<h2 class="ft-slice-head"><a href="./">More from Flip the Stock</a></h2><div class="ft-row">' +
         more.map(function (item) {
-          return '<article class="ft-teaser"><a href="piece.html?slug=' + encodeURIComponent(item.slug || "") + '">' +
+          return '<article class="ft-teaser"><a href="' + pieceHref("", item.slug) + '">' +
             '<p class="ft-tag">' + esc(item.kicker || "Latest") + '</p><h3>' + esc(item.title) + '</h3>' +
             '<p class="ft-dek">' + esc(item.dek) + '</p></a>' + stampHtml(item.date) + '</article>';
         }).join("") + '</div></section>' : '');

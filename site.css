@@ -1034,6 +1034,30 @@ body.is-logged-on .log-line { display: block; }
 .article-body a { color: var(--teal); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
 .article-foot { margin: 24px 0 0; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .article-foot .back { margin: 0; }
+.article-sources {
+  margin: 24px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.article-sources h2 {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.article-sources ul { margin: 0; padding: 0; list-style: none; }
+.article-sources li { margin: 0 0 6px; font-size: 14px; }
+.article-sources a {
+  color: var(--teal);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+.article-sources a:hover { color: var(--claret); }
+
 .related-slice { margin-top: 36px; }
 .related-slice .ft-teaser h3 { font-size: 19px; }
 
