@@ -85,7 +85,7 @@
 
   <main id="main">
     <div class="wrap">
-      <section class="top" id="news-grid" aria-label="This issue"></section>
+      <div class="front" id="news-grid" aria-label="This issue"></div>
 
       <section class="band" id="memes" aria-label="Meme of the day">
         <div class="band-head">
@@ -100,18 +100,26 @@
           <h2>Video of the week</h2>
           <a href="videos/">All videos</a>
         </div>
-        <div class="video-row" id="video-row"></div>
+        <div class="quad video-row" id="video-row"></div>
       </section>
 
-      <section class="primer" aria-label="Learn">
-        <div>
-          <p class="kicker">Learn</p>
-          <h2>The background, the tenets, and the contracts sit on one page.</h2>
-          <p class="dek">Home is still the Ethereum contract. Copies on Solana, Base, BNB Chain, and Sui are bridges. Confirm them on spx6900.com before you trust a token with this name.</p>
-          <p><a class="more" href="learn/">Open the learn page</a></p>
-        </div>
-        <img class="pic" src="assets/sticker.jpg" alt="Plush mascot in a black hoodie and lime visor, holding a blank card.">
-      </section>
+      <div class="fp-row">
+        <section class="fp-main" aria-label="Learn">
+          <div class="band-head">
+            <h2>Learn</h2>
+            <a href="learn/">Open the learn page</a>
+          </div>
+          <div class="primer">
+            <div>
+              <h3>The background, the tenets, and the contracts sit on one page.</h3>
+              <p class="dek">Home is still the Ethereum contract. Copies on Solana, Base, BNB Chain, and Sui are bridges. Confirm them on spx6900.com before you trust a token with this name.</p>
+              <p><a class="more" href="learn/">Read the primer</a></p>
+            </div>
+            <img class="pic" src="assets/sticker.jpg" alt="Plush mascot in a black hoodie and lime visor, holding a blank card.">
+          </div>
+        </section>
+        <aside class="fp-col rail" id="most-read" aria-label="Most read"></aside>
+      </div>
     </div>
   </main>
 
@@ -141,6 +149,7 @@
     renderNews(document.getElementById("news-grid"));
     renderFrontMemes(document.getElementById("meme-row"));
     renderFrontVideos(document.getElementById("video-row"));
+    renderMostRead(document.getElementById("most-read"));
   </script>
   <script src="edition.js"></script>
   <script src="ticker.js"></script>

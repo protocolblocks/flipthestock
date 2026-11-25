@@ -237,19 +237,6 @@
       '</article>';
   }
 
-  function nextGatheringHtml(eventsHref) {
-    var online = firstUpcomingOfType("online");
-    var inPerson = firstUpcomingOfType("in-person");
-    if (!online && !inPerson) return "";
-    var items = "";
-    if (online) items += eventItemHtml(online, { compact: true });
-    if (inPerson) items += eventItemHtml(inPerson, { compact: true });
-    return '<div class="next-box">' +
-      '<p class="kicker">Next gathering</p>' +
-      items +
-      '<p><a class="more" href="' + esc(eventsHref) + '">All gatherings</a></p></div>';
-  }
-
   window.renderEvents = function (root) {
     if (!root) return;
     var upcoming = upcomingEvents();
@@ -568,18 +555,64 @@
     return url;
   }
 
-  window.renderNews = function (root) {
-    var articles = data().articles.slice().sort(function (a, b) {
+  function sortedArticles() {
+    return data().articles.slice().sort(function (a, b) {
       return String(b.date || "").localeCompare(String(a.date || ""));
     });
+  }
+
+  function bandHead(title, href, label) {
+    return '<div class="band-head"><h2>' + esc(title) + '</h2>' +
+      (href ? '<a href="' + esc(href) + '">' + esc(label) + '</a>' : '') + '</div>';
+  }
+
+  function frontGatheringHtml(eventsHref) {
+    var online = firstUpcomingOfType("online");
+    var inPerson = firstUpcomingOfType("in-person");
+    var items = "";
+    if (online) items += eventItemHtml(online, { compact: true });
+    if (inPerson) items += eventItemHtml(inPerson, { compact: true });
+    if (!items) {
+      items = '<p class="event-empty">Nothing dated is on the calendar just now. The regulars still meet.</p>';
+    }
+    return '<section class="fp-col next-box" aria-label="Next gathering">' +
+      bandHead("Next gathering", eventsHref, "All gatherings") + items + '</section>';
+  }
+
+  window.renderNews = function (root) {
+    var articles = sortedArticles();
     if (!articles.length) {
-      root.innerHTML = empty("Nothing filed yet.", "The latest piece will lead this page.");
+      root.innerHTML = empty("Nothing filed yet.", "The latest piece will lead this page.") +
+        '<div class="fp-row">' + frontGatheringHtml("events/") + '</div>';
       return;
     }
     var lead = articles[0];
     var side = articles[1];
     var related = articles.slice(2, 4);
-    var sideHtml = "";
+    var leadHref = pieceHref("articles/", lead.slug);
+
+    var coverSrc = "assets/cover.jpg";
+    var coverAlt = "A sheet of chart paper with a faint grid and a single black dot. The rest of the grid is empty.";
+    var leadMeme = data().memes[0];
+    if (leadMeme) {
+      var memeSrc = safeImage(leadMeme.src);
+      if (memeSrc) {
+        coverSrc = "memes/" + memeSrc;
+        coverAlt = leadMeme.alt || leadMeme.caption || coverAlt;
+      }
+    }
+    var leadHtml = '<section class="fp-lead" aria-label="Lead story">' +
+      '<div class="fp-lead-copy"><a href="' + leadHref + '">' +
+      '<p class="kicker">' + esc(lead.kicker || "Cover") + '</p>' +
+      '<h2>' + esc(lead.title) + '</h2>' +
+      '<p class="dek">' + esc(lead.dek) + '</p></a>' +
+      '<p class="when">' + formatDate(lead.date) + '</p>' +
+      '<p><a class="more" href="' + leadHref + '">Read the story</a></p></div>' +
+      '<a class="fp-lead-pic" href="' + leadHref + '">' +
+      '<img class="pic" src="' + esc(coverSrc) + '" alt="' + esc(coverAlt) + '" onerror="this.onerror=null;this.src=\'assets/cover.jpg\'"></a>' +
+      '</section>';
+
+    var latestHtml = "";
     if (side) {
       var sideImgSrc = "memes/wall/no-chart.jpg";
       var sideImgAlt = "A dark empty chart with green text reading We are here and an arrow pointing at a single dot.";
@@ -594,47 +627,40 @@
           sideImgHref = "memes/" + (coverMemeId ? "#" + coverMemeId : "");
         }
       }
-      sideHtml = '<div class="side"><a href="' + sideImgHref + '">' +
+      latestHtml = '<div class="fp-feature">' +
+        '<a class="fp-feature-pic" href="' + sideImgHref + '">' +
         '<img class="pic" src="' + esc(sideImgSrc) + '" alt="' + esc(sideImgAlt) + '"></a>' +
-        '<a href="' + pieceHref("articles/", side.slug) + '">' +
+        '<a class="fp-feature-copy" href="' + pieceHref("articles/", side.slug) + '">' +
         '<p class="kicker">' + esc(side.kicker || "Latest") + '</p>' +
-        '<h2>' + esc(side.title) + '</h2>' +
+        '<h3>' + esc(side.title) + '</h3>' +
         '<p class="dek">' + esc(side.dek) + '</p>' +
-        '<p class="when">' + formatDate(side.date) + '</p></a>' +
-        related.map(function (article) {
-          return '<div class="related"><a href="' + pieceHref("articles/", article.slug) + '">' +
+        '<p class="when">' + formatDate(side.date) + '</p></a></div>' +
+        (related.length ? '<div class="fp-related">' + related.map(function (article) {
+          return '<a href="' + pieceHref("articles/", article.slug) + '">' +
             '<p class="kicker">' + esc(article.kicker || "Latest") + '</p>' +
-            '<h3>' + esc(article.title) + '</h3></a></div>';
-        }).join("") +
-        nextGatheringHtml("events/") +
-        '</div>';
+            '<h3>' + esc(article.title) + '</h3>' +
+            '<p class="when">' + formatDate(article.date) + '</p></a>';
+        }).join("") + '</div>' : '');
     } else {
-      var soloBox = nextGatheringHtml("events/");
-      if (soloBox) sideHtml = '<div class="side">' + soloBox + '</div>';
+      latestHtml = '<p class="event-empty">More pieces will be filed here.</p>';
     }
-    var most = articles.slice(0, 6).map(function (article, index) {
-      return '<li><span>' + (index + 1) + '</span><a href="' + pieceHref("articles/", article.slug) + '">' +
+
+    root.innerHTML = leadHtml +
+      '<div class="fp-row">' +
+      '<section class="fp-main" aria-label="Latest articles">' +
+      bandHead("Latest articles", "articles/", "All articles") + latestHtml + '</section>' +
+      frontGatheringHtml("events/") +
+      '</div>';
+  };
+
+  window.renderMostRead = function (root) {
+    if (!root) return;
+    var most = sortedArticles().slice(0, 6).map(function (article, index) {
+      return '<li><span class="idx">' + (index + 1) + '</span><a href="' + pieceHref("articles/", article.slug) + '">' +
         esc(article.title) + '</a></li>';
     }).join("");
-    var coverSrc = "assets/cover.jpg";
-    var coverAlt = "A sheet of chart paper with a faint grid and a single black dot. The rest of the grid is empty.";
-    var leadMeme = data().memes[0];
-    if (leadMeme) {
-      var memeSrc = safeImage(leadMeme.src);
-      if (memeSrc) {
-        coverSrc = "memes/" + memeSrc;
-        coverAlt = leadMeme.alt || leadMeme.caption || coverAlt;
-      }
-    }
-    root.innerHTML = sideHtml +
-      '<a class="hero-pic" href="' + pieceHref("articles/", lead.slug) + '">' +
-      '<img class="pic" src="' + esc(coverSrc) + '" alt="' + esc(coverAlt) + '" onerror="this.onerror=null;this.src=\'assets/cover.jpg\'"></a>' +
-      '<div class="hero-copy"><a href="' + pieceHref("articles/", lead.slug) + '">' +
-      '<p class="kicker">' + esc(lead.kicker || "Cover") + '</p>' +
-      '<h2>' + esc(lead.title) + '</h2>' +
-      '<p class="dek">' + esc(lead.dek) + '</p>' +
-      '<p class="when">' + formatDate(lead.date) + '</p></a></div>' +
-      '<aside class="rail" aria-label="Most read"><h2>Most read</h2><ol class="most">' + most + '</ol></aside>';
+    root.innerHTML = bandHead("Most read", "articles/", "Archive") +
+      (most ? '<ol class="most">' + most + '</ol>' : '<p class="event-empty">Nothing filed yet.</p>');
   };
 
   function postedDate(entry) {
@@ -670,7 +696,7 @@
   };
 
   window.renderFrontVideos = function (root) {
-    var videos = validVideos().slice(0, 5);
+    var videos = validVideos().slice(0, 4);
     if (!videos.length) {
       root.innerHTML = empty("No reels filed.", "The best videos will play here.");
       return;
