@@ -31,7 +31,7 @@ NAV = [("Home", ""), ("Articles", "articles/"), ("Memes", "memes/"), ("Videos", 
 
 def header(p, current, has_form):
     nav = "\n".join(
-        '        <a href="%s"%s>%s</a>' % ((p + href) or "./", ' aria-current="page"' if label == current else "", label)
+        '          <a href="%s"%s>%s</a>' % ((p + href) or "./", ' aria-current="page"' if label == current else "", label)
         for label, href in NAV)
     sub = "#newsletter" if has_form else ("/" if p == "/" else p) + "#newsletter"
     return '''<!-- chrome:header -->
@@ -51,10 +51,12 @@ def header(p, current, has_form):
       <a class="logo" href="%s">Flip the Stock</a>
       <a class="brand-cta" href="%s">Subscribe</a>
     </div>
-    <div class="wrap">
-      <nav class="nav-links" aria-label="Site">
+    <div class="nav-bar">
+      <div class="wrap">
+        <nav class="nav-links" aria-label="Site">
 %s
-      </nav>
+        </nav>
+      </div>
     </div>
   </header>
   <!-- /chrome:header -->''' % (p or "./", sub, nav)

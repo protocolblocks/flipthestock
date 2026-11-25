@@ -102,8 +102,9 @@ body > header, body > section, body > footer { width: 100%; }
   display: flex;
   justify-content: center;
   padding: 20px 0 16px;
-  border-bottom: 1px solid var(--line);
 }
+/* Full-bleed hairlines above and below the section nav, as on ft.com. */
+.nav-bar { border-top: 1px solid var(--line); }
 .logo {
   font-family: var(--serif);
   font-size: 40px;
