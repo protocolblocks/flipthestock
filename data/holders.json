@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-26T04:51:19-06:00",
-  "total": 242635,
+  "updated_at": "2026-11-26T04:53:19-06:00",
+  "total": 242637,
   "label": "Wallets holding SPX",
   "note": "This counts wallets with a non-zero balance, including exchange and contract wallets. Wallets are counted per chain, so someone holding on more than one chain is counted more than once. The total adds the Ethereum token to the bridged copies on Base and Solana. Bridged copies on BNB Chain and Sui are omitted because no reliable free source returned a current figure.",
   "chains": [
@@ -16,7 +16,7 @@
       "id": "base",
       "name": "Base",
       "contract": "0x50dA645f148798F68EF2d7dB7C1CB22A6819bb2C",
-      "holders": 113824,
+      "holders": 113826,
       "source": "GeckoTerminal",
       "source_url": "https://www.geckoterminal.com/base/tokens/0x50da645f148798f68ef2d7db7c1cb22a6819bb2c"
     },
@@ -50,7 +50,7 @@
     },
     {
       "date": "2026-11-26",
-      "total": 242635
+      "total": 242637
     }
   ]
 }
