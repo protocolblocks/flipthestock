@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Market Data — Flip the Stock</title>
-  <meta name="description" content="Holder counts for SPX6900, by chain, and other market figures as they are added. A community site. Not financial advice.">
+  <meta name="description" content="Price, market value and holder counts for SPX6900, each with its source and the time it was taken. A community site. Not financial advice.">
   <meta name="theme-color" content="#fff1e5">
   <link rel="canonical" href="https://www.flipthestock.com/market-data/">
   <meta property="og:site_name" content="Flip the Stock">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en_US">
   <meta property="og:title" content="Market Data — Flip the Stock">
-  <meta property="og:description" content="Holder counts for SPX6900, by chain, and other market figures as they are added. A community site. Not financial advice.">
+  <meta property="og:description" content="Price, market value and holder counts for SPX6900, each with its source and the time it was taken. A community site. Not financial advice.">
   <meta property="og:url" content="https://www.flipthestock.com/market-data/">
   <meta property="og:image" content="https://www.flipthestock.com/assets/og.png">
   <meta property="og:image:type" content="image/png">
@@ -20,7 +20,7 @@
   <meta property="og:image:alt" content="Flip the Stock masthead on cream paper, with a single black dot on an otherwise blank chart.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Market Data — Flip the Stock">
-  <meta name="twitter:description" content="Holder counts for SPX6900, by chain, and other market figures as they are added. A community site. Not financial advice.">
+  <meta name="twitter:description" content="Price, market value and holder counts for SPX6900, each with its source and the time it was taken. A community site. Not financial advice.">
   <meta name="twitter:image" content="https://www.flipthestock.com/assets/og.png">
   <meta name="twitter:image:alt" content="Flip the Stock masthead on cream paper, with a single black dot on an otherwise blank chart.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -29,14 +29,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500&family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../site.css?v=43af7d75">
+  <link rel="stylesheet" href="../site.css?v=dbe07c06">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "Market Data",
     "url": "https://www.flipthestock.com/market-data/",
-    "description": "Holder counts for SPX6900, by chain, and other market figures as they are added. A community site. Not financial advice.",
+    "description": "Price, market value and holder counts for SPX6900, each with its source and the time it was taken. A community site. Not financial advice.",
     "isPartOf": {
       "@type": "WebSite",
       "name": "Flip the Stock",
@@ -87,7 +87,7 @@
       <header class="sec-head">
       <p class="ft-tag">Markets</p>
       <h1>Market Data</h1>
-      <p class="dek">Holder counts for SPX6900, shown as a total and by chain. More figures will be added here over time.</p>
+      <p class="dek">Holder counts for SPX6900, by chain, together with the price, market value and 24-hour change. Each figure is shown with its source and the time it was taken.</p>
       </header>
 
       <section class="data-block" id="holders" aria-labelledby="holders-heading">
@@ -95,11 +95,24 @@
 
         <div class="md-lead">
           <div class="md-lead-figure">
-            <span class="figure-label">Wallets holding SPX</span>
-            <span class="figure-value" id="holders-total-value">—</span>
-            <p class="figure-note" id="holders-total-note">Loading the latest count…</p>
+            <!-- generated:holders-lead -->
+          <span class="figure-label" id="holders-label">Wallets holding SPX</span>
+          <span class="figure-value" id="holders-total-value">242,635</span>
+          <p class="figure-note" id="holders-total-note">As of 26 November 2026 4:59 am MT.</p>
+        <!-- /generated:holders-lead -->
           </div>
-          <div class="md-history" id="holders-history"></div>
+          <div class="md-history" id="holders-history">
+            <!-- generated:holders-history -->
+          <p class="figure-label">Total holders</p>
+          <svg class="md-spark" viewBox="0 0 360 130" width="100%" height="130" role="img" aria-label="Daily total holders from 25 Nov 2026 to 26 Nov 2026">
+            <path class="md-spark-area" d="M4.0 14.0 L350.0 102.0 L350.0 102 L4.0 102 Z"></path>
+            <path class="md-spark-line" d="M4.0 14.0 L350.0 102.0" fill="none"></path>
+            <circle class="md-spark-dot" cx="350.0" cy="102.0" r="3.5"></circle>
+            <text class="md-spark-label" x="4" y="122">25 Nov 2026</text>
+            <text class="md-spark-label md-spark-label-end" x="350" y="122">26 Nov 2026</text>
+          </svg>
+        <!-- /generated:holders-history -->
+          </div>
         </div>
 
         <div class="md-table-wrap">
@@ -112,14 +125,86 @@
                 <th scope="col" class="bar-col"><span class="vh">Share of total</span></th>
               </tr>
             </thead>
-            <tbody id="holders-chains"></tbody>
+            <tbody id="holders-chains">
+            <!-- generated:holders-chains -->
+            <tr>
+              <th scope="row">Ethereum</th>
+              <td class="num">49,756</td>
+              <td class="num">20.5%</td>
+              <td class="bar-col">
+                <span class="md-bar" role="presentation"><span style="width:20.5%"></span></span>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Base</th>
+              <td class="num">113,824</td>
+              <td class="num">46.9%</td>
+              <td class="bar-col">
+                <span class="md-bar" role="presentation"><span style="width:46.9%"></span></span>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Solana</th>
+              <td class="num">79,055</td>
+              <td class="num">32.6%</td>
+              <td class="bar-col">
+                <span class="md-bar" role="presentation"><span style="width:32.6%"></span></span>
+              </td>
+            </tr>
+        <!-- /generated:holders-chains -->
+            </tbody>
           </table>
         </div>
 
-        <div class="md-note" id="holders-method"></div>
-        <noscript>
-          <p class="md-note">JavaScript is off, so the figures cannot be drawn here. The latest saved counts are in <a href="../data/holders.json">data/holders.json</a>.</p>
-        </noscript>
+        <div class="md-note" id="holders-method">
+        <!-- generated:holders-method -->
+          <h3>Sources and method</h3>
+          <p>This counts wallets with a non-zero balance, including exchange and contract wallets. Wallets are counted per chain, so someone holding on more than one chain is counted more than once. The total adds the Ethereum token to the bridged copies on Base and Solana. Bridged copies on BNB Chain and Sui are omitted because no reliable free source returned a current figure.</p>
+          <p>Ethereum: <a href="https://ethplorer.io/address/0xe0f63a424a4439cbe457d80e4f4b51ad25b2c56c" target="_blank" rel="noopener noreferrer">Ethplorer</a>. Base: <a href="https://www.geckoterminal.com/base/tokens/0x50da645f148798f68ef2d7db7c1cb22a6819bb2c" target="_blank" rel="noopener noreferrer">GeckoTerminal</a>. Solana: <a href="https://www.geckoterminal.com/solana/tokens/J3NKxxXZcnNiMjKw9hYb2K4LUxgwB6t1FtPtQVsv3KFr" target="_blank" rel="noopener noreferrer">GeckoTerminal</a>.</p>
+        <!-- /generated:holders-method -->
+        </div>
+      </section>
+
+      <section class="data-block" id="snapshot" aria-labelledby="snapshot-heading">
+        <div class="section-head"><h2 id="snapshot-heading">Price and value</h2></div>
+        <!-- generated:market-snapshot -->
+        <p class="figure-note" id="snapshot-asof">As of 26 November 2026 7:57 am MT. Source: <a href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer">CoinGecko</a>.</p>
+        <div class="md-table-wrap">
+          <table class="md-table md-facts">
+            <tbody id="snapshot-rows">
+            <tr>
+              <th scope="row">Price (USD)</th>
+              <td class="num" id="snap-price" title="$0.278603">$0.2786</td>
+            </tr>
+            <tr>
+              <th scope="row">24-hour change</th>
+              <td class="md-change is-up" id="snap-change">▲ 8.7%</td>
+            </tr>
+            <tr>
+              <th scope="row">Market cap</th>
+              <td class="num" id="snap-cap" title="$259,404,908">$259.4m</td>
+            </tr>
+            <tr>
+              <th scope="row">24-hour volume</th>
+              <td class="num" id="snap-volume" title="$5,045,147">$5.05m</td>
+            </tr>
+            <tr>
+              <th scope="row">Circulating supply</th>
+              <td class="num" id="snap-circulating" title="930,987,178">931m</td>
+            </tr>
+            <tr>
+              <th scope="row">Max supply</th>
+              <td class="num" id="snap-max" title="1,000,000,000">1bn</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="md-note" id="snapshot-method">
+          <h3>Sources and method</h3>
+          <p>Figures are taken from <a href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer">CoinGecko</a> and are not live. They are refreshed once a day, and the time above is when the source last updated them.</p>
+          <p>CoinGecko also publishes a fully diluted valuation; it is not shown separately because it matches the market cap, as circulating supply equals total supply.</p>
+        </div>
+        <!-- /generated:market-snapshot -->
       </section>
     </div>
   </main>
@@ -193,7 +278,7 @@
   <!-- /chrome:footer -->
   <script src="../edition.js?v=d1af8f9d"></script>
   <script src="../ticker.js?v=179352f9"></script>
-  <script src="holders.js"></script>
+  <script src="market-data.js?v=1219d047"></script>
   <script data-goatcounter="https://flipthestock.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>

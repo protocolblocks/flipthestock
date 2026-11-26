@@ -202,6 +202,7 @@ ASSET_FILES = (
     "ticker.js",
     "edition.js",
     "learn-hero.js",
+    "market-data/market-data.js",
 )
 
 
@@ -216,11 +217,12 @@ def bust_asset_urls(html: str) -> str:
     """Append a content-hash query to local CSS and JS so browsers pick up changes."""
     for name in ASSET_FILES:
         ver = file_version(name)
+        basename = name.split("/")[-1]
         pattern = re.compile(
-            r'((?:href|src)=")(/?(?:\.\./)*)%s(?:\?[^"]*)?(")' % re.escape(name)
+            r'((?:href|src)=")(/?(?:\.\./)*)%s(?:\?[^"]*)?(")' % re.escape(basename)
         )
         html = pattern.sub(
-            lambda m, n=name, v=ver: "%s%s%s?v=%s%s" % (m.group(1), m.group(2), n, v, m.group(3)),
+            lambda m, n=basename, v=ver: "%s%s%s?v=%s%s" % (m.group(1), m.group(2), n, v, m.group(3)),
             html,
         )
     return html

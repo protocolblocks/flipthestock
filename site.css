@@ -1229,6 +1229,10 @@ main + .site-foot, dialog + .site-foot { margin-top: 48px; }
   text-transform: uppercase;
 }
 .md-note p + p { margin-top: 8px; }
+.md-facts { max-width: 40rem; }
+#snapshot-asof { margin: 0 0 4px; }
+.md-change.is-up { color: var(--teal); }
+.md-change.is-down { color: var(--claret); }
 
 
 /* Learn page, modelled on an ft.com explainer or Big Read:

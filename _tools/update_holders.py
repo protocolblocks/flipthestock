@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-"""Fetch SPX6900 holder counts and write data/holders.json.
+"""Fetch SPX6900 holder counts and refresh the Market Data page.
 
 Run from the repo root:
     python3 _tools/update_holders.py
 
-Jekyll skips folders starting with "_", so this file is not published.
+Writes data/holders.json, then refreshes data/market.json and bakes both
+into market-data/index.html. Jekyll skips folders starting with "_", so
+this file is not published.
 """
 from __future__ import annotations
 
+import importlib.util
 import json
 import time
 import urllib.error
@@ -168,6 +171,17 @@ def first_ok(name: str, fetchers) -> tuple[int, str, str]:
     raise FetchError("%s: all sources failed (%s)" % (name, "; ".join(errors)))
 
 
+
+def load_tool(name: str):
+    path = Path(__file__).resolve().parent / (name + ".py")
+    spec = importlib.util.spec_from_file_location(name, path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("could not load %s" % path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def load_existing() -> dict:
     if not OUT.exists():
         return {}
@@ -269,6 +283,13 @@ def main() -> int:
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, indent=2) + "\n")
     print("wrote %s (total %s)" % (OUT.relative_to(ROOT), total))
+
+    try:
+        load_tool("update_market").update()
+    except Exception as e:
+        print("market snapshot not refreshed: %s" % e)
+
+    load_tool("build_market_data").build()
     return 0
 
 

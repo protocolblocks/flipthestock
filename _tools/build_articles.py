@@ -452,7 +452,7 @@ DATE_RE = re.compile(r"(\d{4}-\d{2}-\d{2})")
 # from the existing file when we cannot derive a newer date from library.js.
 STATIC_SITEMAP = [
     ("/explained/", "2026-11-25"),
-    ("/market-data/", "2026-11-25"),
+    ("/market-data/", "2026-11-26"),
     ("/contact/", "2026-11-24"),
 ]
 
