@@ -121,6 +121,9 @@ body > header, body > section, body > footer { width: 100%; }
   color: var(--ink);
 }
 .logo:hover { color: var(--ink); }
+/* Homepage only: the wordmark sits in an h1 without changing how it looks. */
+.logo-h1 { margin: 0; font: inherit; letter-spacing: 0; }
+.logo-h1 .logo { display: block; }
 .brand-cta {
   position: absolute;
   right: 0;

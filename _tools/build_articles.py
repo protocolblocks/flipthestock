@@ -5,7 +5,8 @@ Run from the repo root after adding or editing articles:
     python3 _tools/build_articles.py
 
 It writes articles/<slug>/index.html (with the shared chrome from
-sync_chrome.py), refreshes sitemap.xml and /feed.xml, and removes
+sync_chrome.py), refreshes sitemap.xml and /feed.xml, bakes the lists on the homepage and the
+Articles, Memes, Videos and Events pages into their HTML (bake_pages.py), and removes
 generated pages whose slugs are no longer in library.js. Jekyll skips
 folders starting with "_", so this file is not published.
 """
@@ -25,6 +26,7 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import sync_chrome  # noqa: E402
+import bake_pages  # noqa: E402
 
 ORIGIN = "https://www.flipthestock.com"
 SITE = "Flip the Stock"
@@ -635,6 +637,12 @@ def main() -> int:
         print("feed.xml already current")
     validate_xml(ROOT / "sitemap.xml")
     validate_xml(ROOT / "feed.xml")
+    try:
+        baked = bake_pages.bake()
+    except bake_pages.BakeError as e:
+        raise SystemExit("build_articles: %s" % e)
+    for page in bake_pages.PAGES:
+        print("%s %s" % ("baked" if page in baked else "unchanged", page))
     print("articles: %s written, %s unchanged, %s removed" % (
         written, len(articles) - written, len(removed)))
     return 0

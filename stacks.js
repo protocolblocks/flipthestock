@@ -1,4 +1,9 @@
 (function () {
+  // Set by _tools/bake_pages.js while it writes the static copy of each list into
+  // the HTML. In that mode dates are absolute and times are in Mountain, so the
+  // baked markup never goes stale-wrong. Browsers never set this flag.
+  var BAKING = !!window.STACKS_BAKE_MODE;
+
   function esc(value) {
     return String(value == null ? "" : value)
       .replace(/&/g, "&amp;")
@@ -130,21 +135,28 @@
   }
 
   function formatLocalWhen(date) {
-    var day = date.toLocaleDateString("en-GB", {
+    var dayOpts = {
       weekday: "long",
       day: "numeric",
       month: "long",
       year: "numeric"
-    });
-    var time = date.toLocaleTimeString("en-GB", {
+    };
+    var timeOpts = {
       hour: "numeric",
       minute: "2-digit",
-      hour12: true,
-      timeZoneName: "short"
-    }).replace(/\s*(am|pm)/i, function (_, mer) {
+      hour12: true
+    };
+    if (BAKING) {
+      dayOpts.timeZone = "America/Edmonton";
+      timeOpts.timeZone = "America/Edmonton";
+    } else {
+      timeOpts.timeZoneName = "short";
+    }
+    var day = date.toLocaleDateString("en-GB", dayOpts);
+    var time = date.toLocaleTimeString("en-GB", timeOpts).replace(/\s*(am|pm)/i, function (_, mer) {
       return mer.toLowerCase() === "am" ? " a.m." : " p.m.";
     });
-    return day + ", " + time;
+    return day + ", " + time + (BAKING ? " MT" : "");
   }
 
   function zoneHints(date) {
@@ -601,9 +613,11 @@
     var today = new Date().toLocaleDateString("en-CA", { timeZone: "America/Edmonton" }).split("-");
     var now = Date.UTC(+today[0], +today[1] - 1, +today[2]);
     var days = Math.round((now - then) / 86400000);
-    if (days === 0) return "Today";
-    if (days === 1) return "Yesterday";
-    if (days > 1 && days < 7) return days + " days ago";
+    if (!BAKING) {
+      if (days === 0) return "Today";
+      if (days === 1) return "Yesterday";
+      if (days > 1 && days < 7) return days + " days ago";
+    }
     return new Date(then + 43200000).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
   }
 

@@ -34,11 +34,16 @@ NAV = [("Home", ""), ("Articles", "articles/"), ("Market Data", "market-data/"),
        ("Events", "events/"), ("Videos", "videos/"), ("Memes", "memes/"), ("Explained", "explained/")]
 
 
-def header(p, current, has_form):
+def header(p, current, has_form, is_home=False):
     nav = "\n".join(
         '          <a href="%s"%s>%s</a>' % ((p + href) or "./", ' aria-current="page"' if label == current else "", label)
         for label, href in NAV)
     sub = "#newsletter" if has_form else ("/" if p == "/" else p) + "#newsletter"
+    # The homepage has no other page title, so the wordmark is its h1, as the
+    # site name heads the front page. Other pages keep it a plain link.
+    logo = '<a class="logo" href="%s">Flip the Stock</a>' % (p or "./")
+    if is_home:
+        logo = '<h1 class="logo-h1">%s</h1>' % logo
     return '''<!-- chrome:header -->
   <header class="mast">
     <div class="markets">
@@ -54,7 +59,7 @@ def header(p, current, has_form):
       </div>
     </div>
     <div class="wrap brand">
-      <a class="logo" href="%s">Flip the Stock</a>
+      %s
       <a class="brand-cta" href="%s">Subscribe</a>
     </div>
     <div class="nav-bar">
@@ -65,7 +70,7 @@ def header(p, current, has_form):
       </div>
     </div>
   </header>
-  <!-- /chrome:header -->''' % (p or "./", sub, nav)
+  <!-- /chrome:header -->''' % (logo, sub, nav)
 
 
 def promo(input_id, tag):
@@ -235,7 +240,7 @@ def sync():
         html = re.sub(r'<link href="https://fonts\.googleapis\.com/css2\?[^"]*" rel="stylesheet">', lambda m: FONTS_LINK, html, count=1)
         html = ensure_rss_link(html)
         has_form = input_id is not None
-        html = replace(html, r'<header class="mast">.*?</header>', "header", header(p, current, has_form))
+        html = replace(html, r'<header class="mast">.*?</header>', "header", header(p, current, has_form, path == "index.html"))
         html = replace(html, r'<footer>.*?</footer>', "footer", footer(p, has_form))
         if has_form and "<!-- chrome:newsletter -->" not in html:
             html = html.replace("<!-- chrome:footer -->", promo(input_id, tag) + "\n\n  <!-- chrome:footer -->", 1)
