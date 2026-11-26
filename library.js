@@ -105,6 +105,13 @@ window.STACKS = {
   ],
   memes: [
     {
+      src: "wall/2026-11-25-flip-the-stock-market-cap.jpg",
+      alt: "A young woman with a dark shag haircut and a black leather jacket stands on an escalator, wearing a faded grey and blue baseball cap embroidered with the words: All I want is to flip the stock market.",
+      caption: "The ambition, stitched on a cap. Modest headwear, immodest goal.",
+      credit: "Post on X · @rootsie143",
+      href: "https://x.com/rootsie143/status/2125654813430169857"
+    },
+    {
       src: "wall/2026-11-24-flip-the-stock-market-poster.jpg",
       alt: "An anime-style illustration of a long-haired blonde elf with a cross painted on her cheek, seated on a stool beside a small winged figure holding an SPX6900 coin. Text reads: be delusional enough to believe that it's possible, be disciplined enough to prove yourself right. SPX6900, flip the stock market.",
       caption: "Delusion first, discipline second. The poster asks for both.",
