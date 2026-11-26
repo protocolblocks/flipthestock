@@ -1631,6 +1631,17 @@ main + .site-foot, dialog + .site-foot { margin-top: 48px; }
   .chain .copy { margin-top: 4px; }
   .block, .page h1, .video, .meme { scroll-margin-top: 16px; }
 }
+/* The markets bar grows once the edition date and ticker have loaded.
+   These min-heights match that loaded height exactly, so the page does
+   not shift: 45px at 342–429px (360, 390 and similar phones), 48px at
+   341px and below. 430–640px stays 32px and tablet/desktop stays 36px. */
+@media (max-width: 429px) {
+  .markets-bar { min-height: 45px; }
+}
+@media (max-width: 341px) {
+  .markets-bar { min-height: 48px; }
+}
 @media (prefers-reduced-motion: reduce) {
+
   html { scroll-behavior: auto; }
 }
