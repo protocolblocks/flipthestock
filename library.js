@@ -12,6 +12,18 @@
 window.STACKS = {
   articles: [
     {
+      slug: "wallstreetbets-believe-in-something",
+      kicker: "Community",
+      title: "WallStreetBets posted three words. Aeons answered",
+      date: "2026-11-26",
+      dek: "Late on Wednesday the @wallstreetbets account posted “believe in something” with no further comment. SPX6900 holders took it as theirs.",
+      html: [
+        "<p>At 11:30 p.m. Mountain time on Wednesday, 25 November, the @wallstreetbets account on X, which has about 2.15 million followers, <a href=\"https://x.com/wallstreetbets/status/2125839470838825430\">posted</a> three words: \"believe in something.\" There was no image, link or tag. By Thursday morning the post had drawn about 600 likes, 42 reposts and 193 replies, and roughly 44,000 views, according to X's own counts.</p>",
+        "<p>The phrase is half of the line SPX6900 holders have used for years, \"stop trading and believe in something.\" The account did not mention SPX6900, and whether the post was a nod to the token or a coincidence of wording has not been said. Its replies made up their own minds. <a href=\"https://x.com/Ricky8868718823/status/2125882156014821580\">@Ricky8868718823 wrote</a>: \"Stop trading Believe in something @MustStopMurad said @spx6900.\" <a href=\"https://x.com/Avistar05_/status/2125909908038308230\">@Avistar05_ replied</a> \"SPX CODED,\" and <a href=\"https://x.com/IndoCrypto_J/status/2125895294026186875\">@IndoCrypto_J</a> offered: \"Something is #SPX6900.\" At least ten replies named the token outright.</p>",
+        "<p>Others quoted it rather than replied. <a href=\"https://x.com/TracerVibe/status/2125893353682153830\">@TracerVibe wrote</a> that \"those who use the SPX6900 slogan clearly believe in SPX6900,\" adding: \"thank you very much, we are thrilled.\" The same account had spent the evening posting crypto headlines, among them a <a href=\"https://x.com/wallstreetbets/status/2125747642164719840\">\"we're so back\"</a> over a bitcoin price alert. As of Thursday morning it had not followed the three words up.</p>"
+      ].join(""),
+    },
+    {
       slug: "restraint-on-a-bad-day",
       kicker: "Community",
       title: "Ansem’s wallet was drained. The advice was restraint",
