@@ -21,9 +21,9 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(build.format_change(8.67325), "▲ 8.7%")
         self.assertEqual(build.format_change(-3.04), "▼ 3.0%")
         self.assertEqual(build.format_change(0), "– 0.0%")
-        self.assertEqual(build.change_class(8.6), "md-change is-up")
-        self.assertEqual(build.change_class(-3), "md-change is-down")
-        self.assertEqual(build.change_class(0), "md-change")
+        self.assertEqual(build.change_class(8.6), "num md-change is-up")
+        self.assertEqual(build.change_class(-3), "num md-change is-down")
+        self.assertEqual(build.change_class(0), "num md-change")
 
     def test_compact_and_supply(self):
         self.assertEqual(build.format_usd_compact(259591400), "$259.6m")
@@ -146,8 +146,13 @@ class BakeTests(unittest.TestCase):
         self.assertIn("md-spark", history)
         self.assertIn("25 Nov 2026", history)
         snap = build.render_market_snapshot(market_data)
+        self.assertIn('id="snap-price"', snap)
+        self.assertIn("figure-value", snap)
         self.assertIn("$0.2788", snap)
+        self.assertIn("md-lead-change", snap)
+        self.assertIn("num md-change is-up", snap)
         self.assertIn("▲ 8.7%", snap)
+        self.assertNotIn("24-hour change", snap)
         self.assertIn("$259.6m", snap)
         self.assertIn("$5.14m", snap)
         self.assertIn("931m", snap)
@@ -156,6 +161,8 @@ class BakeTests(unittest.TestCase):
         self.assertIn("CoinGecko", snap)
         self.assertIn("As of 26 November 2026 7:50 am MT", snap)
         self.assertIn("matches the market cap", snap)
+        self.assertLess(snap.find("snap-price"), snap.find("snap-cap"))
+        self.assertLess(snap.find("md-snapshot-lead"), snap.find("snapshot-method"))
 
 
 if __name__ == "__main__":

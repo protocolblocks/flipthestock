@@ -29,7 +29,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500&family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../site.css?v=dbe07c06">
+  <link rel="stylesheet" href="../site.css?v=6f1959e8">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -87,8 +87,49 @@
       <header class="sec-head">
       <p class="ft-tag">Markets</p>
       <h1>Market Data</h1>
-      <p class="dek">Holder counts for SPX6900, by chain, together with the price, market value and 24-hour change. Each figure is shown with its source and the time it was taken.</p>
+      <p class="dek">The price, market value and 24-hour change for SPX6900, together with holder counts by chain. Each figure is shown with its source and the time it was taken.</p>
       </header>
+
+      <section class="data-block" id="snapshot" aria-labelledby="snapshot-heading">
+        <div class="section-head"><h2 id="snapshot-heading">Price and value</h2></div>
+        <!-- generated:market-snapshot -->
+        <div class="md-lead md-snapshot-lead">
+          <div class="md-lead-figure">
+            <span class="figure-label">Price (USD)</span>
+            <span class="figure-value" id="snap-price" title="$0.278603">$0.2786</span>
+          <p class="md-lead-change num md-change is-up" id="snap-change">▲ 8.7%</p>
+            <p class="figure-note" id="snapshot-asof">As of 26 November 2026 7:57 am MT. Source: <a href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer">CoinGecko</a>.</p>
+          </div>
+          <div class="md-table-wrap">
+            <table class="md-table md-facts">
+              <tbody id="snapshot-rows">
+            <tr>
+              <th scope="row">Market cap</th>
+              <td class="num" id="snap-cap" title="$259,404,908">$259.4m</td>
+            </tr>
+            <tr>
+              <th scope="row">24-hour volume</th>
+              <td class="num" id="snap-volume" title="$5,045,147">$5.05m</td>
+            </tr>
+            <tr>
+              <th scope="row">Circulating supply</th>
+              <td class="num" id="snap-circulating" title="930,987,178">931m</td>
+            </tr>
+            <tr>
+              <th scope="row">Max supply</th>
+              <td class="num" id="snap-max" title="1,000,000,000">1bn</td>
+            </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="md-note" id="snapshot-method">
+          <h3>Sources and method</h3>
+          <p>Figures are taken from <a href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer">CoinGecko</a> and are not live. They are refreshed once a day, and the time above is when the source last updated them.</p>
+          <p>CoinGecko also publishes a fully diluted valuation; it is not shown separately because it matches the market cap, as circulating supply equals total supply.</p>
+        </div>
+        <!-- /generated:market-snapshot -->
+      </section>
 
       <section class="data-block" id="holders" aria-labelledby="holders-heading">
         <div class="section-head"><h2 id="holders-heading">Holders</h2></div>
@@ -164,48 +205,6 @@
         <!-- /generated:holders-method -->
         </div>
       </section>
-
-      <section class="data-block" id="snapshot" aria-labelledby="snapshot-heading">
-        <div class="section-head"><h2 id="snapshot-heading">Price and value</h2></div>
-        <!-- generated:market-snapshot -->
-        <p class="figure-note" id="snapshot-asof">As of 26 November 2026 7:57 am MT. Source: <a href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer">CoinGecko</a>.</p>
-        <div class="md-table-wrap">
-          <table class="md-table md-facts">
-            <tbody id="snapshot-rows">
-            <tr>
-              <th scope="row">Price (USD)</th>
-              <td class="num" id="snap-price" title="$0.278603">$0.2786</td>
-            </tr>
-            <tr>
-              <th scope="row">24-hour change</th>
-              <td class="md-change is-up" id="snap-change">▲ 8.7%</td>
-            </tr>
-            <tr>
-              <th scope="row">Market cap</th>
-              <td class="num" id="snap-cap" title="$259,404,908">$259.4m</td>
-            </tr>
-            <tr>
-              <th scope="row">24-hour volume</th>
-              <td class="num" id="snap-volume" title="$5,045,147">$5.05m</td>
-            </tr>
-            <tr>
-              <th scope="row">Circulating supply</th>
-              <td class="num" id="snap-circulating" title="930,987,178">931m</td>
-            </tr>
-            <tr>
-              <th scope="row">Max supply</th>
-              <td class="num" id="snap-max" title="1,000,000,000">1bn</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="md-note" id="snapshot-method">
-          <h3>Sources and method</h3>
-          <p>Figures are taken from <a href="https://www.coingecko.com/en/coins/spx6900" target="_blank" rel="noopener noreferrer">CoinGecko</a> and are not live. They are refreshed once a day, and the time above is when the source last updated them.</p>
-          <p>CoinGecko also publishes a fully diluted valuation; it is not shown separately because it matches the market cap, as circulating supply equals total supply.</p>
-        </div>
-        <!-- /generated:market-snapshot -->
-      </section>
     </div>
   </main>
   <!-- chrome:newsletter -->
@@ -278,7 +277,7 @@
   <!-- /chrome:footer -->
   <script src="../edition.js?v=d1af8f9d"></script>
   <script src="../ticker.js?v=179352f9"></script>
-  <script src="market-data.js?v=1219d047"></script>
+  <script src="market-data.js?v=685c9d2d"></script>
   <script data-goatcounter="https://flipthestock.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>

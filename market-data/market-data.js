@@ -95,8 +95,8 @@
   }
 
   function changeClass(n) {
-    if (typeof n !== "number" || !isFinite(n) || n === 0) return "md-change";
-    return n > 0 ? "md-change is-up" : "md-change is-down";
+    if (typeof n !== "number" || !isFinite(n) || n === 0) return "num md-change";
+    return n > 0 ? "num md-change is-up" : "num md-change is-down";
   }
 
   function trimNum(value, decimals) {
@@ -291,11 +291,27 @@
     }
     if (asOfEl) asOfEl.innerHTML = line;
 
-    var rows = [];
-    rows.push(factRow("Price (USD)", formatPrice(data.price_usd), "num", "snap-price", formatUsdFull(data.price_usd)));
-    if (typeof data.change_24h_pct === "number") {
-      rows.push(factRow("24-hour change", formatChange(data.change_24h_pct), changeClass(data.change_24h_pct), "snap-change"));
+    var priceEl = $("snap-price");
+    if (priceEl) {
+      priceEl.textContent = formatPrice(data.price_usd);
+      var priceTitle = formatUsdFull(data.price_usd);
+      if (priceTitle) priceEl.setAttribute("title", priceTitle);
+      else priceEl.removeAttribute("title");
     }
+    var changeEl = $("snap-change");
+    if (changeEl) {
+      if (typeof data.change_24h_pct === "number") {
+        changeEl.textContent = formatChange(data.change_24h_pct);
+        changeEl.className = "md-lead-change " + changeClass(data.change_24h_pct);
+        changeEl.removeAttribute("hidden");
+      } else {
+        changeEl.textContent = "";
+        changeEl.className = "md-lead-change num md-change";
+        changeEl.setAttribute("hidden", "");
+      }
+    }
+
+    var rows = [];
     if (typeof data.market_cap_usd === "number") {
       rows.push(factRow("Market cap", formatUsdCompact(data.market_cap_usd), "num", "snap-cap", formatUsdFull(data.market_cap_usd)));
     }

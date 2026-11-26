@@ -135,8 +135,8 @@ def format_change(n) -> str:
 
 def change_class(n) -> str:
     if not isinstance(n, (int, float)) or isinstance(n, bool) or not math.isfinite(n) or n == 0:
-        return "md-change"
-    return "md-change is-up" if n > 0 else "md-change is-down"
+        return "num md-change"
+    return "num md-change is-up" if n > 0 else "num md-change is-down"
 
 
 def _trim(value: float, decimals: int) -> str:
@@ -387,23 +387,19 @@ def render_market_snapshot(data: dict) -> str:
     if source:
         line = (line + " Source: " + source + ".") if line else ("Source: " + source + ".")
 
-    rows = [
-        fact_row(
-            "Price (USD)",
-            esc(format_price(data.get("price_usd"))),
-            title=format_usd_full(data.get("price_usd")),
-            row_id="snap-price",
+    change = data.get("change_24h_pct")
+    if change is not None:
+        change_html = (
+            '          <p class="md-lead-change %s" id="snap-change">%s</p>\n'
+            % (esc(change_class(change)), esc(format_change(change)))
         )
-    ]
-    if data.get("change_24h_pct") is not None:
-        rows.append(
-            fact_row(
-                "24-hour change",
-                esc(format_change(data.get("change_24h_pct"))),
-                css=change_class(data.get("change_24h_pct")),
-                row_id="snap-change",
-            )
-        )
+    else:
+        change_html = '          <p class="md-lead-change num md-change" id="snap-change" hidden></p>\n'
+
+    price_title = format_usd_full(data.get("price_usd"))
+    price_title_attr = ' title="%s"' % esc(price_title) if price_title else ""
+
+    rows = []
     if data.get("market_cap_usd") is not None:
         rows.append(
             fact_row(
@@ -468,19 +464,29 @@ def render_market_snapshot(data: dict) -> str:
         )
 
     return (
-        '        <p class="figure-note" id="snapshot-asof">%s</p>\n'
-        '        <div class="md-table-wrap">\n'
-        '          <table class="md-table md-facts">\n'
-        "            <tbody id=\"snapshot-rows\">\n"
+        '        <div class="md-lead md-snapshot-lead">\n'
+        '          <div class="md-lead-figure">\n'
+        '            <span class="figure-label">Price (USD)</span>\n'
+        '            <span class="figure-value" id="snap-price"%s>%s</span>\n'
+        "%s"
+        '            <p class="figure-note" id="snapshot-asof">%s</p>\n'
+        "          </div>\n"
+        '          <div class="md-table-wrap">\n'
+        '            <table class="md-table md-facts">\n'
+        '              <tbody id="snapshot-rows">\n'
         "%s\n"
-        "            </tbody>\n"
-        "          </table>\n"
+        "              </tbody>\n"
+        "            </table>\n"
+        "          </div>\n"
         "        </div>\n"
         '        <div class="md-note" id="snapshot-method">\n'
         "          <h3>Sources and method</h3>\n"
         "          <p>%s</p>\n"
         "        </div>"
         % (
+            price_title_attr,
+            esc(format_price(data.get("price_usd"))),
+            change_html,
             line,
             "\n".join(rows),
             "</p>\n          <p>".join(method),
