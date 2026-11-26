@@ -407,7 +407,7 @@
   }
 
   // Cover for the left-hand "This issue" thumbnail. Uses the archive only
-  // (everything after memes[0]), so it never matches the meme of the day on
+  // (everything after memes[0]), so it never matches the featured meme on
   // the main hero. The index is (library length * 7) % archive length: it
   // changes when the daily routine prepends a new memes[0], and 7 keeps the
   // pick from always being the previous day's neighbour.
@@ -688,7 +688,7 @@
       var href = "memes/" + (id ? "#" + id : "");
       featureHtml = '<div class="ft-feature"><a href="' + href + '">' +
         '<span class="ft-feature-pic"><img class="pic" src="memes/' + esc(src) + '" alt="' + esc(meme.alt || "") + '" onerror="this.onerror=null;this.src=\'assets/cover.jpg\'"></span>' +
-        '<span class="ft-feature-panel"><span class="ft-tag">Meme of the day</span>' +
+        '<span class="ft-feature-panel"><span class="ft-tag">Featured meme</span>' +
         '<span class="ft-feature-title">' + esc(meme.caption || "") + '</span></span></a></div>';
     }
 
@@ -789,7 +789,7 @@
         : "https://i.ytimg.com/vi/" + youtubeId(video) + "/hqdefault.jpg";
       return '<article class="ft-card"><a href="videos/#v-' + key + '">' +
         '<span class="ft-thumb"><img class="pic" src="' + esc(thumb) + '" alt=""><span class="ft-play" aria-hidden="true"></span></span>' +
-        '<span class="ft-card-body"><span class="ft-tag">' + (index === 0 ? "Video of the week" : "Video") + '</span>' +
+        '<span class="ft-card-body"><span class="ft-tag">' + (index === 0 ? "Featured video" : "Video") + '</span>' +
         '<span class="ft-card-title">' + esc(video.title) + '</span>' +
         (note ? '<span class="ft-stamp">' + esc(note) + '</span>' : '') + '</span></a></article>';
     }).join("");
@@ -834,7 +834,7 @@
         var lead = page === 1 && index === 0;
         var when = postedDate(meme);
         return '<figure class="meme' + (lead ? ' meme-lead' : '') + '"' + (id ? ' id="' + id + '"' : '') + '>' +
-          '<figcaption><span class="ft-tag">' + (lead ? "Meme of the day" : "Meme") + '</span>' +
+          '<figcaption><span class="ft-tag">' + (lead ? "Featured meme" : "Meme") + '</span>' +
           '<span class="meme-title">' + esc(meme.caption) + '</span>' +
           (when ? '<span class="ft-stamp">' + esc(when) + '</span>' : '') + credit + '</figcaption>' +
           '<button type="button" data-src="' + esc(src) + '" data-alt="' + esc(meme.alt) + '" aria-label="Enlarge meme">' +
@@ -886,7 +886,7 @@
           return '<article class="video' + (page === 1 && index === 0 ? ' video-lead' : '') + '" id="v-' + x.id + '"><div class="frame frame-x">' + fallback +
             '<blockquote class="twitter-tweet" data-dnt="true" data-media-max-width="560">' +
             '<a href="' + esc(x.href) + '">' + esc(video.title || "View on X") + '</a></blockquote></div>' +
-            '<p class="ft-tag">' + (page === 1 && index === 0 ? "Video of the week" : "Video") + '</p>' +
+            '<p class="ft-tag">' + (page === 1 && index === 0 ? "Featured video" : "Video") + '</p>' +
             '<h2>' + esc(video.title) + '</h2>' +
             (postedDate(video) ? '<p class="ft-stamp">' + esc(postedDate(video)) + '</p>' : '') +
             (video.note ? '<p>' + esc(video.note) + '</p>' : '') +
@@ -897,7 +897,7 @@
         if (!id) return "";
         var src = "https://www.youtube-nocookie.com/embed/" + id;
         return '<article class="video' + (page === 1 && index === 0 ? ' video-lead' : '') + '" id="v-' + id + '"><div class="frame"><iframe src="' + src + '" title="' + esc(video.title) + '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>' +
-          '<p class="ft-tag">' + (page === 1 && index === 0 ? "Video of the week" : "Video") + '</p>' +
+          '<p class="ft-tag">' + (page === 1 && index === 0 ? "Featured video" : "Video") + '</p>' +
           '<h2>' + esc(video.title) + '</h2>' +
           (postedDate(video) ? '<p class="ft-stamp">' + esc(postedDate(video)) + '</p>' : '') +
           (video.note ? '<p>' + esc(video.note) + '</p>' : '') +

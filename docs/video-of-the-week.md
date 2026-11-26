@@ -1,6 +1,6 @@
-# Video of the week
+# Featured video
 
-Internal notes for the Friday routine. This file is not linked from the site.
+Internal notes for the Friday routine that fills the site’s Featured video slot. This file is not linked from the site.
 
 Every Friday morning, in America/Edmonton, look back at the seven days just ended and prepend one native SPX6900 video from X to `window.STACKS.videos` in `library.js`. The site deploys from `main`. Work directly on `main`: add the poster, prepend the entry, commit, and push.
 
@@ -91,11 +91,11 @@ Match the tone of the YouTube notes already in `library.js` (source, date, lengt
 
 Commit message, on `main`:
 
-`Add SPX6900 video of the week for week ending YYYY-MM-DD`
+`Add featured SPX6900 video for week ending YYYY-MM-DD`
 
 The date is the Thursday that closed the window. Push to `origin main` so GitHub Pages can build.
 
 ## How the site uses the entry
 
-- Homepage “Video of the week” band: first five videos, poster image, link to `videos/#v-<statusid>`.
+- Homepage “Featured video” band: first five videos, poster image, link to `videos/#v-<statusid>`.
 - `/videos/`: official X embed (`blockquote.twitter-tweet` + `platform.twitter.com/widgets.js`). If the widget fails, the poster remains, linked out to the post, with a “Watch on X” label.
