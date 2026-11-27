@@ -21,7 +21,7 @@ window.STACKS = {
       date: "2026-11-27",
       dek: "American Aeons spent the holiday posting thanks to one another. A small poll that closed the same day suggested many hold little else.",
       image: "articles/images/thanksgiving-on-the-timeline.jpg",
-      image_alt: "A holiday table seen from above, with a laptop, a pumpkin pie and a bar chart.",
+      image_alt: "A 1970s family at a Thanksgiving table, with a glowing gold coin in the sky and an old computer showing a poll chart.",
       image_width: 1280,
       image_height: 720,
       html: [
