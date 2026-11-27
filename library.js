@@ -175,6 +175,13 @@ window.STACKS = {
   ],
   videos: [
     {
+      x: "https://x.com/kidtoshis/status/2126113411880935511",
+      poster: "videos/posters/2026-11-26-every-board-reads-6900.jpg",
+      title: "On the trading floor, every board reads 6900",
+      note: "Kidtoshi, 26 November 2026. About a minute and twenty seconds. A stylised montage of a trading floor whose boards read 6900, fire and crowds, with lines such as “Stop trading” and “Flip the market”, and credit to @trvisXX and @heavypulp.",
+      credit: "Post on X · @kidtoshis"
+    },
+    {
       x: "https://x.com/MustStopMurad/status/2124964992277446975",
       poster: "videos/posters/2026-11-23-only-seen-it-with-bitcoin.jpg",
       title: "Murad has only seen this once before, with Bitcoin",
