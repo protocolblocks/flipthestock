@@ -312,12 +312,6 @@
     };
   }
 
-  function leadPicHtml(article, href) {
-    var img = articleImage(article);
-    if (!img) return "";
-    return '<a class="ft-lead-pic" href="' + href + '"><img class="pic" src="' + esc(img.src) + '" alt="' + esc(img.alt) + '" width="' + img.width + '" height="' + img.height + '"></a>';
-  }
-
   function articlePicHtml(article) {
     var img = articleImage(article);
     if (!img) return "";
@@ -699,13 +693,12 @@
     var lead = articles[0];
     var leadHref = pieceHref("articles/", lead.slug);
     var related = articles.slice(1, 3);
-    var leadPic = leadPicHtml(lead, leadHref);
     var leadHtml = '<div class="ft-lead">' +
       '<a href="' + leadHref + '">' +
       '<p class="ft-tag">' + esc(lead.kicker || "Cover") + '</p>' +
       '<h2>' + esc(lead.title) + '</h2>' +
       '<p class="ft-dek">' + esc(lead.dek) + '</p></a>' +
-      stampHtml(lead.date) + leadPic +
+      stampHtml(lead.date) +
       (related.length ? '<ul class="ft-related">' + related.map(function (article) {
         return '<li><a href="' + pieceHref("articles/", article.slug) + '">' + esc(article.title) + '</a></li>';
       }).join("") + '</ul>' : '') +

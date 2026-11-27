@@ -225,14 +225,6 @@ a.kicker:hover, .kicker:hover { color: var(--claret); }
 .ft-lead .ft-dek { font-size: 17px; }
 .ft-lead a:hover h2, .ft-teaser a:hover h3, .ft-card a:hover .ft-card-title, .ft-feature a:hover .ft-feature-title { color: var(--claret); }
 .ft-lead a:hover, .ft-teaser a:hover, .ft-card a:hover { color: inherit; }
-.ft-lead-pic { display: block; margin-top: 14px; }
-.ft-lead-pic .pic {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-}
 .ft-related { list-style: none; margin: 18px 0 0; padding: 0; }
 .ft-related li { padding: 10px 0; border-top: 1px solid var(--line); }
 .ft-related a { font-size: 17px; font-weight: 600; line-height: 1.25; }
