@@ -294,6 +294,36 @@
     return path;
   }
 
+
+  function articleImage(article) {
+    var src = safeImage(article && article.image);
+    if (!src) return null;
+    var width = parseInt(article.image_width || article.imageWidth, 10);
+    var height = parseInt(article.image_height || article.imageHeight, 10);
+    if (!(width > 0 && height > 0)) {
+      width = 16;
+      height = 9;
+    }
+    return {
+      src: src,
+      alt: article.image_alt || article.imageAlt || "",
+      width: width,
+      height: height
+    };
+  }
+
+  function leadPicHtml(article, href) {
+    var img = articleImage(article);
+    if (!img) return "";
+    return '<a class="ft-lead-pic" href="' + href + '"><img class="pic" src="' + esc(img.src) + '" alt="' + esc(img.alt) + '" width="' + img.width + '" height="' + img.height + '"></a>';
+  }
+
+  function articlePicHtml(article) {
+    var img = articleImage(article);
+    if (!img) return "";
+    return '<figure class="article-pic"><img src="/' + esc(img.src) + '" alt="' + esc(img.alt) + '" width="' + img.width + '" height="' + img.height + '"></figure>';
+  }
+
   function empty(title, text) {
     return '<div class="empty"><div class="idx">Empty</div><h2>' + esc(title) + '</h2><p>' + esc(text) + '</p></div>';
   }
@@ -551,7 +581,10 @@
       "inLanguage": "en",
       "mainEntityOfPage": pieceUrl,
       "url": pieceUrl,
-      "image": ORIGIN + "/assets/og.png",
+      "image": (function () {
+        var img = articleImage(article);
+        return img ? ORIGIN + "/" + img.src : ORIGIN + "/assets/og.png";
+      })(),
       "author": { "@type": "Organization", "name": SITE, "url": ORIGIN + "/" },
       "publisher": { "@type": "Organization", "name": SITE, "url": ORIGIN + "/" },
       "isPartOf": { "@type": "WebSite", "name": SITE, "url": ORIGIN + "/" }
@@ -576,6 +609,7 @@
       (article.date ? '<span class="byline-date">' + formatDate(article.date) + '</span>' : '') + '</p>' +
       '<p class="share"><a href="' + esc(shareX) + '" target="_blank" rel="noopener noreferrer">Share on X</a>' +
       '<button type="button" class="share-copy" data-url="' + esc(pieceUrl) + '">Copy link</button></p></div>' +
+      articlePicHtml(article) +
       '<div class="article-body">' + body + '</div>' +
       '<p class="article-foot">Nothing here is an offer or financial advice. <a class="back" href="./">All articles</a></p></article>' +
       '<aside class="rail" id="article-rail" aria-label="More on this site"></aside></div>' +
@@ -665,10 +699,7 @@
     var lead = articles[0];
     var leadHref = pieceHref("articles/", lead.slug);
     var related = articles.slice(1, 3);
-    var leadImg = safeImage(lead.image);
-    var leadPic = leadImg
-      ? '<a class="ft-lead-pic" href="' + leadHref + '"><img class="pic" src="' + esc(leadImg) + '" alt="' + esc(lead.imageAlt || "") + '"></a>'
-      : "";
+    var leadPic = leadPicHtml(lead, leadHref);
     var leadHtml = '<div class="ft-lead">' +
       '<a href="' + leadHref + '">' +
       '<p class="ft-tag">' + esc(lead.kicker || "Cover") + '</p>' +

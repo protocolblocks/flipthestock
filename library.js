@@ -1,5 +1,7 @@
 /* Add pieces here. Titles and captions are plain text.
    Article html is a short string of <p> blocks.
+   Optional image is a site-relative path, for example
+   "articles/images/slug.jpg", with image_alt.
    Meme src is a path from the memes folder, for example "wall/poster.jpg".
    Meme href, when set, is an https link back to the X post.
    Video id is the 11-character YouTube id.
@@ -17,6 +19,10 @@ window.STACKS = {
       title: "Thanksgiving on the timeline, and a poll on how much is in",
       date: "2026-11-27",
       dek: "American Aeons spent the holiday posting thanks to one another. A small poll that closed the same day suggested many hold little else.",
+      image: "articles/images/thanksgiving-on-the-timeline.jpg",
+      image_alt: "A holiday table seen from above, with a laptop, a pumpkin pie and a bar chart.",
+      image_width: 1280,
+      image_height: 720,
       html: [
         "<p>Thursday was Thanksgiving in the United States, and the SPX6900 corner of X marked it in its usual register. At about 10:10 a.m. Mountain time <a href=\"https://x.com/spxaeon/status/2126001237867073852\">@spxaeon posted</a> an \"SPX6900 Thanksgiving challenge\": \"Name 10 Aeons ur thankful for.\" The account listed ten handles \"in NO ORDER,\" adding that it could list 6,900. By Friday morning the post had about 100 likes, 22 reposts and 11 replies, by X's own counts. Others posted holiday greetings alongside their daily purchase streaks.</p>",
         "<p>@MustStopMurad, the token's best-known advocate, kept to his theme of patience. \"Slow and Steady always wins. Peaceful Life Over Greed,\" he <a href=\"https://x.com/MustStopMurad/status/2125950204452950505\">wrote</a> early on Thursday. A later <a href=\"https://x.com/MustStopMurad/status/2126031911713964534\">post</a>, claiming that what holders are doing \"is going to set us up for life,\" drew about 680 likes and 36,000 views. That is his claim, not a forecast this site makes.</p>",

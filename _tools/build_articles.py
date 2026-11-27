@@ -148,6 +148,52 @@ def article_image(article) -> tuple[str, str, bool]:
     return DEFAULT_OG, DEFAULT_OG_ALT, True
 
 
+
+def local_image_path(article) -> Path | None:
+    value = str(article.get("image") or "").strip().lstrip("/")
+    if not value or not SAFE_PATH_RE.match(value) or ".." in value:
+        return None
+    path = ROOT / value
+    return path if path.is_file() else None
+
+
+def image_dimensions(article) -> tuple[int, int] | None:
+    width = article.get("image_width")
+    height = article.get("image_height")
+    try:
+        if int(width) > 0 and int(height) > 0:
+            return int(width), int(height)
+    except (TypeError, ValueError):
+        pass
+    path = local_image_path(article)
+    if not path:
+        return None
+    try:
+        from PIL import Image
+        with Image.open(path) as im:
+            return im.size
+    except Exception:
+        return None
+
+
+def article_figure(article) -> str:
+    path = local_image_path(article)
+    if not path:
+        return ""
+    src = "/" + str(article.get("image") or "").strip().lstrip("/")
+    alt = str(article.get("image_alt") or article.get("title") or "")
+    dims = image_dimensions(article) or (16, 9)
+    return (
+        '<figure class="article-pic"><img src="%s" alt="%s" width="%s" height="%s"></figure>'
+        % (esc(src), esc(alt), dims[0], dims[1])
+    )
+
+
+def article_figure_block(article) -> str:
+    figure = article_figure(article)
+    return "          %s\n" % figure if figure else ""
+
+
 def sources_html(article) -> str:
     sources = article.get("sources")
     if not sources:
@@ -268,6 +314,13 @@ def page_html(article, articles) -> str:
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">"""
+    else:
+        dims = image_dimensions(article)
+        extras = ['  <meta property="og:image:type" content="image/jpeg">']
+        if dims:
+            extras.append('  <meta property="og:image:width" content="%s">' % dims[0])
+            extras.append('  <meta property="og:image:height" content="%s">' % dims[1])
+        og_image_extras = "\n" + "\n".join(extras)
 
     published_meta = ""
     if published:
@@ -332,7 +385,7 @@ def page_html(article, articles) -> str:
               <button type="button" class="share-copy" data-url="%s">Copy link</button>
             </p>
           </div>
-          <div class="article-body">
+%s          <div class="article-body">
             %s
           </div>
           %s
@@ -398,6 +451,7 @@ def page_html(article, articles) -> str:
         byline_date,
         esc(share_x),
         esc(url),
+        article_figure_block(article),
         body,
         sources,
         related_html(article, articles),
