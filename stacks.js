@@ -810,7 +810,7 @@
     var leadImg = articleImage(lead);
     var meme = memes[0];
     if (leadImg) {
-      featureHtml = '<div class="ft-feature"><a href="' + leadHref + '">' +
+      featureHtml = '<div class="ft-feature ft-feature-fill"><a href="' + leadHref + '">' +
         '<span class="ft-feature-pic">' + imgTag({
           src: leadImg.src,
           alt: leadImg.alt,
@@ -818,10 +818,7 @@
           width: leadImg.width,
           height: leadImg.height,
           eager: true
-        }) + '</span>' +
-        '<span class="ft-feature-panel">' +
-        (lead.kicker ? '<span class="ft-tag">' + esc(lead.kicker) + '</span>' : '') +
-        '<span class="ft-feature-title">' + esc(lead.title) + '</span></span></a></div>';
+        }) + '</span></a></div>';
     } else if (meme) {
       var src = safeImage(meme.src);
       var id = memeAnchor(src);

@@ -64,14 +64,17 @@ class BakedPages(unittest.TestCase):
 
     def test_homepage_feature_uses_latest_article_image(self):
         newest = sorted(self.stacks["articles"], key=lambda a: a["date"], reverse=True)[0]
-        feature = re.search(r'<div class="ft-feature">.*?</div>', self.home, re.S).group(0)
+        feature = re.search(r'<div class="ft-feature[^"]*">.*?</div>', self.home, re.S).group(0)
         meme_row = re.search(r"<!-- baked:meme-row -->(.*?)<!-- /baked:meme-row -->", self.home, re.S).group(1)
         lead_meme = self.stacks["memes"][0]["src"]
         if newest.get("image"):
+            self.assertIn("ft-feature-fill", feature)
             self.assertIn(newest["image"], feature)
             self.assertIn("articles/%s/" % newest["slug"], feature)
             self.assertIn('fetchpriority="high"', feature)
             self.assertIn('class="pic pic-fill"', feature)
+            self.assertNotIn("ft-feature-panel", feature)
+            self.assertNotIn(newest["title"], feature)
             self.assertNotIn("Featured meme", feature)
             self.assertIn(lead_meme, meme_row)
             self.assertIn("Featured meme", meme_row)
