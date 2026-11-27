@@ -176,7 +176,7 @@ a.kicker:hover, .kicker:hover { color: var(--claret); }
 }
 .idx { color: var(--claret); font-weight: 600; }
 
-.pic { width: 100%; object-fit: cover; background: var(--wheat); }
+.pic { width: 100%; height: auto; object-fit: cover; background: var(--wheat); }
 
 /* Front page, modelled on the ft.com homepage. */
 .front { padding-top: 26px; }
@@ -232,7 +232,7 @@ a.kicker:hover, .kicker:hover { color: var(--claret); }
 
 .ft-feature a { display: flex; flex-direction: column; height: 100%; color: inherit; }
 .ft-feature-pic { display: block; background: var(--wheat); }
-.ft-feature-pic .pic { aspect-ratio: 16 / 10; object-fit: contain; }
+.ft-feature-pic .pic { aspect-ratio: 16 / 10; height: auto; object-fit: contain; }
 .ft-feature-panel {
   flex: 1;
   display: block;
