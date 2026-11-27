@@ -117,6 +117,13 @@ window.STACKS = {
   ],
   memes: [
     {
+      src: "wall/2026-11-27-sp6900-daydream.jpg",
+      alt: "A young woman in a navy top sits cross-legged with her eyes closed against a blue sky, as glowing rings stamped with SPX6900 ripple from her head toward a dreamlike forest scene with two anime figures on a wooden bridge. A chrome S&P 6900 logo sits in the corner.",
+      caption: "Meditation, with a ticker. The vision arrives in concentric rings.",
+      credit: "Post on X · @spxaeon",
+      href: "https://x.com/spxaeon/status/2126001237867073852"
+    },
+    {
       src: "wall/2026-11-25-flip-the-stock-market-cap.jpg",
       alt: "A young woman with a dark shag haircut and a black leather jacket stands on an escalator, wearing a faded grey and blue baseball cap embroidered with the words: All I want is to flip the stock market.",
       caption: "The ambition, stitched on a cap. Modest headwear, immodest goal.",
