@@ -30,10 +30,9 @@ import bake_pages  # noqa: E402
 
 ORIGIN = "https://www.flipthestock.com"
 SITE = "Flip the Stock"
-DEFAULT_OG = ORIGIN + "/assets/og.png"
+DEFAULT_OG = ORIGIN + "/assets/og.png?v=2"
 DEFAULT_OG_ALT = (
-    "Flip the Stock masthead on cream paper, with a single black dot "
-    "on an otherwise blank chart."
+    "Flip the Stock on a 1970s drive-in at dusk, with a gold coin on the screen."
 )
 TZ = ZoneInfo("America/Edmonton")
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")

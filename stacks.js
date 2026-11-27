@@ -667,7 +667,7 @@
       "url": pieceUrl,
       "image": (function () {
         var img = articleImage(article);
-        return img ? ORIGIN + "/" + img.src : ORIGIN + "/assets/og.png";
+        return img ? ORIGIN + "/" + img.src : ORIGIN + "/assets/og.png?v=2";
       })(),
       "author": { "@type": "Organization", "name": SITE, "url": ORIGIN + "/" },
       "publisher": { "@type": "Organization", "name": SITE, "url": ORIGIN + "/" },

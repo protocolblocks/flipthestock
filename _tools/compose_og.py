@@ -25,7 +25,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 KICKER = "SPX6900"
 TITLE = "FLIP THE STOCK"
-TAGLINE = "Stop trading and believe in something. You’ll find the SPX6900 community here."
+TAGLINE = "Stop trading and believe in something. The SPX6900 show is starting."
 
 WIDTH, HEIGHT = 1200, 630
 CREAM = (255, 241, 229, 255)
@@ -109,7 +109,7 @@ def blit_text(base: Image.Image, xy: tuple[int, int], text: str, font: ImageFont
     return tw, th
 
 
-def compose(background: Path, y_bias: float = 0.30) -> Image.Image:
+def compose(background: Path, y_bias: float = 0.30, text_top: int | None = None) -> Image.Image:
     src = Image.open(background).convert("RGB")
     card = cover_crop(src, WIDTH, HEIGHT, y_bias=y_bias).convert("RGBA")
     card = Image.alpha_composite(card, left_scrim(card.size))
@@ -150,7 +150,10 @@ def compose(background: Path, y_bias: float = 0.30) -> Image.Image:
     gap_title_tag = 26
     block_h = (kicker_h + gap_kicker_title + title_h + gap_title_tag
                + len(lines) * line_h + max(0, len(lines) - 1) * line_gap)
-    top = max(52, int((HEIGHT - block_h) / 2) - 10)
+    if text_top is None:
+        top = max(52, int((HEIGHT - block_h) / 2) - 10)
+    else:
+        top = max(24, text_top)
 
     y = top
     blit_text(card, (left, y), KICKER, kicker_font, CREAM, tracking=kicker_tracking)
@@ -184,6 +187,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="PNG preview path (default: %s)" % DEFAULT_PREVIEW)
     parser.add_argument("--y-bias", type=float, default=0.30,
                         help="Vertical crop bias; lower keeps more of the top (default: 0.30)")
+    parser.add_argument("--top", type=int, default=None, dest="text_top",
+                        help="Y position of the text block in pixels (default: vertically centred)")
     parser.add_argument("--quality", type=int, default=88, help="JPEG quality for --out (default: 88)")
     args = parser.parse_args(argv)
 
@@ -191,7 +196,7 @@ def main(argv: list[str] | None = None) -> int:
         sys.stderr.write("Background not found: %s\n" % args.background)
         return 1
 
-    card = compose(args.background, y_bias=args.y_bias)
+    card = compose(args.background, y_bias=args.y_bias, text_top=args.text_top)
     if args.preview:
         save_png(card, args.preview)
         print("preview", args.preview, args.preview.stat().st_size)
