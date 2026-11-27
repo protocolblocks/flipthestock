@@ -184,7 +184,7 @@ def article_figure(article) -> str:
     alt = str(article.get("image_alt") or article.get("title") or "")
     dims = image_dimensions(article) or (16, 9)
     return (
-        '<figure class="article-pic"><img src="%s" alt="%s" width="%s" height="%s"></figure>'
+        '<figure class="article-pic"><img src="%s" alt="%s" width="%s" height="%s" decoding="async" fetchpriority="high"></figure>'
         % (esc(src), esc(alt), dims[0], dims[1])
     )
 

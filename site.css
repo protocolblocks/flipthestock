@@ -520,6 +520,43 @@ a.credit:hover { color: var(--teal); }
 .pager button:hover:not(:disabled):not([aria-current="page"]) { color: var(--claret); }
 .pager button:disabled { color: var(--line); cursor: default; }
 .frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.yt-play {
+  appearance: none;
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.yt-play img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+.yt-play .ft-play {
+  left: 50%;
+  top: 50%;
+  bottom: auto;
+  width: 56px;
+  height: 56px;
+  transform: translate(-50%, -50%);
+}
+.yt-play .ft-play::after {
+  left: 22px;
+  top: 16px;
+  border-left-width: 16px;
+  border-top-width: 12px;
+  border-bottom-width: 12px;
+}
+.yt-play:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: -4px;
+}
 
 .article { max-width: 68ch; padding-top: 8px; }
 .back { display: inline-block; margin-bottom: 18px; }

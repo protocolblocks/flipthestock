@@ -315,7 +315,71 @@
   function articlePicHtml(article) {
     var img = articleImage(article);
     if (!img) return "";
-    return '<figure class="article-pic"><img src="/' + esc(img.src) + '" alt="' + esc(img.alt) + '" width="' + img.width + '" height="' + img.height + '"></figure>';
+    return '<figure class="article-pic">' + imgTag({
+      src: "/" + img.src,
+      alt: img.alt,
+      width: img.width,
+      height: img.height,
+      eager: true
+    }) + '</figure>';
+  }
+
+  function entrySize(entry, fallbackW, fallbackH) {
+    var width = parseInt(entry && entry.width, 10);
+    var height = parseInt(entry && entry.height, 10);
+    if (width > 0 && height > 0) return { width: width, height: height };
+    if (fallbackW > 0 && fallbackH > 0) return { width: fallbackW, height: fallbackH };
+    return { width: 0, height: 0 };
+  }
+
+  function imgTag(opts) {
+    var parts = ['src="' + esc(opts.src) + '"', 'alt="' + esc(opts.alt || "") + '"'];
+    if (opts.className) parts.push('class="' + esc(opts.className) + '"');
+    if (opts.width > 0 && opts.height > 0) {
+      parts.push('width="' + opts.width + '"');
+      parts.push('height="' + opts.height + '"');
+    }
+    parts.push('decoding="async"');
+    if (opts.eager) parts.push('fetchpriority="high"');
+    else parts.push('loading="lazy"');
+    if (opts.extra) parts.push(opts.extra);
+    return "<img " + parts.join(" ") + ">";
+  }
+
+  function playYoutubeButton(button) {
+    var id = button && button.getAttribute("data-youtube-id") || "";
+    if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return;
+    var frame = button.closest(".frame");
+    if (!frame) return;
+    var title = button.getAttribute("data-title") || "";
+    var iframe = document.createElement("iframe");
+    iframe.src = "https://www.youtube-nocookie.com/embed/" + id + "?autoplay=1";
+    iframe.title = title;
+    iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
+    iframe.setAttribute("allowfullscreen", "");
+    frame.innerHTML = "";
+    frame.appendChild(iframe);
+  }
+
+  function bindYoutubePlay(root) {
+    if (!root || root.getAttribute("data-yt-play") === "on") return;
+    root.setAttribute("data-yt-play", "on");
+    root.addEventListener("click", function (event) {
+      var button = event.target.closest("button.yt-play[data-youtube-id]");
+      if (!button || !root.contains(button)) return;
+      playYoutubeButton(button);
+    });
+  }
+
+  function youtubePosterHtml(video, eager) {
+    var id = youtubeId(video);
+    if (!id) return "";
+    var title = video.title || "video";
+    var thumb = "https://i.ytimg.com/vi/" + id + "/hqdefault.jpg";
+    return '<div class="frame"><button type="button" class="yt-play" data-youtube-id="' + esc(id) + '" data-title="' + esc(title) + '" aria-label="Play ' + esc(title) + '">' +
+      imgTag({ src: thumb, alt: "", width: 480, height: 360, eager: !!eager }) +
+      '<span class="ft-play" aria-hidden="true"></span></button>' +
+      '<noscript><iframe src="https://www.youtube-nocookie.com/embed/' + id + '" title="' + esc(title) + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></noscript></div>';
   }
 
   function empty(title, text) {
@@ -324,6 +388,7 @@
 
   var VIDEO_PAGE_SIZE = 7;
   var MEME_PAGE_SIZE = 7;
+  var ARTICLE_PAGE_SIZE = 10;
 
   function youtubeId(video) {
     var id = String(video && video.id || "");
@@ -515,27 +580,52 @@
     var articles = sortedArticles();
     if (!articles.length) {
       root.innerHTML = empty("The shelf is empty.", "Written pieces will be filed here, newest first.");
+      placePager(root, 1, 0);
       return;
     }
-    var lead = articles[0];
-    var leadHref = pieceHref("", lead.slug);
-    var html = '<a class="sec-lead" href="' + leadHref + '">' +
-      '<span class="ft-tag">' + esc(lead.kicker || "Latest") + '</span>' +
-      '<span class="sec-lead-title">' + esc(lead.title) + '</span>' +
-      '<span class="ft-dek">' + esc(lead.dek) + '</span>' +
-      '<span class="ft-stamp">' + esc(stampText(lead.date)) + '</span></a>';
-    var lastDate = null;
-    html += '<h2 class="col-head">Latest articles</h2><ol class="stream">' + articles.slice(1).map(function (article) {
-      var showDate = article.date !== lastDate;
-      lastDate = article.date;
-      return '<li class="stream-item"><p class="stream-date">' + (showDate ? formatDate(article.date) : "") + '</p>' +
-        '<a class="stream-body" href="' + pieceHref("", article.slug) + '">' +
-        '<span class="ft-tag">' + esc(article.kicker || "Latest") + '</span>' +
-        '<span class="stream-title">' + esc(article.title) + '</span>' +
-        '<span class="ft-dek">' + esc(article.dek) + '</span>' +
-        '<span class="ft-stamp">' + esc(stampText(article.date)) + '</span></a></li>';
-    }).join("") + '</ol>';
-    root.innerHTML = html;
+
+    function streamItems(list, lastDate) {
+      return list.map(function (article) {
+        var showDate = article.date !== lastDate;
+        lastDate = article.date;
+        return '<li class="stream-item"><p class="stream-date">' + (showDate ? formatDate(article.date) : "") + '</p>' +
+          '<a class="stream-body" href="' + pieceHref("", article.slug) + '">' +
+          '<span class="ft-tag">' + esc(article.kicker || "Latest") + '</span>' +
+          '<span class="stream-title">' + esc(article.title) + '</span>' +
+          '<span class="ft-dek">' + esc(article.dek) + '</span>' +
+          '<span class="ft-stamp">' + esc(stampText(article.date)) + '</span></a></li>';
+      }).join("");
+    }
+
+    function draw(page, opts) {
+      opts = opts || {};
+      var totalPages = Math.ceil(articles.length / ARTICLE_PAGE_SIZE);
+      page = clampPage(page, totalPages);
+      var slice = articles.slice((page - 1) * ARTICLE_PAGE_SIZE, page * ARTICLE_PAGE_SIZE);
+      var html = "";
+      if (page === 1 && slice.length) {
+        var lead = slice[0];
+        html += '<a class="sec-lead" href="' + pieceHref("", lead.slug) + '">' +
+          '<span class="ft-tag">' + esc(lead.kicker || "Latest") + '</span>' +
+          '<span class="sec-lead-title">' + esc(lead.title) + '</span>' +
+          '<span class="ft-dek">' + esc(lead.dek) + '</span>' +
+          '<span class="ft-stamp">' + esc(stampText(lead.date)) + '</span></a>';
+        html += '<h2 class="col-head">Latest articles</h2><ol class="stream">' + streamItems(slice.slice(1), lead.date) + '</ol>';
+      } else {
+        html += '<h2 class="col-head">Latest articles</h2><ol class="stream">' + streamItems(slice, null) + '</ol>';
+      }
+      root.innerHTML = html;
+      placePager(root, page, totalPages, function (next) {
+        setPageQuery(next);
+        draw(next, { scroll: "grid" });
+      }, "Article pages");
+      if (opts.scroll === "grid") {
+        var section = document.getElementById("main") || root;
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    draw(clampPage(pageFromSearch(), Math.ceil(articles.length / ARTICLE_PAGE_SIZE)));
   };
 
   window.renderPiece = function (root) {
@@ -711,7 +801,15 @@
       var id = memeAnchor(src);
       var href = "memes/" + (id ? "#" + id : "");
       featureHtml = '<div class="ft-feature"><a href="' + href + '">' +
-        '<span class="ft-feature-pic"><img class="pic" src="memes/' + esc(src) + '" alt="' + esc(meme.alt || "") + '" onerror="this.onerror=null;this.src=\'assets/cover.jpg\'"></span>' +
+        '<span class="ft-feature-pic">' + imgTag({
+          src: "memes/" + src,
+          alt: meme.alt || "",
+          className: "pic",
+          width: entrySize(meme).width,
+          height: entrySize(meme).height,
+          eager: true,
+          extra: 'onerror="this.onerror=null;this.src=\'assets/cover.jpg\'"'
+        }) + '</span>' +
         '<span class="ft-feature-panel"><span class="ft-tag">Featured meme</span>' +
         '<span class="ft-feature-title">' + esc(meme.caption || "") + '</span></span></a></div>';
     }
@@ -790,7 +888,10 @@
         : '<a href="memes/">';
       var when = postedDate(meme);
       return '<article class="ft-card">' + open +
-        '<span class="ft-thumb ft-thumb-meme"><img class="pic" src="memes/' + esc(src) + '" alt="' + esc(meme.alt || "") + '"></span>' +
+        '<span class="ft-thumb ft-thumb-meme">' + imgTag({
+          src: "memes/" + src, alt: meme.alt || "", className: "pic",
+          width: entrySize(meme).width, height: entrySize(meme).height
+        }) + '</span>' +
         '<span class="ft-card-body"><span class="ft-tag">Meme</span>' +
         '<span class="ft-card-title">' + esc(meme.caption) + '</span>' +
         (when ? '<span class="ft-stamp">' + esc(when) + '</span>' : '') + '</span></a></article>';
@@ -812,7 +913,11 @@
         ? posterSrc(video.poster)
         : "https://i.ytimg.com/vi/" + youtubeId(video) + "/hqdefault.jpg";
       return '<article class="ft-card"><a href="videos/#v-' + key + '">' +
-        '<span class="ft-thumb"><img class="pic" src="' + esc(thumb) + '" alt=""><span class="ft-play" aria-hidden="true"></span></span>' +
+        '<span class="ft-thumb">' + imgTag({
+          src: thumb, alt: "", className: "pic",
+          width: (x ? entrySize(video, 16, 9) : { width: 480, height: 360 }).width,
+          height: (x ? entrySize(video, 16, 9) : { width: 480, height: 360 }).height
+        }) + '<span class="ft-play" aria-hidden="true"></span></span>' +
         '<span class="ft-card-body"><span class="ft-tag">' + (index === 0 ? "Featured video" : "Video") + '</span>' +
         '<span class="ft-card-title">' + esc(video.title) + '</span>' +
         (note ? '<span class="ft-stamp">' + esc(note) + '</span>' : '') + '</span></a></article>';
@@ -862,7 +967,11 @@
           '<span class="meme-title">' + esc(meme.caption) + '</span>' +
           (when ? '<span class="ft-stamp">' + esc(when) + '</span>' : '') + credit + '</figcaption>' +
           '<button type="button" data-src="' + esc(src) + '" data-alt="' + esc(meme.alt) + '" aria-label="Enlarge meme">' +
-          '<img src="' + esc(src) + '" alt="' + esc(meme.alt || "Meme " + number) + '"></button></figure>';
+          imgTag({
+          src: src, alt: meme.alt || ("Meme " + number),
+          width: entrySize(meme).width, height: entrySize(meme).height,
+          eager: lead
+        }) + '</button></figure>';
       }).join("");
       placePager(root, page, totalPages, function (next) {
         setPageQuery(next);
@@ -901,7 +1010,11 @@
           var poster = posterSrc(video.poster);
           var fallback = poster
             ? '<a class="x-fallback" href="' + esc(x.href) + '" target="_blank" rel="noopener noreferrer">' +
-              '<img src="' + esc(poster) + '" alt="">' +
+              imgTag({
+                src: poster, alt: "",
+                width: entrySize(video).width, height: entrySize(video).height,
+                eager: page === 1 && index === 0
+              }) +
               '<span class="x-fallback-label">Watch on X</span></a>'
             : "";
           var credit = video.credit
@@ -919,8 +1032,8 @@
         }
         var id = youtubeId(video);
         if (!id) return "";
-        var src = "https://www.youtube-nocookie.com/embed/" + id;
-        return '<article class="video' + (page === 1 && index === 0 ? ' video-lead' : '') + '" id="v-' + id + '"><div class="frame"><iframe src="' + src + '" title="' + esc(video.title) + '" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>' +
+        return '<article class="video' + (page === 1 && index === 0 ? ' video-lead' : '') + '" id="v-' + id + '">' +
+          youtubePosterHtml(video, page === 1 && index === 0) +
           '<p class="ft-tag">' + (page === 1 && index === 0 ? "Featured video" : "Video") + '</p>' +
           '<h2>' + esc(video.title) + '</h2>' +
           (postedDate(video) ? '<p class="ft-stamp">' + esc(postedDate(video)) + '</p>' : '') +
@@ -928,6 +1041,12 @@
           '</article>';
       }).join("");
       loadTwitterWidgets(root);
+      bindYoutubePlay(root);
+      var hashId = String(location.hash || "").replace(/^#v-/, "");
+      if (/^[A-Za-z0-9_-]{11}$/.test(hashId)) {
+        var playBtn = root.querySelector('button.yt-play[data-youtube-id="' + hashId + '"]');
+        if (playBtn) playYoutubeButton(playBtn);
+      }
       placePager(root, page, totalPages, function (next) {
         setPageQuery(next);
         draw(next, { scroll: "grid" });

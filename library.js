@@ -3,6 +3,7 @@
    Optional image is a site-relative path, for example
    "articles/images/slug.jpg", with image_alt.
    Meme src is a path from the memes folder, for example "wall/poster.jpg".
+   Optional width and height on memes and video posters are the intrinsic pixel size.
    Meme href, when set, is an https link back to the X post.
    Video id is the 11-character YouTube id.
    Events: soonest dated items first, then standing regulars, then recent past.
@@ -137,6 +138,8 @@ window.STACKS = {
   memes: [
     {
       src: "wall/2026-11-27-sp6900-daydream.jpg",
+      width: 811,
+      height: 825,
       alt: "A young woman in a navy top sits cross-legged with her eyes closed against a blue sky, as glowing rings stamped with SPX6900 ripple from her head toward a dreamlike forest scene with two anime figures on a wooden bridge. A chrome S&P 6900 logo sits in the corner.",
       caption: "Meditation, with a ticker. The vision arrives in concentric rings.",
       credit: "Post on X · @spxaeon",
@@ -144,6 +147,8 @@ window.STACKS = {
     },
     {
       src: "wall/2026-11-25-flip-the-stock-market-cap.jpg",
+      width: 904,
+      height: 1200,
       alt: "A young woman with a dark shag haircut and a black leather jacket stands on an escalator, wearing a faded grey and blue baseball cap embroidered with the words: All I want is to flip the stock market.",
       caption: "The ambition, stitched on a cap. Modest headwear, immodest goal.",
       credit: "Post on X · @rootsie143",
@@ -151,6 +156,8 @@ window.STACKS = {
     },
     {
       src: "wall/2026-11-24-flip-the-stock-market-poster.jpg",
+      width: 960,
+      height: 1200,
       alt: "An anime-style illustration of a long-haired blonde elf with a cross painted on her cheek, seated on a stool beside a small winged figure holding an SPX6900 coin. Text reads: be delusional enough to believe that it's possible, be disciplined enough to prove yourself right. SPX6900, flip the stock market.",
       caption: "Delusion first, discipline second. The poster asks for both.",
       credit: "Post on X · @MustStopMurad",
@@ -158,6 +165,8 @@ window.STACKS = {
     },
     {
       src: "wall/2026-11-24-spiritual-gold.jpg",
+      width: 956,
+      height: 1205,
       alt: "A three-row graphic: a gold coin labeled Physical Gold (Backed by Physics), the Bitcoin logo labeled Digital Gold (Backed by Math), and an SPX6900 coin labeled Spiritual Gold (Backed by Belief).",
       caption: "Three kinds of gold. The last is SPX6900, backed by belief.",
       credit: "Post on X · @matuaxbt",
@@ -165,6 +174,8 @@ window.STACKS = {
     },
     {
       src: "wall/2026-11-23-painting-the-wall.jpg",
+      width: 2048,
+      height: 1150,
       alt: "A man in a backwards cap and tank top rolls teal paint onto a wall, captioned Me in November 2026 instead of buying SPX6900 at $0.25.",
       caption: "The regret trade. A fresh coat of paint where a position should have been.",
       credit: "Post on X · @ChandlerCharts",
@@ -172,6 +183,8 @@ window.STACKS = {
     },
     {
       src: "wall/stop-trading.jpg",
+      width: 960,
+      height: 989,
       alt: "Concentric arrows around an SPX6900 coin: DCA, hold, chill, shill, stop trading, believe in something, persist forever, flip the stock market.",
       caption: "The loop. Stop trading on the inside, flip the stock market on the outside.",
       credit: "Post on X · @spx6900",
@@ -179,6 +192,8 @@ window.STACKS = {
     },
     {
       src: "wall/no-chart.jpg",
+      width: 840,
+      height: 520,
       alt: "A dark empty chart with green text reading We are here and an arrow pointing at a single dot.",
       caption: "Murad’s chart. One dot, and the rest of the grid left blank.",
       credit: "Post on X · @MustStopMurad",
@@ -186,6 +201,8 @@ window.STACKS = {
     },
     {
       src: "wall/nobody.jpg",
+      width: 1179,
+      height: 1597,
       alt: "A pixel-art portrait captioned I am truly only interested in flipping the stock market.",
       caption: "Nobody asked. The official account answered anyway.",
       credit: "Post on X · @spx6900",
@@ -193,6 +210,8 @@ window.STACKS = {
     },
     {
       src: "wall/binance.jpg",
+      width: 1170,
+      height: 1131,
       alt: "A two-panel meme. Top, a remote pointed at a football game, labeled Others on Sunday. Bottom, a figure in a church pew under an SPX6900 logo, labeled Me on Sunday.",
       caption: "Sunday, in the reply the official account sent Binance.",
       credit: "Post on X · @spx6900",
@@ -208,6 +227,8 @@ window.STACKS = {
     {
       x: "https://x.com/kidtoshis/status/2126113411880935511",
       poster: "videos/posters/2026-11-26-every-board-reads-6900.jpg",
+      width: 1080,
+      height: 1080,
       title: "On the trading floor, every board reads 6900",
       note: "Kidtoshi, 26 November 2026. About a minute and twenty seconds. A stylised montage of a trading floor whose boards read 6900, fire and crowds, with lines such as “Stop trading” and “Flip the market”, and credit to @trvisXX and @heavypulp.",
       credit: "Post on X · @kidtoshis"
@@ -215,6 +236,8 @@ window.STACKS = {
     {
       x: "https://x.com/MustStopMurad/status/2124964992277446975",
       poster: "videos/posters/2026-11-23-only-seen-it-with-bitcoin.jpg",
+      width: 1200,
+      height: 675,
       title: "Murad has only seen this once before, with Bitcoin",
       note: "MustStopMurad, 23 November 2026. About fifty-three seconds. The clip sets SPX6900 next to Bitcoin, with credit to @STPC_Pro and @Cryptic_Mang.",
       credit: "Post on X · @MustStopMurad"
