@@ -62,10 +62,25 @@ class BakedPages(unittest.TestCase):
         self.assertEqual(len(re.findall(r"<h1\b", self.home)), 1)
         self.assertIn('<h1 class="logo-h1"><a class="logo" href="./">Flip the Stock</a></h1>', self.home)
 
-    def test_homepage_meme_lead_is_first_meme(self):
-        lead = self.stacks["memes"][0]["src"]
+    def test_homepage_feature_uses_latest_article_image(self):
+        newest = sorted(self.stacks["articles"], key=lambda a: a["date"], reverse=True)[0]
         feature = re.search(r'<div class="ft-feature">.*?</div>', self.home, re.S).group(0)
-        self.assertIn("memes/" + lead, feature)
+        meme_row = re.search(r"<!-- baked:meme-row -->(.*?)<!-- /baked:meme-row -->", self.home, re.S).group(1)
+        lead_meme = self.stacks["memes"][0]["src"]
+        if newest.get("image"):
+            self.assertIn(newest["image"], feature)
+            self.assertIn("articles/%s/" % newest["slug"], feature)
+            self.assertIn('fetchpriority="high"', feature)
+            self.assertIn('class="pic pic-fill"', feature)
+            self.assertNotIn("Featured meme", feature)
+            self.assertIn(lead_meme, meme_row)
+            self.assertIn("Featured meme", meme_row)
+            self.assertNotIn('fetchpriority="high"', meme_row)
+            self.assertIn('loading="lazy"', meme_row)
+        else:
+            self.assertIn("memes/" + lead_meme, feature)
+            self.assertIn("Featured meme", feature)
+            self.assertNotIn(lead_meme, meme_row)
 
     def test_homepage_lead_story_is_newest_article(self):
         newest = sorted(self.stacks["articles"], key=lambda a: a["date"], reverse=True)[0]

@@ -748,6 +748,18 @@
     return validMemes();
   }
 
+  // The hero feature slot uses the latest article's lead image when it has one.
+  // Otherwise it keeps today's featured meme, and the Memes row stays unchanged.
+  function latestArticleImage() {
+    var articles = sortedArticles();
+    return articles.length ? articleImage(articles[0]) : null;
+  }
+
+  function frontMemeStrip() {
+    var memes = frontMemes();
+    return latestArticleImage() ? memes.slice(0, 4) : memes.slice(1, 5);
+  }
+
   function frontGatheringHtml(eventsHref) {
     var online = firstUpcomingOfType("online");
     var inPerson = firstUpcomingOfType("in-person");
@@ -795,8 +807,22 @@
       '</div>';
 
     var featureHtml = '<div class="ft-feature"></div>';
+    var leadImg = articleImage(lead);
     var meme = memes[0];
-    if (meme) {
+    if (leadImg) {
+      featureHtml = '<div class="ft-feature"><a href="' + leadHref + '">' +
+        '<span class="ft-feature-pic">' + imgTag({
+          src: leadImg.src,
+          alt: leadImg.alt,
+          className: "pic pic-fill",
+          width: leadImg.width,
+          height: leadImg.height,
+          eager: true
+        }) + '</span>' +
+        '<span class="ft-feature-panel">' +
+        (lead.kicker ? '<span class="ft-tag">' + esc(lead.kicker) + '</span>' : '') +
+        '<span class="ft-feature-title">' + esc(lead.title) + '</span></span></a></div>';
+    } else if (meme) {
       var src = safeImage(meme.src);
       var id = memeAnchor(src);
       var href = "memes/" + (id ? "#" + id : "");
@@ -874,12 +900,13 @@
   }
 
   window.renderFrontMemes = function (root) {
-    var memes = frontMemes().slice(1, 5);
+    var featuredInStrip = !!latestArticleImage();
+    var memes = frontMemeStrip();
     if (!memes.length) {
       root.innerHTML = empty("Nothing on the wall.", "Meme images will be hung here.");
       return;
     }
-    root.innerHTML = memes.map(function (meme) {
+    root.innerHTML = memes.map(function (meme, index) {
       var src = safeImage(meme.src);
       if (!src) return "";
       var href = safePostUrl(meme.href);
@@ -887,12 +914,13 @@
         ? '<a href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">'
         : '<a href="memes/">';
       var when = postedDate(meme);
+      var tag = featuredInStrip && index === 0 ? "Featured meme" : "Meme";
       return '<article class="ft-card">' + open +
         '<span class="ft-thumb ft-thumb-meme">' + imgTag({
           src: "memes/" + src, alt: meme.alt || "", className: "pic",
           width: entrySize(meme).width, height: entrySize(meme).height
         }) + '</span>' +
-        '<span class="ft-card-body"><span class="ft-tag">Meme</span>' +
+        '<span class="ft-card-body"><span class="ft-tag">' + tag + '</span>' +
         '<span class="ft-card-title">' + esc(meme.caption) + '</span>' +
         (when ? '<span class="ft-stamp">' + esc(when) + '</span>' : '') + '</span></a></article>';
     }).join("");
