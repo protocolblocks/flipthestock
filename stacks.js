@@ -697,8 +697,8 @@
       ? '<section class="ft-slice" aria-label="Top stories">' +
         '<h2 class="ft-slice-head"><a href="articles/">Top stories</a></h2>' +
         '<div class="ft-row">' + top.map(function (a) { return teaserHtml(a, true); }).join("") +
-        '<aside class="ft-most" id="most-read-slot" aria-label="Most read"></aside></div></section>'
-      : '<section class="ft-slice" aria-label="Most read"><div class="ft-row"><aside class="ft-most" id="most-read-slot" aria-label="Most read"></aside></div></section>';
+        '<aside class="ft-most" id="most-read-slot" aria-label="Latest"></aside></div></section>'
+      : '<section class="ft-slice" aria-label="Latest"><div class="ft-row"><aside class="ft-most" id="most-read-slot" aria-label="Latest"></aside></div></section>';
 
     root.innerHTML = '<section class="ft-hero" aria-label="Lead stories">' + leadHtml + featureHtml + picks + '</section>' + topHtml;
     renderMostRead(document.getElementById("most-read-slot"));
@@ -711,17 +711,17 @@
       return '<li><span class="ft-num">' + (index + 1) + '</span><a href="' + pieceHref(prefix + "articles/", article.slug) + '">' +
         esc(article.title) + '</a></li>';
     }).join("");
-    root.innerHTML = '<p class="ft-most-head"><a href="' + esc(prefix) + 'articles/">Most read</a></p>' +
+    root.innerHTML = '<p class="ft-most-head"><a href="' + esc(prefix) + 'articles/">Latest</a></p>' +
       (most ? '<ol class="ft-most-list">' + most + '</ol>' : '<p class="event-empty">Nothing filed yet.</p>');
   };
 
-  /* Right rail for section and article pages, like ft.com's: Most read,
+  /* Right rail for section and article pages, like ft.com's: Latest,
      the next gathering, and a newsletter nudge. */
   window.renderRail = function (root, prefix, opts) {
     if (!root) return;
     opts = opts || {};
     prefix = prefix || "../";
-    var html = '<section class="rail-block" aria-label="Most read"><div class="ft-most" data-most></div></section>';
+    var html = '<section class="rail-block" aria-label="Latest"><div class="ft-most" data-most></div></section>';
     if (!opts.noEvents) {
       var online = firstUpcomingOfType("online");
       var inPerson = firstUpcomingOfType("in-person");

@@ -100,9 +100,9 @@ const jobs = {
 
 // Sub-elements the renderers fill in after drawing their root.
 const fills = [
-  ['<aside class="ft-most" id="most-read-slot" aria-label="Most read"></aside>',
+  ['<aside class="ft-most" id="most-read-slot" aria-label="Latest"></aside>',
     function () { return elements["most-read-slot"]; },
-    function (inner) { return '<aside class="ft-most" id="most-read-slot" aria-label="Most read">' + inner + "</aside>"; }],
+    function (inner) { return '<aside class="ft-most" id="most-read-slot" aria-label="Latest">' + inner + "</aside>"; }],
   ['<div class="ft-most" data-most></div>',
     function (root) { return root.children["[data-most]"]; },
     function (inner) { return '<div class="ft-most" data-most>' + inner + "</div>"; }]
