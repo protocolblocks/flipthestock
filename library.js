@@ -12,6 +12,19 @@
 window.STACKS = {
   articles: [
     {
+      slug: "thanksgiving-on-the-timeline",
+      kicker: "Community",
+      title: "Thanksgiving on the timeline, and a poll on how much is in",
+      date: "2026-11-27",
+      dek: "American Aeons spent the holiday posting thanks to one another. A small poll that closed the same day suggested many hold little else.",
+      html: [
+        "<p>Thursday was Thanksgiving in the United States, and the SPX6900 corner of X marked it in its usual register. At about 10:10 a.m. Mountain time <a href=\"https://x.com/spxaeon/status/2126001237867073852\">@spxaeon posted</a> an \"SPX6900 Thanksgiving challenge\": \"Name 10 Aeons ur thankful for.\" The account listed ten handles \"in NO ORDER,\" adding that it could list 6,900. By Friday morning the post had about 100 likes, 22 reposts and 11 replies, by X's own counts. Others posted holiday greetings alongside their daily purchase streaks.</p>",
+        "<p>@MustStopMurad, the token's best-known advocate, kept to his theme of patience. \"Slow and Steady always wins. Peaceful Life Over Greed,\" he <a href=\"https://x.com/MustStopMurad/status/2125950204452950505\">wrote</a> early on Thursday. A later <a href=\"https://x.com/MustStopMurad/status/2126031911713964534\">post</a>, claiming that what holders are doing \"is going to set us up for life,\" drew about 680 likes and 36,000 views. That is his claim, not a forecast this site makes.</p>",
+        "<p>The same morning a three-day <a href=\"https://x.com/Insight_Voyager/status/2124794720916578382\">poll</a> by @Insight_Voyager closed. It asked SPX holders what share of their crypto holdings the token makes up. Of 106 votes, 79 chose \"&gt; 69%,\" 13 chose 30 to 69 per cent, eight chose 10 to 30 per cent and six chose under 10 per cent. The account <a href=\"https://x.com/Insight_Voyager/status/2126130406697402522\">summed it up</a> on Thursday evening: 74.5 per cent of respondents are \"essentially full ported.\"</p>",
+        "<p>An X poll is self-selected and anonymous, and 106 votes is a small sample. It says something about who answers polls on SPX6900 accounts, and little about holders at large.</p>"
+      ].join(""),
+    },
+    {
       slug: "wallstreetbets-believe-in-something",
       kicker: "Community",
       title: "WallStreetBets posted three words. Aeons answered",
