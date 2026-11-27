@@ -298,7 +298,7 @@
     return '<div class="empty"><div class="idx">Empty</div><h2>' + esc(title) + '</h2><p>' + esc(text) + '</p></div>';
   }
 
-  var VIDEO_PAGE_SIZE = 9;
+  var VIDEO_PAGE_SIZE = 6;
   var MEME_PAGE_SIZE = 6;
 
   function youtubeId(video) {
