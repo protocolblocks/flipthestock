@@ -5,7 +5,8 @@ Run from the repo root after adding or editing articles:
     python3 _tools/build_articles.py
 
 It writes articles/<slug>/index.html (with the shared chrome from
-sync_chrome.py), refreshes sitemap.xml and /feed.xml, bakes the lists on the homepage and the
+sync_chrome.py), writes a static page and share image for every video and meme,
+refreshes sitemap.xml and /feed.xml, bakes the lists on the homepage and the
 Articles, Memes, Videos and Events pages into their HTML (bake_pages.py), and removes
 generated pages whose slugs are no longer in library.js. Jekyll skips
 folders starting with "_", so this file is not published.
@@ -27,6 +28,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import sync_chrome  # noqa: E402
 import bake_pages  # noqa: E402
+import media_pages  # noqa: E402
 
 ORIGIN = "https://www.flipthestock.com"
 SITE = "Flip the Stock"
@@ -575,8 +577,16 @@ def update_sitemap(articles: list, stacks: dict) -> bool:
     ]
     for article in articles:
         lines.append(sitemap_url("/articles/%s/" % article["slug"], article_date(article)))
+    meme_items = media_pages.valid_memes(stacks if isinstance(stacks, dict) else {})
+    video_items = media_pages.valid_videos(stacks if isinstance(stacks, dict) else {})
+    mslugs = media_pages.meme_slugs(meme_items)
+    vslugs = media_pages.video_slugs(video_items)
     lines.append(sitemap_url("/memes/", lastmod_for("/memes/", newest_date(meme_dates), previous, "2026-11-23")))
+    for path, lastmod in media_pages.sitemap_entries([], meme_items, {}, mslugs):
+        lines.append(sitemap_url(path, lastmod_for(path, lastmod, previous, lastmod)))
     lines.append(sitemap_url("/videos/", lastmod_for("/videos/", newest_date(video_dates), previous, "2026-11-23")))
+    for path, lastmod in media_pages.sitemap_entries(video_items, [], vslugs, {}):
+        lines.append(sitemap_url(path, lastmod_for(path, lastmod, previous, lastmod)))
     # Event dates are occurrence times, not page-edit dates, so keep the
     # existing lastmod unless the sitemap was missing this URL.
     lines.append(sitemap_url("/events/", lastmod_for("/events/", "", previous, "2026-11-24")))

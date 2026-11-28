@@ -29,6 +29,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 RENDER = Path(__file__).resolve().parent / "bake_render.js"
+import media_pages  # noqa: E402
 
 # Page -> ids of the elements that get a baked block. The renderer calls for
 # each one live in bake_render.js and in the page's inline script.
@@ -87,8 +88,14 @@ def bake_block(page_html: str, element_id: str, inner: str, name: str) -> str:
 
 
 def bake(check: bool = False) -> list[str]:
-    """Bake every block. Returns the pages that changed (or would change)."""
+    """Bake every block, plus a static page for each video and meme."""
     rendered = render_all()
+    stacks = media_pages.load_stacks()
+    videos = media_pages.valid_videos(stacks)
+    memes = media_pages.valid_memes(stacks)
+    redirects = media_pages.hash_redirects(
+        videos, memes, media_pages.video_slugs(videos), media_pages.meme_slugs(memes)
+    )
     changed = []
     for page, ids in PAGES.items():
         path = ROOT / page
@@ -103,10 +110,13 @@ def bake(check: bool = False) -> list[str]:
             if "<!--" in inner:
                 raise BakeError("%s: rendered #%s contains a comment" % (page, element_id))
             new = bake_block(new, element_id, inner, page)
+        if page in redirects:
+            new = media_pages.inject_hash_redirect(new, redirects[page])
         if new != old:
             changed.append(page)
             if not check:
                 path.write_text(new)
+    changed.extend(media_pages.publish(stacks=stacks, check=check))
     return changed
 
 

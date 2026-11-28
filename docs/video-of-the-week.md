@@ -47,7 +47,7 @@ A YouTube winner uses the existing YouTube shape, `{ id, title, note }`, with th
 
 Skip a candidate if any of these already appear in `library.js`:
 
-- The same X status id (the digits in `/status/<id>`, which becomes `#v-<id>` on the site)
+- The same X status id (the digits in `/status/<id>`, which is the old `#v-<id>` alias on `/videos/`)
 - The same canonical post URL (`https://x.com/<user>/status/<id>`), ignoring `twitter.com`, `www`, and query strings
 - A quote, repost, or obvious re-upload of a video already filed (including the existing YouTube interviews, if the X post is just a clip of one of those)
 
@@ -93,6 +93,15 @@ Match the tone of the YouTube notes already in `library.js` (source, date, lengt
 3. Save it as `videos/posters/<yyyy-mm-dd>-<short-slug>.jpg`, using the post’s Edmonton date and a lowercase hyphenated slug from the title (for example `2026-11-21-persist-on-the-timeline.jpg`).
 4. Commit the JPEG with the `library.js` change. Do not commit temporary test posters.
 
+## Build
+
+After prepending the entry (and adding the poster, if any), from the repo root run:
+
+    python3 _tools/sync_chrome.py
+    python3 _tools/build_articles.py
+
+That writes the new `/videos/<slug>/` page, a 1200×630 share image under `videos/share/`, the sitemap row, and the baked homepage and Videos index links. Commit those generated files with the `library.js` change (and the poster). Do not hand-write the page.
+
 ## Commit
 
 Commit message, on `main`:
@@ -103,5 +112,6 @@ The date is the run date (the Tuesday or Friday). Push to `origin main` so GitHu
 
 ## How the site uses the entry
 
-- Homepage “Featured video” band: first five videos, poster image, link to `videos/#v-<statusid>`.
-- `/videos/`: official X embed (`blockquote.twitter-tweet` + `platform.twitter.com/widgets.js`). If the widget fails, the poster remains, linked out to the post, with a “Watch on X” label.
+- Each video has a static page at `/videos/<slug>/`, with its own title, description and share card. The slug is derived from the title in the bake step.
+- Homepage “Featured video” band: first four videos, poster image, link to `/videos/<slug>/`.
+- `/videos/`: official X embed (`blockquote.twitter-tweet` + `platform.twitter.com/widgets.js`). If the widget fails, the poster remains, linked out to the post, with a “Watch on X” label. Titles link to the static page. Old `#v-<id>` links on this index redirect to `/videos/<slug>/`.

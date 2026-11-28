@@ -495,6 +495,116 @@
     return "m-" + name;
   }
 
+  function slugify(text) {
+    var s = String(text || "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "");
+    s = s.replace(/['\u2019]/g, "");
+    s = s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    if (s.length > 80) s = s.slice(0, 80).replace(/-+$/g, "");
+    return s;
+  }
+
+  function slugSuffix(key) {
+    return String(key || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+
+  function assignSlugs(items, baseFn, keyFn) {
+    var used = {};
+    var byKey = {};
+    for (var i = items.length - 1; i >= 0; i--) {
+      var key = keyFn(items[i]);
+      if (!key) continue;
+      var base = baseFn(items[i]) || ("item-" + slugSuffix(key));
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(base)) base = "item-" + slugSuffix(key);
+      var slug = base;
+      if (used[slug]) {
+        slug = base + "-" + slugSuffix(key);
+        var n = 2;
+        while (used[slug]) {
+          slug = base + "-" + slugSuffix(key) + "-" + n;
+          n += 1;
+        }
+      }
+      used[slug] = true;
+      byKey[key] = slug;
+    }
+    return byKey;
+  }
+
+  function memeFileKey(meme) {
+    return safeImage(meme && meme.src);
+  }
+
+  function memeSlugBase(meme) {
+    var src = memeFileKey(meme);
+    var name = String(src || "").split("/").pop().replace(/\.[A-Za-z0-9]+$/, "");
+    return slugify(name.replace(/_/g, "-")) || slugify(meme && meme.caption);
+  }
+
+  var _videoSlugs = null;
+  var _memeSlugs = null;
+
+  function videoSlugMap() {
+    if (!_videoSlugs) _videoSlugs = assignSlugs(validVideos(), function (v) { return slugify(v.title); }, videoKey);
+    return _videoSlugs;
+  }
+
+  function memeSlugMap() {
+    if (!_memeSlugs) _memeSlugs = assignSlugs(validMemes(), memeSlugBase, memeFileKey);
+    return _memeSlugs;
+  }
+
+  function itemHref(prefix, slug) {
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(slug || ""))) return prefix || "./";
+    return (prefix || "") + slug + "/";
+  }
+
+  function videoHref(video, prefix) {
+    var slug = videoSlugMap()[videoKey(video)];
+    return slug ? itemHref(prefix, slug) : (prefix || "./");
+  }
+
+  function memeHref(meme, prefix) {
+    var slug = memeSlugMap()[memeFileKey(meme)];
+    return slug ? itemHref(prefix, slug) : (prefix || "./");
+  }
+
+  window.mediaSlugMaps = function () {
+    return { videos: videoSlugMap(), memes: memeSlugMap() };
+  };
+
+  function redirectIndexHash(kind) {
+    if (typeof location === "undefined") return false;
+    var hash = String(location.hash || "").replace(/^#/, "");
+    if (!hash) return false;
+    if (kind === "video" && hash.indexOf("v-") === 0) {
+      var key = hash.slice(2);
+      var slug = videoSlugMap()[key];
+      if (slug) {
+        location.replace(itemHref("", slug));
+        return true;
+      }
+    }
+    if (kind === "meme" && hash.indexOf("m-") === 0) {
+      var memes = validMemes();
+      for (var i = 0; i < memes.length; i++) {
+        if (memeAnchor(memes[i].src) === hash) {
+          var slug = memeSlugMap()[memeFileKey(memes[i])];
+          if (slug) {
+            location.replace(itemHref("", slug));
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  window.bindMediaEmbed = function (root) {
+    bindYoutubePlay(root);
+    loadTwitterWidgets(root);
+  };
+
+
   // Cover for the left-hand "This issue" thumbnail. Uses the archive only
   // (everything after memes[0]), so it never matches the featured meme on
   // the main hero. The index is (library length * 7) % archive length: it
@@ -821,8 +931,7 @@
         }) + '</span></a></div>';
     } else if (meme) {
       var src = safeImage(meme.src);
-      var id = memeAnchor(src);
-      var href = "memes/" + (id ? "#" + id : "");
+      var href = memeHref(meme, "memes/");
       featureHtml = '<div class="ft-feature"><a href="' + href + '">' +
         '<span class="ft-feature-pic">' + imgTag({
           src: "memes/" + src,
@@ -906,10 +1015,7 @@
     root.innerHTML = memes.map(function (meme, index) {
       var src = safeImage(meme.src);
       if (!src) return "";
-      var href = safePostUrl(meme.href);
-      var open = href
-        ? '<a href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">'
-        : '<a href="memes/">';
+      var open = '<a href="' + esc(memeHref(meme, "memes/")) + '">';
       var when = postedDate(meme);
       var tag = featuredInStrip && index === 0 ? "Featured meme" : "Meme";
       return '<article class="ft-card">' + open +
@@ -937,7 +1043,7 @@
       var thumb = x
         ? posterSrc(video.poster)
         : "https://i.ytimg.com/vi/" + youtubeId(video) + "/hqdefault.jpg";
-      return '<article class="ft-card"><a href="videos/#v-' + key + '">' +
+      return '<article class="ft-card"><a href="' + esc(videoHref(video, "videos/")) + '">' +
         '<span class="ft-thumb">' + imgTag({
           src: thumb, alt: "", className: "pic",
           width: (x ? entrySize(video, 16, 9) : { width: 480, height: 360 }).width,
@@ -950,6 +1056,7 @@
   };
 
   window.renderMemes = function (root) {
+    if (redirectIndexHash("meme")) return;
     var memes = validMemes();
     if (!memes.length) {
       root.innerHTML = empty("Nothing on the wall.", "Meme images will be hung here.");
@@ -989,7 +1096,7 @@
         var when = postedDate(meme);
         return '<figure class="meme' + (lead ? ' meme-lead' : '') + '"' + (id ? ' id="' + id + '"' : '') + '>' +
           '<figcaption><span class="ft-tag">' + (lead ? "Featured meme" : "Meme") + '</span>' +
-          '<span class="meme-title">' + esc(meme.caption) + '</span>' +
+          '<span class="meme-title"><a href="' + esc(memeHref(meme, "")) + '">' + esc(meme.caption) + '</a></span>' +
           (when ? '<span class="ft-stamp">' + esc(when) + '</span>' : '') + credit + '</figcaption>' +
           '<button type="button" data-src="' + esc(src) + '" data-alt="' + esc(meme.alt) + '" aria-label="Enlarge meme">' +
           imgTag({
@@ -1017,6 +1124,7 @@
   };
 
   window.renderVideos = function (root) {
+    if (redirectIndexHash("video")) return;
     var videos = validVideos();
     if (!videos.length) {
       root.innerHTML = empty("No reels filed.", "The best videos will play here.");
@@ -1049,7 +1157,7 @@
             '<blockquote class="twitter-tweet" data-dnt="true" data-media-max-width="560">' +
             '<a href="' + esc(x.href) + '">' + esc(video.title || "View on X") + '</a></blockquote></div>' +
             '<p class="ft-tag">' + (page === 1 && index === 0 ? "Featured video" : "Video") + '</p>' +
-            '<h2>' + esc(video.title) + '</h2>' +
+            '<h2><a href="' + esc(videoHref(video, "")) + '">' + esc(video.title) + '</a></h2>' +
             (postedDate(video) ? '<p class="ft-stamp">' + esc(postedDate(video)) + '</p>' : '') +
             (video.note ? '<p>' + esc(video.note) + '</p>' : '') +
             credit +
@@ -1060,7 +1168,7 @@
         return '<article class="video' + (page === 1 && index === 0 ? ' video-lead' : '') + '" id="v-' + id + '">' +
           youtubePosterHtml(video, page === 1 && index === 0) +
           '<p class="ft-tag">' + (page === 1 && index === 0 ? "Featured video" : "Video") + '</p>' +
-          '<h2>' + esc(video.title) + '</h2>' +
+          '<h2><a href="' + esc(videoHref(video, "")) + '">' + esc(video.title) + '</a></h2>' +
           (postedDate(video) ? '<p class="ft-stamp">' + esc(postedDate(video)) + '</p>' : '') +
           (video.note ? '<p>' + esc(video.note) + '</p>' : '') +
           '</article>';

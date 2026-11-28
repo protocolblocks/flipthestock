@@ -14,6 +14,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 # Static article pages stamped by _tools/build_articles.py so sync can
 # keep their header, footer and font link in step with the rest of the site.
 ARTICLE_MARKER = "<!-- generated:article"
+VIDEO_MARKER = "<!-- generated:video"
+MEME_MARKER = "<!-- generated:meme"
 
 # file, link prefix, current nav label, newsletter input id, newsletter tag
 PAGES = [
@@ -195,8 +197,42 @@ def article_pages():
     return extra
 
 
+def generated_section_pages(folder, marker, current, tag):
+    extra = []
+    root = ROOT / folder
+    if not root.is_dir():
+        return extra
+    reserved = {"posters", "share", "wall"}
+    for path in sorted(root.iterdir()):
+        index = path / "index.html"
+        if not path.is_dir() or path.name in reserved or not index.is_file():
+            continue
+        try:
+            text = index.read_text()
+        except OSError:
+            continue
+        if marker not in text:
+            continue
+        slug = path.name
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug):
+            continue
+        extra.append((
+            "%s/%s/index.html" % (folder, slug),
+            "../../",
+            current,
+            "newsletter-email-%s-%s" % (tag, slug),
+            tag,
+        ))
+    return extra
+
+
 def all_pages():
-    return list(PAGES) + article_pages()
+    return (
+        list(PAGES)
+        + article_pages()
+        + generated_section_pages("videos", VIDEO_MARKER, "Videos", "video")
+        + generated_section_pages("memes", MEME_MARKER, "Memes", "meme")
+    )
 
 
 

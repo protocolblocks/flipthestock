@@ -81,8 +81,9 @@ class BakedPages(unittest.TestCase):
             self.assertNotIn('fetchpriority="high"', meme_row)
             self.assertIn('loading="lazy"', meme_row)
         else:
-            self.assertIn("memes/" + lead_meme, feature)
+            self.assertIn("memes/", feature)
             self.assertIn("Featured meme", feature)
+            self.assertNotIn("#m-", feature)
             self.assertNotIn(lead_meme, meme_row)
 
     def test_homepage_lead_story_is_newest_article(self):
@@ -95,6 +96,22 @@ class BakedPages(unittest.TestCase):
             text = (ROOT / page).read_text()
             for block in re.findall(r"<!-- baked:.*?<!-- /baked:", text, re.S):
                 self.assertNotRegex(block, r">(Today|Yesterday|\d days ago)<", page)
+
+    def test_index_items_link_to_pages(self):
+        home = self.home
+        self.assertNotIn("videos/#v-", home)
+        videos = (ROOT / "videos/index.html").read_text()
+        memes = (ROOT / "memes/index.html").read_text()
+        self.assertIn("<!-- baked:hash-redirect -->", videos)
+        self.assertIn("<!-- baked:hash-redirect -->", memes)
+        self.assertIn("location.replace", videos)
+        self.assertIn("location.replace", memes)
+        self.assertIn("the-truth-about-spx6900/", videos)
+        self.assertIn("the-truth-about-spx6900/", home)
+        lead_src = self.stacks["memes"][0]["src"]
+        lead_slug = lead_src.split("/")[-1].rsplit(".", 1)[0]
+        self.assertIn(lead_slug + "/", memes)
+        self.assertIn("memes/" + lead_slug + "/", home)
 
     def test_lists_are_in_raw_html(self):
         videos = (ROOT / "videos/index.html").read_text()
