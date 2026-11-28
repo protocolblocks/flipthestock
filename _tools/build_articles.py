@@ -361,9 +361,6 @@ def page_html(article, articles) -> str:
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon.ico" sizes="32x32">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  %s
   <link rel="stylesheet" href="../../site.css">
   <script type="application/ld+json">
   %s
@@ -443,7 +440,6 @@ def page_html(article, articles) -> str:
         esc(image),
         esc(image_alt),
         published_meta,
-        sync_chrome.FONTS_LINK,
         json_ld(article, url, description, image),
         chrome_header,
         esc(kicker),

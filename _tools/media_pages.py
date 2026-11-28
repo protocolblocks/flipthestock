@@ -645,9 +645,6 @@ def page_html(
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon.ico" sizes="32x32">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  %s
   <link rel="stylesheet" href="../../site.css">
   <script type="application/ld+json">
   %s
@@ -727,7 +724,6 @@ def page_html(
         esc(description),
         esc(image_url),
         esc(image_alt),
-        sync_chrome.FONTS_LINK,
         json_ld(kind, title, description, url, image_url, item),
         chrome_header,
         esc(tag),

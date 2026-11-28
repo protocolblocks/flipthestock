@@ -58,7 +58,17 @@ class BakedPages(unittest.TestCase):
                 self.assertIsNotNone(m, "%s #%s has no baked block" % (page, element_id))
                 self.assertGreater(len(m.group(0)), 80, "%s #%s is empty" % (page, element_id))
 
+    def test_no_google_fonts(self):
+        for page in list(bake_pages.PAGES) + ["site.css"]:
+            text = (ROOT / page).read_text()
+            self.assertNotIn("fonts.googleapis", text, page)
+            self.assertNotIn("fonts.gstatic", text, page)
+        self.assertIn("@font-face", (ROOT / "site.css").read_text())
+        self.assertIn("/assets/fonts/frank-ruhl-libre-500-latin.woff2", self.home)
+        self.assertIn('rel="preload"', self.home)
+
     def test_homepage_h1(self):
+
         self.assertEqual(len(re.findall(r"<h1\b", self.home)), 1)
         self.assertIn('<h1 class="logo-h1"><a class="logo" href="./">Flip the Stock</a></h1>', self.home)
 

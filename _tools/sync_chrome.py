@@ -155,9 +155,20 @@ def replace(html, pattern, marker, new):
     return out
 
 
-FONTS_LINK = ('<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500'
-              '&family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700'
-              '&display=swap" rel="stylesheet">')
+# Homepage preloads the wordmark and headline fonts. Other pages pick them
+# up from site.css. Google Fonts <link> tags are no longer used.
+FONT_PRELOADS = (
+    '  <link rel="preload" href="/assets/fonts/frank-ruhl-libre-500-latin.woff2" as="font" type="font/woff2" crossorigin>\n'
+    '  <link rel="preload" href="/assets/fonts/newsreader-500-600-latin.woff2" as="font" type="font/woff2" crossorigin>'
+)
+GOOGLE_FONTS_RE = re.compile(
+    r'[ \t]*<link rel="preconnect" href="https://fonts\.googleapis\.com">\n?'
+    r'|[ \t]*<link rel="preconnect" href="https://fonts\.gstatic\.com" crossorigin>\n?'
+    r'|[ \t]*<link href="https://fonts\.googleapis\.com/css2\?[^"]*" rel="stylesheet">\n?'
+)
+FONT_PRELOAD_RE = re.compile(
+    r'(?:[ \t]*<link rel="preload" href="/assets/fonts/[^"]+" as="font" type="font/woff2" crossorigin>\s*)+'
+)
 
 RSS_LINK = ('<link rel="alternate" type="application/rss+xml" title="Flip the Stock" '
             'href="https://www.flipthestock.com/feed.xml">')
@@ -269,11 +280,28 @@ def bust_asset_urls(html: str) -> str:
     return html
 
 
+def strip_google_fonts(html: str) -> str:
+    return GOOGLE_FONTS_RE.sub("", html)
+
+
+def apply_font_preloads(html: str, is_home: bool) -> str:
+    html = FONT_PRELOAD_RE.sub("", html)
+    if not is_home:
+        return html
+    return re.sub(
+        r'([ \t]*<link rel="stylesheet" href="(?:\./)?site\.css)',
+        FONT_PRELOADS + r"\n\1",
+        html,
+        count=1,
+    )
+
+
 def sync():
     for path, p, current, input_id, tag in all_pages():
         f = ROOT / path
         html = f.read_text()
-        html = re.sub(r'<link href="https://fonts\.googleapis\.com/css2\?[^"]*" rel="stylesheet">', lambda m: FONTS_LINK, html, count=1)
+        html = strip_google_fonts(html)
+        html = apply_font_preloads(html, path == "index.html")
         html = ensure_rss_link(html)
         has_form = input_id is not None
         html = replace(html, r'<header class="mast">.*?</header>', "header", header(p, current, has_form, path == "index.html"))
