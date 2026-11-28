@@ -220,6 +220,11 @@ window.STACKS = {
   ],
   videos: [
     {
+      id: "8QfHmsC_CS0",
+      title: "The Truth About SPX6900",
+      note: "SPX Filmmaker, 2 February 2026. About two minutes and thirty-eight seconds. A short titled “The Truth About SPX6900”."
+    },
+    {
       id: "n1_dvGj82zA",
       title: "Bitcoin and SPX6900, argued by the Flip The Stock Market crew",
       note: "Flip The Stock Market, 25 November 2026. A livestream of about an hour and six minutes. Four co-hosts set Bitcoin’s fixed supply against SPX6900’s complaint about the wider system, and conclude that plenty of people hold both."
